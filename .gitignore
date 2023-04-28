@@ -1,0 +1,7 @@
+#ignore directories
+build/
+.vscode/
+
+#ignore files
+*.t
+*.bin
