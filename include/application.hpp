@@ -9,13 +9,14 @@ namespace particleSimulator{
 //alias for sfml render window
 using W=sf::RenderWindow;
 
-class Application{
     //simulation options
     struct options{
         int w_width{};
         int w_height{};
         std::string w_name{};
     };
+
+class Application{
 
     options optn_{};
     W w_;//sfml render window
