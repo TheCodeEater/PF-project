@@ -28,7 +28,7 @@ add_executable(particelle.bin src/main.cpp src/application.cpp src/graphics.cpp 
 find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
 
 #set link libraries 
-target_link_libraries(game.bin PRIVATE sfml-graphics)
+target_link_libraries(particelle.bin PRIVATE sfml-graphics)
 
 # se il testing e' abilitato...
 #   per disabilitare il testing, passare -DBUILD_TESTING=OFF a cmake durante la fase di configurazione
