@@ -1,6 +1,7 @@
 #ignore directories
 build/
 .vscode/
+build-debug/
 
 #ignore files
 *.t
