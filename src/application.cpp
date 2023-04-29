@@ -6,6 +6,12 @@ Application::Application(options const& opt)
       w_{sf::VideoMode(optn_.w_width, optn_.w_height), optn_.w_name} {}
 
 int Application::loop(){
+    sf::VertexArray v{sf::Lines,2};
+    v[0].position={10,10};
+    v[1].position={100,100};
+    v[0].color=sf::Color::Red;
+    v[1].color=sf::Color::Red;
+
     // run the program as long as the window is open
     while (w_.isOpen())
     {
@@ -29,7 +35,7 @@ int Application::loop(){
         w_.clear(sf::Color::Black);
 
         // draw everything here...
-        // window.draw(...);
+        w_.draw(v);
 
         // display
         w_.display();
