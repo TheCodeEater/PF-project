@@ -11,14 +11,19 @@ using W = sf::RenderWindow;
 
 // simulation options
 struct options {
-  int w_width{};
-  int w_height{};
+  float w_width{};
+  float w_height{};
   std::string w_name{};
 };
 
 class Application {
-  options optn_{};
-  W w_;  // sfml render window
+  const options optn_{};  // window options
+  W w_;                   // sfml render window
+  sf::View camera_{};     // view
+
+  // graphic objects
+  sf::VertexArray x_{};  // x axis
+  sf::VertexArray y_{};  // y axis
 
  public:
   Application(options const&);
