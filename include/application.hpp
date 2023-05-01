@@ -11,13 +11,13 @@ using W = sf::RenderWindow;
 
 // simulation options
 struct options {
-  int w_width{};
-  int w_height{};
+  float w_width{};
+  float w_height{};
   std::string w_name{};
 };
 
 class Application {
-  options optn_{};
+  const options optn_{};
   W w_;  // sfml render window
 
  public:
