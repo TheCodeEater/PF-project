@@ -17,8 +17,13 @@ struct options {
 };
 
 class Application {
-  const options optn_{};
-  W w_;  // sfml render window
+  const options optn_{};  // window options
+  W w_;                   // sfml render window
+  sf::View camera_{};     // view
+
+  // graphic objects
+  sf::VertexArray x_{};  // x axis
+  sf::VertexArray y_{};  // y axis
 
  public:
   Application(options const&);
