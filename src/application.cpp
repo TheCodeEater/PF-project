@@ -7,8 +7,8 @@ Application::Application(options const& opt)
 
 int Application::loop(){
     sf::VertexArray x{sf::Lines,2};
-    x[0].position={-optn_.w_width/2.f,0};
-    x[1].position={optn_.w_width/2.f,0};
+    x[0].position={0,0};
+    x[1].position={optn_.w_width,0};
     x[0].color=sf::Color::Green;
     x[1].color=sf::Color::Green;
     sf::VertexArray y{sf::Lines,2};
@@ -18,7 +18,7 @@ int Application::loop(){
     y[1].color=sf::Color::Green;
 
 
-    sf::View view({optn_.w_width/2.f-30,0},{static_cast<float>(optn_.w_width),static_cast<float>(-optn_.w_height)});
+    sf::View view({optn_.w_width/2.f-30,0},{optn_.w_width,-optn_.w_height});
     w_.setView(view);//set the view
 
     // run the program as long as the window is open
