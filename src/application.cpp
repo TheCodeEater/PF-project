@@ -18,7 +18,7 @@ int Application::loop(){
     y[1].color=sf::Color::Green;
 
 
-    sf::View view({0,0},{static_cast<float>(optn_.w_width),static_cast<float>(-optn_.w_height)});
+    sf::View view({optn_.w_width/2.f-30,0},{static_cast<float>(optn_.w_width),static_cast<float>(-optn_.w_height)});
     w_.setView(view);//set the view
 
     // run the program as long as the window is open
