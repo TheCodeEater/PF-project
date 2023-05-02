@@ -26,8 +26,9 @@ class Application {
   const sf::VertexArray y_{};  // y axis
 
  public:
-  Application(options const&);
+  explicit Application(options const&);
 
+  //likely to be removed
   ~Application() = default;  // default destructir
   // disable copy and move
   Application(Application const&) = delete;
