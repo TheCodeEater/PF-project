@@ -22,8 +22,8 @@ class Application {
   sf::View camera_{};     // view
 
   // graphic objects
-  sf::VertexArray x_{};  // x axis
-  sf::VertexArray y_{};  // y axis
+  const sf::VertexArray x_{};  // x axis
+  const sf::VertexArray y_{};  // y axis
 
  public:
   Application(options const&);
