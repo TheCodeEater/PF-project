@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(biliardoParticelle VERSION 0.1.0)
 
 # abilita il supporto per i test, tra cui l'opzione BUILD_TESTING usata sotto
-#include(CTest)
+include(CTest)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -37,7 +37,7 @@ if (BUILD_TESTING)
 
   # aggiungi l'eseguibile gane,t
   add_executable(particelle_test.t test/graphics.test.cpp src/application.cpp src/graphics.cpp src/io.cpp)
-  target_link_libraries(game.t PRIVATE sfml-graphics)
+  target_link_libraries(particelle_test.t PRIVATE sfml-graphics)
   # aggiungi l'eseguibile statistics.t alla lista dei test
   add_test(NAME particelle_test.t COMMAND particelle_test.t)
 
