@@ -5,7 +5,11 @@
 #include <algorithm>
 namespace particleSimulator {
 
-sf::Vector2f operator*(float t, sf::Vector2f v){
+sf::Vector2f operator*(float t, sf::Vector2f const& v){
+    return {t*v.x,t*v.y};
+}
+
+sf::Vector2f operator*(sf::Vector2f const& v, float t){
     return {t*v.x,t*v.y};
 }
 
