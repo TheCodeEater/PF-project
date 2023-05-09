@@ -11,12 +11,14 @@ sf::Vector2f operator*(float t, sf::Vector2f v){
 
 dottedLine::dottedLine(sf::Vector2f p0, sf::Vector2f p1)
     : first_{p0}, last_{p1}, direction_{last_-first_}, vertices_{sf::Points, 2} {
+        //genera punti con un dato step di incremento del parametro finché non superi il punto finale
+        const float step{0.2f};
         //genera N punti della linea e inseriscili mediante back inserter
-        int i{};
-        std::generate_n(std::back_inserter(*this),20,[this,&i](){
+        float t{0.f};
+        std::generate_n(std::back_inserter(*this),20,[this,&t,&step](){
             //calcola la posizione
-            sf::Vertex vertex{0.1*(first_+i*direction_)};
-            ++i;
+            sf::Vertex vertex{first_+t*direction_};
+            t+=step;
 
             return vertex;
         });
