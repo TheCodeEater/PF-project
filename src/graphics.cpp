@@ -13,9 +13,17 @@ dottedLine::dottedLine(sf::Vector2f p0, sf::Vector2f p1)
     : first_{p0}, last_{p1}, direction_{last_-first_}, vertices_{sf::Points, 2} {
         //genera punti con un dato step di incremento del parametro finché non superi il punto finale
         const float step{0.2f};
+        //calcola la lunghezza della retta
+        const double l=std::sqrt(direction_.x*direction_.x+direction_.y*direction_.y);
+        //calcola un segmentino
+        const sf::Vector2f q{step*direction_};
+        //norma del segmento tra punto zero e primo punto
+        const double l_1=std::sqrt(q.x*q.x+q.y*q.y);
+        //calcola il numero di punti per rappresentare la retta con il dato step al parametro e arrotonda
+        const int N{std::round(l/l_1)};
         //genera N punti della linea e inseriscili mediante back inserter
         float t{0.f};
-        std::generate_n(std::back_inserter(*this),20,[this,&t,&step](){
+        std::generate_n(std::back_inserter(*this),N,[this,&t,&step](){
             //calcola la posizione
             sf::Vertex vertex{first_+t*direction_};
             t+=step;
