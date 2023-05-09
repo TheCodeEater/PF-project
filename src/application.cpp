@@ -56,7 +56,7 @@ int Application::loop() {
     }
 
     // clear window. set black color
-    w_.clear(sf::Color::White);
+    w_.clear(sf::Color::Black);
 
     // draw everything here...
     w_.draw(x_);
