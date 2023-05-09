@@ -15,7 +15,7 @@ class dottedLine {
   sf::VertexArray vertices_{};
 
  public:
-  dottedLine(sf::Vector2f p0, sf::Vector2f p1);
+  dottedLine(sf::Vector2f p0, sf::Vector2f p1, sf::Color c=sf::Color::White);
 
     typedef sf::Vertex value_type;
 
