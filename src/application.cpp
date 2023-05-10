@@ -1,4 +1,5 @@
 #include "../include/application.hpp"
+#include "../include/graphics.hpp"
 
 namespace particleSimulator {
 Application::Application(options const& opt)
@@ -90,9 +91,9 @@ int Application::loop() {
     w_.draw(y_);
     w_.draw(line_inf_);
     w_.draw(line_sup_);
-
     // display
     w_.display();
+
   }
 
   return 0;
