@@ -7,7 +7,6 @@
 namespace particleSimulator {
 
 class dottedLine {
-
   sf::Vector2f first_{};
   sf::Vector2f last_{};
   sf::Vector2f direction_{};
@@ -15,22 +14,22 @@ class dottedLine {
   sf::VertexArray vertices_{};
 
  public:
-  dottedLine(sf::Vector2f p0, sf::Vector2f p1, sf::Color c=sf::Color::White);
+  dottedLine(sf::Vector2f p0, sf::Vector2f p1, sf::Color c = sf::Color::White);
 
-    typedef sf::Vertex value_type;
+  typedef sf::Vertex value_type;
 
   /*void setPoints(sf::Vector2f, sf::Vector2f);
   void setPoint1(sf::Vector2f);
   void setPoint2(sf::Vector2f);*/
 
-  //member access
+  // member access
   sf::VertexArray const& getVertexArray() const;
-  std::pair<sf::Vector2f,sf::Vector2f> getExtremes() const;
+  std::pair<sf::Vector2f, sf::Vector2f> getExtremes() const;
 
-  //drawing
+  // drawing
   void draw(sf::RenderWindow&) const;
 
-  //vertex access
+  // vertex access
   void push_back(value_type);
 };
 
