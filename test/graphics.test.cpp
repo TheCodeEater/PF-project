@@ -13,10 +13,4 @@ TEST_CASE("Testing dotted line creation"){
 
     CHECK(e.first==sf::Vector2f{0,0});
     CHECK(e.second==sf::Vector2f{150,150});
-
-    //check array
-    auto vertices=l.getVertexArray();
-    for(int i{}; i<vertices.getVertexCount();++i){
-        std::cout<<vertices[i].position.x<<"/"<<vertices[i].position.y<<"\n";
-    }
 }
