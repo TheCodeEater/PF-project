@@ -7,3 +7,4 @@ build-debug/
 #ignore files
 *.t
 *.bin
+test/doctest.h

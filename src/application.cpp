@@ -1,4 +1,5 @@
 #include "../include/application.hpp"
+#include "../include/graphics.hpp"
 
 namespace particleSimulator {
 Application::Application(options const& opt)
@@ -32,7 +33,34 @@ Application::Application(options const& opt)
         y_axis[1].color = sf::Color::Green;
 
         return y_axis;
-      }()} {
+      }()},
+      line_sup_{[this](){
+        //create upper rect
+        sf::VertexArray l_sup{sf::Lines,2};
+
+        //set coordinates
+        l_sup[0].position= {0, optn_.r1};
+        l_sup[1].position={optn_.l,optn_.r2};
+
+        l_sup[0].color=sf::Color::Red;
+        l_sup[1].color=sf::Color::Red;
+
+        return l_sup;
+      }()},
+        line_inf_{[this](){
+        //create upper rect
+        sf::VertexArray l_inf{sf::Lines,2};
+
+        //set coordinates
+        l_inf[0].position= {0, -optn_.r1};
+        l_inf[1].position={optn_.l,-optn_.r2};
+
+        l_inf[0].color=sf::Color::Red;
+        l_inf[1].color=sf::Color::Red;
+
+        return l_inf;
+      }()}
+       {
   w_.setView(camera_);  // set the current view
 }
 
@@ -56,14 +84,16 @@ int Application::loop() {
     }
 
     // clear window. set black color
-    w_.clear(sf::Color::White);
+    w_.clear(sf::Color::Black);
 
     // draw everything here...
     w_.draw(x_);
     w_.draw(y_);
-
+    w_.draw(line_inf_);
+    w_.draw(line_sup_);
     // display
     w_.display();
+
   }
 
   return 0;

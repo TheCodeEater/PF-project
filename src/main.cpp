@@ -1,11 +1,12 @@
 #include "../include/application.hpp"
+#include "../include/io.hpp"
 
 //alias for namespace
 namespace ps=particleSimulator;
 
 int main(){
-    ps::options initial_config{2200,1230,"Simulatore di particelle"};
-    ps::Application app{initial_config};
+    ps::config c{};
+    ps::Application app{c.getOptions()};
 
     return app.loop();
 }

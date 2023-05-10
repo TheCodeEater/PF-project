@@ -14,6 +14,10 @@ struct options {
   float w_width{};
   float w_height{};
   std::string w_name{};
+  //experiment setup
+  float r1{};
+  float r2{};
+  float l{};
 };
 
 class Application {
@@ -24,6 +28,9 @@ class Application {
   // graphic objects
   const sf::VertexArray x_{};  // x axis
   const sf::VertexArray y_{};  // y axis
+
+  const sf::VertexArray line_sup_{};
+  const sf::VertexArray line_inf_{};
 
  public:
   explicit Application(options const&);
