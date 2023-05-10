@@ -26,9 +26,10 @@ add_executable(particelle.bin src/main.cpp src/application.cpp src/graphics.cpp 
 
 #set dependencies
 find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
+find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 
 #set link libraries 
-target_link_libraries(particelle.bin PRIVATE sfml-graphics)
+target_link_libraries(particelle.bin PRIVATE sfml-graphics Eigen3::Eigen)
 
 # se il testing e' abilitato...
 #   per disabilitare il testing, passare -DBUILD_TESTING=OFF a cmake durante la fase di configurazione
