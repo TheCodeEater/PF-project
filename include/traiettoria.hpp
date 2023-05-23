@@ -5,7 +5,7 @@
 #include "../Eigen/Dense"
 #include <cmath>
 
-using Line=Eigen::Hyperplane<double, 2>;
+using Line=Eigen::Hyperplane<float, 2>;
 namespace particleSimulator{
     struct particle{
         Eigen::Vector2f pos{}; //pos sta per position
