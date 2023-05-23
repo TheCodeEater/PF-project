@@ -14,7 +14,7 @@ struct options {
   float w_width{};
   float w_height{};
   std::string w_name{};
-  //experiment setup
+  // experiment setup
   float r1{};
   float r2{};
   float l{};
@@ -35,7 +35,7 @@ class Application {
  public:
   explicit Application(options const&);
 
-  //likely to be removed
+  // likely to be removed
   ~Application() = default;  // default destructir
   // disable copy and move
   Application(Application const&) = delete;

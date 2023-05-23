@@ -2,15 +2,13 @@
 #define IO_HPP
 
 #include "application.hpp"
-namespace particleSimulator{
+namespace particleSimulator {
 
-class config{
-
-    public:
-     config()=default;
-     options getOptions() const;
+class config {
+ public:
+  config() = default;
+  options getOptions() const;
 };
-}
-
+}  // namespace particleSimulator
 
 #endif

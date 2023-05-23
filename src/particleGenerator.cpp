@@ -1,5 +1,3 @@
 #include "../include/particleGenerator.hpp"
 
-namespace particleGenerator{
-    
-}
+namespace particleGenerator {}
