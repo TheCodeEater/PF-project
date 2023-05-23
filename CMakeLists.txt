@@ -36,7 +36,7 @@ target_link_libraries(particelle.bin PRIVATE sfml-graphics)
 if (BUILD_TESTING)
 
   # aggiungi l'eseguibile gane,t
-  add_executable(particelle_test.t test/graphics.test.cpp src/application.cpp src/graphics.cpp src/io.cpp src/traiettoria.cpp)
+  add_executable(particelle_test.t test/traiettoria.test.cpp src/application.cpp src/graphics.cpp src/io.cpp src/traiettoria.cpp)
   target_link_libraries(particelle_test.t PRIVATE sfml-graphics)
   # aggiungi l'eseguibile statistics.t alla lista dei test
   add_test(NAME particelle_test.t COMMAND particelle_test.t)
