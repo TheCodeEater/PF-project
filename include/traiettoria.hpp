@@ -5,20 +5,21 @@
 #include "../Eigen/Dense"
 #include <cmath>
 
+using Line=Eigen::Hyperplane<double, 2>;
 namespace particleSimulator{
     struct particle{
         Eigen::Vector2f pos{}; //pos sta per position
-        double theta{};
+        double theta{};  //pos e theta da input (distribuzione)
     };
     
-    class path {
-        sf::VertexArray const& borderup_{};
-        sf::VertexArray const& borderdown_{};
+    class path {  //contiene i bordi del biliardo
+        Line const& borderup_{};
+        Line const& borderdown_{};
         
         
         public:
-        path(sf::VertexArray const&, sf::VertexArray const&);
-        Eigen::Vector2f operator()(particle);
+        path(Line const&, Line const&);
+        Eigen::Vector2f operator()(particle);  // operatore () per calcolare la traiettoria
     
     };
 }
