@@ -12,7 +12,7 @@ Eigen::Vector2f path::operator()(particle p){
     //tentativi falliti
     //Eigen::Matrix2f sist1{dir, borderup_};
     //Eigen::Matrix2f sist2{dir, borderdown_};
-    Eigen::Vector2f intersection = trajectory.intersectionPoint(borderup_); //intersezione traiettoria con i bordi
+    const Eigen::Vector2f intersection = trajectory.intersectionPoint(borderup_); //intersezione traiettoria con i bordi
     return intersection;
     }
 
