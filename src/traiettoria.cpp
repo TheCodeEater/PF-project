@@ -4,7 +4,11 @@
 
 namespace particleSimulator {
 path::path(Line const& bup, Line const& bdown)
-    : borderup_{bup}, borderdown_{bdown} {}
+    : borderup_{bup}, borderdown_{bdown} {
+        //TEST: correttezza della direzione dei vettori
+        assert(borderup_.direction().x()>0 && borderup_.direction().y() <0); //test bordo sopra
+        assert(borderdown_.direction().x()>0 && borderup_.direction.y() >0); //test bordo sotto
+    }
 
 Eigen::Vector2f path::operator()(particle const& p) const {
   const Eigen::Vector2f dir{std::cos(p.theta),
