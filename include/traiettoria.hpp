@@ -13,8 +13,8 @@ namespace particleSimulator{
     };
     
     class path {  //contiene i bordi del biliardo
-        Line const& borderup_{};
-        Line const& borderdown_{};
+        Line borderup_{};
+        Line borderdown_{};
         
         
         public:
