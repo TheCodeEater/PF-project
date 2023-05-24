@@ -8,6 +8,14 @@ path::path(Line const& bup, Line const& bdown)
         //TEST: correttezza della direzione dei vettori
         assert(borderup_.direction().x()>0 && borderup_.direction().y() <0); //test bordo sopra
         assert(borderdown_.direction().x()>0 && borderup_.direction.y() >0); //test bordo sotto
+
+        //Costruzione vettore normale - bordo sup
+        const Eigen::Rotation2D<float> rot_sup{-pi/2}; //rotazione di -pi/2 verso l'interno del biliardo
+        normal_up_{rot_sup.linear()*borderup_};
+
+        //Vettore normale bordo giu
+        const Eigen::Rotation2D<float> rot_sup{pi/2}; //rotazione di -pi/2 verso l'interno del biliardo
+        normal_down_{rot_sup.linear()*borderdown_};
     }
 
 Eigen::Vector2f path::operator()(particle const& p) const {
