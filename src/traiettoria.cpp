@@ -15,8 +15,13 @@ Eigen::Vector2f path::operator()(particle const& p) const {
       p.pos, dir};  // retta della direzione della particella
 
   const Eigen::Vector2f intersection = trajectory.intersectionPoint(
-      borderup_);  // intersezione traiettoria con i bordi
+      Eigen::Hyperplane{borderup_});  // intersezione traiettoria con i bordi
   return intersection;
+}
+
+Line path::getNormalUP(Eigen::Vector2f) const{//ottieni la retta normale al segmento superiore in un dato punto
+    const double ang_coeff{}
+    const Eigen::Vector2f intercept{0,}
 }
 
 }  // namespace particleSimulator
