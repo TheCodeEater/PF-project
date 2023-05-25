@@ -27,7 +27,7 @@ class path {  // contiene i bordi del biliardo
   path(Line const&, Line const&);
   Eigen::Vector2f operator()(particle const&)
       const;  // operatore () per calcolare la traiettoria riflessa
-  void reflect(particle const&) const;
+  void reflect(particle& ) const;
 
   static float arctan(float x, float y);
 };
