@@ -6,16 +6,16 @@ namespace particleSimulator {
 path::path(Line const& bup, Line const& bdown)
     : borderup_{bup}, borderdown_{bdown} {
         //TEST: correttezza della direzione dei vettori
-        assert(borderup_.direction().x()>0 && borderup_.direction().y() <0); //test bordo sopra
-        assert(borderdown_.direction().x()>0 && borderup_.direction.y() >0); //test bordo sotto
+        assert(borderup_.direction().x()>0); assert(borderup_.direction().y() <0); //test bordo sopra
+        assert(borderdown_.direction().x()>0); assert(borderdown_.direction().y() >0); //test bordo sotto
 
         //Costruzione vettore normale - bordo sup
-        const Eigen::Rotation2D<float> rot_sup{-pi/2}; //rotazione di -pi/2 verso l'interno del biliardo
-        normal_up_{rot_sup.linear()*borderup_};
+        const Eigen::Rotation2Df rot_sup{-pi/2}; //rotazione di -pi/2 verso l'interno del biliardo
+        normal_up_=rot_sup*borderup_.direction();
 
         //Vettore normale bordo giu
-        const Eigen::Rotation2D<float> rot_sup{pi/2}; //rotazione di -pi/2 verso l'interno del biliardo
-        normal_down_{rot_sup.linear()*borderdown_};
+        const Eigen::Rotation2Df rot_inf{pi/2}; //rotazione di -pi/2 verso l'interno del biliardo
+        normal_down_=rot_inf*borderdown_.direction();
     }
 
 Eigen::Vector2f path::operator()(particle const& p) const {
@@ -27,13 +27,14 @@ Eigen::Vector2f path::operator()(particle const& p) const {
       p.pos, dir};  // retta della direzione della particella
 
   const Eigen::Vector2f intersection = trajectory.intersectionPoint(
-      Eigen::Hyperplane{borderup_});  // intersezione traiettoria con i bordi
-  return intersection;
-}
+      Eigen::Hyperplane<float,2>{borderup_});  // intersezione traiettoria con i bordi
 
-Line path::getNormalUP(Eigen::Vector2f) const{//ottieni la retta normale al segmento superiore in un dato punto
-    const double ang_coeff{}
-    const Eigen::Vector2f intercept{0,}
+  //TEST INTERSEZIONE
+  if(intersection.x()<=0){//se l'intersezione è in x negative (ossia se collidiamo con il bordo laterale)
+    return trajectory.intersectionPoint(Eigen::Hyperplane<float,2>::Through({0,0},{0,1}));
+  }else{
+    return intersection;
+  }
 }
 
 }  // namespace particleSimulator
