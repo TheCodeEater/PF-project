@@ -15,6 +15,13 @@ static const inline float pi=std::atan(INFINITY);
 
 using Line = Eigen::ParametrizedLine<float, 2>;
 namespace particleSimulator {
+
+enum class posTypes{
+  Inside,
+  Escaped,
+  BackHit,
+  Error
+};
 struct particle {
   Eigen::Vector2f pos{};  // pos sta per position
   double theta{};         // pos e theta da input (distribuzione)
