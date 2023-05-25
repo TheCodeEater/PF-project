@@ -1,6 +1,11 @@
 #ifndef TRAIETTORIA_HPP
 #define TRAIETTORIA_HPP
 
+#if __INTELLISENSE__
+#undef __ARM_NEON
+#undef __ARM_NEON__
+#endif
+
 #include <SFML/Graphics.hpp>
 #include <cmath>
 
