@@ -21,6 +21,11 @@ struct particle {
 };
 
 class path {  // contiene i bordi del biliardo
+  //parametri biliardo
+  float r1_{};
+  float r2_{};
+  float l_{};
+
   Line borderup_{};
   Line borderdown_{};
 
@@ -29,10 +34,12 @@ class path {  // contiene i bordi del biliardo
   Eigen::Vector2f normal_down_{};
 
  public:
-  path(Line const&, Line const&);
+  //path(Line const&, Line const&);
+  path(float r1, float r2, float r3);
   Eigen::Vector2f operator()(particle const&)
       const;  // operatore () per calcolare la traiettoria riflessa
   void reflect(particle& ) const;
+  bool isInside(Eigen::Vector2f const&) const;
 
   static float arctan(float x, float y);
 };
