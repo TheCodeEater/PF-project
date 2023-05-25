@@ -6,7 +6,7 @@
 
 #include "../Eigen/Dense"
 
-const inline float pi=3.14159265358;
+static const inline float pi=std::atan(INFINITY);
 
 using Line = Eigen::ParametrizedLine<float, 2>;
 namespace particleSimulator {
@@ -27,6 +27,9 @@ class path {  // contiene i bordi del biliardo
   path(Line const&, Line const&);
   Eigen::Vector2f operator()(particle const&)
       const;  // operatore () per calcolare la traiettoria riflessa
+  void reflect(particle const&) const;
+
+  static float arctan(float x, float y);
 };
 
 }  // namespace particleSimulator
