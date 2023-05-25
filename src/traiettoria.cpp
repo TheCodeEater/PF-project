@@ -40,29 +40,27 @@ Eigen::Vector2f path::operator()(particle const& p) const {
 void path::reflect(particle& p) const{
     const Eigen::Vector2f intsect=operator()(p); //calcola il punto di collisione
     //determina se è il bordo su o il bordo giù, usando le coordinate del punto di intersezione
-    const Line& normal_vect=(intsect.y()>0)? normal_up_ : normal_down_;
+    Eigen::Vector2f const& normal_vect{(intsect.y()>0)? normal_up_ : normal_down_};
     const Line normal{intsect,  normal_vect}; //trova la normale
     //calcola l'angolo di incidenza
     //angolo della normale
     float normal_angle=arctan(normal_vect.x(),normal_vect.y());
     //angolo traiettoria
     //vettore traiettoria
-    const Eigen::Vector2f dir{std::cos(p.theta),
-                            std::sin(p.theta)};  // direzione particella
-    //prima flippa il vettore
-    dir*=-1;
+    Eigen::Vector2f dir{-std::cos(p.theta),
+                            -std::sin(p.theta)};  // direzione particella, invertita per il calcolo della riflessione
     //angolo traiettoria
     float dir_angle=arctan(dir.x(),dir.y());
 
     float phi_inc=normal_angle-dir_angle; //angolo di incidenza
 
     //ruota il vettore direzione
-    Eigen::Rotation2Df reflection{phi_inc};
-    dir*=reflection; //esegui la rotazione
+    const Eigen::Rotation2Df reflection{phi_inc};
+    dir=reflection*dir; //esegui la rotazione
 
     //aggiorna la particella
     p.pos=intsect;
-    p.angle=arctan(dir.x(),dir.y());
+    p.theta=arctan(dir.x(),dir.y());
 }
 
 float path::arctan(float x, float y){
