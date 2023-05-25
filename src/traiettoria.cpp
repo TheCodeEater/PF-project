@@ -3,8 +3,13 @@
 #include <cmath>
 
 namespace particleSimulator {
-path::path(Line const& bup, Line const& bdown)
-    : borderup_{bup}, borderdown_{bdown} {
+path::path(float r1, float r2, float l)
+    : r1_{r1}, r2_{r2}, l_{l},
+    borderup_{Line::Through({0,r1_},{l_,r2_})}, borderdown_{Line::Through({0,-r1_},{l_,-r2_})} {
+        //TEST: correttezza parametri
+        assert(r1_>0);
+        assert(r2_>0);
+        assert(l_>0);
         //TEST: correttezza della direzione dei vettori
         assert(borderup_.direction().x()>0); assert(borderup_.direction().y() <0); //test bordo sopra
         assert(borderdown_.direction().x()>0); assert(borderdown_.direction().y() >0); //test bordo sotto
@@ -19,6 +24,9 @@ path::path(Line const& bup, Line const& bdown)
     }
 
 Eigen::Vector2f path::operator()(particle const& p) const {
+  //CONDIZIONI INIZIALI
+  assert(p.pos.x()>=0); //devi essere dentro il biliardo
+
   const Eigen::Vector2f dir{std::cos(p.theta),
                             std::sin(p.theta)};  // direzione particella
   // piccolo test
@@ -26,8 +34,15 @@ Eigen::Vector2f path::operator()(particle const& p) const {
   const Eigen::ParametrizedLine<float, 2> trajectory{
       p.pos, dir};  // retta della direzione della particella
 
-  const Eigen::Vector2f intersection = trajectory.intersectionPoint(
-      Eigen::Hyperplane<float,2>{borderup_});  // intersezione traiettoria con i bordi
+//determina quale bordo puoi colpire
+//casi
+//bordo su, bordo giu
+//vettore orizzontale verso x negative, o verso x positive
+
+  const Eigen::Vector2f intersec_up = trajectory.intersectionPoint(
+      Eigen::Hyperplane<float,2>{borderup_});  // intersezione traiettoria con il sup
+  
+  const Eigen::Vector2f intersec_down = trajectory.intersectionPoint(Eigen::Hyperplane<float,2>{borderdown_}); //intersezione con inf
 
   //TEST INTERSEZIONE
   if(intersection.x()<=0){//se l'intersezione è in x negative (ossia se collidiamo con il bordo laterale)
@@ -64,7 +79,7 @@ void path::reflect(particle& p) const{
 }
 
 float path::arctan(float x, float y){
-    const float theta=std::atan2f(x,y);
+    const float theta=std::atan2f(y,x);
     //correggi l'angolo risultante in modo tale che sia compreso tra zero e 2pi, non tra -pi e pi
     if(theta<0){
         return theta+2*pi;
@@ -73,4 +88,38 @@ float path::arctan(float x, float y){
     }
 }
 
+bool path::isInside(Eigen::Vector2f const& v) const{
+    if(v.x()>0 && v.x()<=)
+}
+
+/*
+bool path::toUp(Eigen::Vector2f const& v){
+    float angle=std::atan2f(v.y(),v.x());
+    
+    if(angle>0){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+bool path::toDown(Eigen::Vector2f const& v){
+    float angle=std::atan2f(v.y(),v.x());
+    
+    if(angle>0){
+        return false;
+    }else{
+        return true;
+    }
+}
+
+bool path::toHoriz(Eigen::Vector2f const& v){
+    float angle=std::atan2f(v.y(),v.x());
+    if(std::abs(angle)<1e-3){
+        return true;
+    }else{
+        return false;
+    }
+}
+*/
 }  // namespace particleSimulator
