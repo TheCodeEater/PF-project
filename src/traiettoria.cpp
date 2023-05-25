@@ -100,6 +100,19 @@ posTypes path::getLocationType(Eigen::Vector2f const& v) const{ //determina il l
     }
 }
 
+vecOrientation path::getHitDirection(Eigen::Vector2f const& v) const{
+    float angle=std::atan2f(v.y(),v.x());
+    if(std::abs(angle)<1e-3){
+        return vecOrientation::Horizontal;
+    }else if(angle<0){
+        return vecOrientation::Down;
+    }else if(angle>0){
+        return vecOrientation::Up;
+    }else{
+        throw std::logic_error("Impossibile determinare l'orientazione del vettore!");
+    }
+}
+
 /*
 bool path::toUp(Eigen::Vector2f const& v){
     float angle=std::atan2f(v.y(),v.x());

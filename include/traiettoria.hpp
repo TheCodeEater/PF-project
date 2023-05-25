@@ -22,6 +22,12 @@ enum class posTypes{
   BackHit,
   Error
 };
+
+enum class vecOrientation{
+  Up,
+  Down,
+  Horizontal
+};
 struct particle {
   Eigen::Vector2f pos{};  // pos sta per position
   double theta{};         // pos e theta da input (distribuzione)
@@ -47,6 +53,7 @@ class path {  // contiene i bordi del biliardo
       const;  // operatore () per calcolare la traiettoria riflessa
   void reflect(particle& ) const;
   posTypes getLocationType(Eigen::Vector2f const&) const;
+  vecOrientation getHitDirection(Eigen::Vector2f const&) const;
 
   static float arctan(float x, float y);
 };
