@@ -6,6 +6,8 @@
 
 #include "../Eigen/Dense"
 
+const inline float pi=3.14159265358;
+
 using Line = Eigen::ParametrizedLine<float, 2>;
 namespace particleSimulator {
 struct particle {
@@ -25,10 +27,8 @@ class path {  // contiene i bordi del biliardo
   path(Line const&, Line const&);
   Eigen::Vector2f operator()(particle const&)
       const;  // operatore () per calcolare la traiettoria riflessa
-
-  Line getNormalUP(Eigen::Vector2f) const;
-  Line getNormalDW() const;
 };
+
 }  // namespace particleSimulator
 
 #endif
