@@ -45,10 +45,10 @@ Eigen::Vector2f path::operator()(particle const& p) const {
   const Eigen::Vector2f intersec_down = trajectory.intersectionPoint(Eigen::Hyperplane<float,2>{borderdown_}); //intersezione con inf
 
   //TEST INTERSEZIONE
-  if(intersection.x()<=0){//se l'intersezione è in x negative (ossia se collidiamo con il bordo laterale)
+  if(intersec_up.x()<=0){//se l'intersezione è in x negative (ossia se collidiamo con il bordo laterale)
     return trajectory.intersectionPoint(Eigen::Hyperplane<float,2>::Through({0,0},{0,1}));
   }else{
-    return intersection;
+    return intersec_up;
   }
 }
 
