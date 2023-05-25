@@ -88,8 +88,16 @@ float path::arctan(float x, float y){
     }
 }
 
-bool path::isInside(Eigen::Vector2f const& v) const{ //determina se il punto individuato è dentro l'area del biliardo
-    return v.x()>=0 && v.x()<=l_;
+posTypes path::getLocationType(Eigen::Vector2f const& v) const{ //determina il luogo del biliardo in cui si trova
+    if(v.x()>=0 && v.x()<=l_){
+        return posTypes::Inside;
+    }else if(v.x()<=0){
+        return posTypes::BackHit;
+    }else if(v.x()>=l_){
+        return posTypes::Escaped;
+    }else{
+        return posTypes::Error;
+    }
 }
 
 /*

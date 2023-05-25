@@ -46,7 +46,7 @@ class path {  // contiene i bordi del biliardo
   Eigen::Vector2f operator()(particle const&)
       const;  // operatore () per calcolare la traiettoria riflessa
   void reflect(particle& ) const;
-  bool isInside(Eigen::Vector2f const&) const;
+  posTypes getLocationType(Eigen::Vector2f const&) const;
 
   static float arctan(float x, float y);
 };
