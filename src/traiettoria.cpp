@@ -25,12 +25,12 @@ path::path(float r1, float r2, float l)
 
 Eigen::Vector2f path::operator()(particle const& p) const {
   //CONDIZIONI INIZIALI
-  assert(p.pos.x()>=0); //devi essere dentro il biliardo
+  assert(getLocationType(p.pos)==posTypes::Inside); //devi essere dentro il biliardo
 
   const Eigen::Vector2f dir{std::cos(p.theta),
                             std::sin(p.theta)};  // direzione particella
   // piccolo test
-  assert(dir.norm() - 1 < 1e-5);
+  assert(std::abs(dir.norm() - 1) < 1e-3);
   const Eigen::ParametrizedLine<float, 2> trajectory{
       p.pos, dir};  // retta della direzione della particella
 
@@ -38,6 +38,8 @@ Eigen::Vector2f path::operator()(particle const& p) const {
 //casi
 //bordo su, bordo giu
 //vettore orizzontale verso x negative, o verso x positive
+
+vecOrientation orientation{getHitDirection(p.theta)}; //calcola il bordo da colpire
 
   const Eigen::Vector2f intersec_up = trajectory.intersectionPoint(
       Eigen::Hyperplane<float,2>{borderup_});  // intersezione traiettoria con il sup
@@ -102,6 +104,10 @@ posTypes path::getLocationType(Eigen::Vector2f const& v) const{ //determina il l
 
 vecOrientation path::getHitDirection(Eigen::Vector2f const& v) const{
     float angle=std::atan2f(v.y(),v.x());
+    return getHitDirection(angle);
+}
+
+vecOrientation path::getHitDirection(float angle) const{
     if(std::abs(angle)<1e-3){
         return vecOrientation::Horizontal;
     }else if(angle<0){
