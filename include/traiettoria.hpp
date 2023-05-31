@@ -54,6 +54,7 @@ class path {  // contiene i bordi del biliardo
   void reflect(particle& ) const;
   posTypes getLocationType(Eigen::Vector2f const&) const;
   vecOrientation getHitDirection(Eigen::Vector2f const&) const;
+  vecOrientation getHitDirection(float angle) const;
 
   static float arctan(float x, float y);
 };
