@@ -127,8 +127,6 @@ float path::reflect(particle const& p) const{
     //const Eigen::Rotation2Df reflection{2*phi_inc};
     //dir=reflection*dir; //esegui la rotazione
 
-    std::cout<<"Nuova direzione: "<<dir_angle<<"\n";
-
     //aggiorna la particella
     /*p.pos=intsect;
     p.theta=*/
