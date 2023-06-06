@@ -1,6 +1,7 @@
 #include "../include/traiettoria.hpp"
 
 #include <cmath>
+#include <iostream>
 
 namespace particleSimulator {
 path::path(float r1, float r2, float l)
@@ -26,11 +27,12 @@ path::path(float r1, float r2, float l)
 Eigen::Vector2f path::operator()(particle const& p) const {
   //CONDIZIONI INIZIALI
   assert(getLocationType(p.pos)==posTypes::Inside); //devi essere dentro il biliardo
+  assert(p.theta>=0 && p.theta<=2*pi); //angolo tra 0 e 2pi
 
   const Eigen::Vector2f dir{std::cos(p.theta),
                             std::sin(p.theta)};  // direzione particella
   // piccolo test
-  assert(std::abs(dir.norm() - 1) < 1e-3);
+  assert(std::abs(dir.norm() - 1) < 1e-3); //test della norma del vettore uguale a 1
   const Eigen::ParametrizedLine<float, 2> trajectory{
       p.pos, dir};  // retta della direzione della particella
 
@@ -41,16 +43,37 @@ Eigen::Vector2f path::operator()(particle const& p) const {
 
 vecOrientation orientation{getHitDirection(p.theta)}; //calcola il bordo da colpire
 
-  const Eigen::Vector2f intersec_up = trajectory.intersectionPoint(
-      Eigen::Hyperplane<float,2>{borderup_});  // intersezione traiettoria con il sup
-  
-  const Eigen::Vector2f intersec_down = trajectory.intersectionPoint(Eigen::Hyperplane<float,2>{borderdown_}); //intersezione con inf
+Eigen::Vector2f intersec{0,0};
 
+switch(orientation){
+    case vecOrientation::Horizontal :{//Al momento gestiamo solo i casi semplici
+        /*const Eigen::Vector2f intsect_up=trajectory.intersectionPoint( 
+            Eigen::Hyperplane<float,2>{borderup_}); //intersezione con sup
+        const Eigen::Vector2f intsect_down=trajectory.intersectionPoint(
+            Eigen::Hyperplane<float,2>{borderdown_}); //intersezione con inf
+
+        
+        break;*/
+        break;
+    }
+
+    case vecOrientation::Up :
+        intersec=trajectory.intersectionPoint(
+            Eigen::Hyperplane<float,2>{borderup_}); //intersezione con sup
+        break;
+
+    case vecOrientation::Down :
+        intersec = trajectory.intersectionPoint(
+            Eigen::Hyperplane<float,2>{borderdown_}); //intersezione con inf
+        break;
+}
+  
+  assert(getLocationType(intersec)!=posTypes::Error);
   //TEST INTERSEZIONE
-  if(intersec_up.x()<=0){//se l'intersezione è in x negative (ossia se collidiamo con il bordo laterale)
+  if(getLocationType(intersec)==posTypes::BackHit){//se l'intersezione è in x negative (ossia se collidiamo con il bordo laterale)
     return trajectory.intersectionPoint(Eigen::Hyperplane<float,2>::Through({0,0},{0,1}));
   }else{
-    return intersec_up;
+    return intersec;
   }
 }
 
@@ -80,7 +103,7 @@ void path::reflect(particle& p) const{
     p.theta=arctan(dir.x(),dir.y());
 }
 
-float path::arctan(float x, float y){
+float path::arctan(float y, float x){
     const float theta=std::atan2f(y,x);
     //correggi l'angolo risultante in modo tale che sia compreso tra zero e 2pi, non tra -pi e pi
     if(theta<0){
@@ -91,28 +114,30 @@ float path::arctan(float x, float y){
 }
 
 posTypes path::getLocationType(Eigen::Vector2f const& v) const{ //determina il luogo del biliardo in cui si trova
-    if(v.x()>=0 && v.x()<=l_){
+    //assert; verifica che la x di v corrisponda al corrispondente valore Y calcolato
+    if(v.x()>=0 && v.x()<=l_){//coordinata x entro i limiti del biliardo
         return posTypes::Inside;
-    }else if(v.x()<=0){
+    }else if(v.x()<=0){//x negative: colpisci il fondo
         return posTypes::BackHit;
-    }else if(v.x()>=l_){
+    }else if(v.x()>=l_){//fuori: fuggito
         return posTypes::Escaped;
-    }else{
+    }else{//altrimenti, problema
         return posTypes::Error;
     }
 }
-
+/*
 vecOrientation path::getHitDirection(Eigen::Vector2f const& v) const{
-    float angle=std::atan2f(v.y(),v.x());
+    float angle=arctan(v.y(),v.x());
     return getHitDirection(angle);
-}
+}*/
 
-vecOrientation path::getHitDirection(float angle) const{
-    if(std::abs(angle)<1e-3){
+vecOrientation path::getHitDirection(float angle) const{//nota: accetta angoli tra -pi e +pi
+    assert(angle>=0 && angle <=2*pi);
+    if(std::abs(angle)<1e-3 || std::abs(angle-pi)<1e-3){//angolo nullo (con aritmetica floating point no ==0)
         return vecOrientation::Horizontal;
-    }else if(angle<0){
+    }else if(angle>=pi && angle<=2*pi){//negativo, verso il basso
         return vecOrientation::Down;
-    }else if(angle>0){
+    }else if(angle>=0 && angle<=pi){//positivo, vai verso l'alto
         return vecOrientation::Up;
     }else{
         throw std::logic_error("Impossibile determinare l'orientazione del vettore!");
