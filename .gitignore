@@ -6,6 +6,7 @@ build-debug/
 Eigen/
 
 #ignore files
+.DS_Store
 *.t
 *.bin
 test/doctest.h
