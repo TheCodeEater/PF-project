@@ -26,7 +26,8 @@ enum class posTypes{
 enum class vecOrientation{
   Up,
   Down,
-  Horizontal
+  HorizontalLeft,
+  HorizontalRight
 };
 struct particle {
   Eigen::Vector2f pos{};  // pos sta per position
