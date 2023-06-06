@@ -173,34 +173,4 @@ vecOrientation path::getHitDirection(float angle) const{//nota: accetta angoli t
     }
 }
 
-/*
-bool path::toUp(Eigen::Vector2f const& v){
-    float angle=std::atan2f(v.y(),v.x());
-    
-    if(angle>0){
-        return true;
-    }else{
-        return false;
-    }
-}
-
-bool path::toDown(Eigen::Vector2f const& v){
-    float angle=std::atan2f(v.y(),v.x());
-    
-    if(angle>0){
-        return false;
-    }else{
-        return true;
-    }
-}
-
-bool path::toHoriz(Eigen::Vector2f const& v){
-    float angle=std::atan2f(v.y(),v.x());
-    if(std::abs(angle)<1e-3){
-        return true;
-    }else{
-        return false;
-    }
-}
-*/
 }  // namespace particleSimulator
