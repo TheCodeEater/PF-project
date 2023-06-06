@@ -46,26 +46,51 @@ const Eigen::Vector2f intersec=[this,&trajectory,&p](){
     vecOrientation orientation{getHitDirection(p.theta)};
 
     switch(orientation){
-    case vecOrientation::Horizontal :{//Al momento gestiamo solo i casi semplici
-        /*const Eigen::Vector2f intsect_up=trajectory.intersectionPoint( 
-            Eigen::Hyperplane<float,2>{borderup_}); //intersezione con sup
-        const Eigen::Vector2f intsect_down=trajectory.intersectionPoint(
-            Eigen::Hyperplane<float,2>{borderdown_}); //intersezione con inf
-
-        
-        break;*/
-        break;
+    case vecOrientation::HorizontalLeft :{//sbatti sempre sul bordo
+        return trajectory.intersectionPoint(
+            Eigen::Hyperplane<float,2>{Line::Through({0,0},{0,1})});
     }
 
-    case vecOrientation::Up :
+    case vecOrientation::HorizontalRight :{//puoi sbattere sopra o sotto
+        //e' importante selezionare il bordo corretto poiche l'intersezione con entrambi si trova, ma una e' fuori
+        //mentre l'altra no
+        //idea: le fai entrambi e restituisci quella che sta dentro, se c'è
+        const Eigen::Vector2f int_sup=trajectory.intersectionPoint(
+            Eigen::Hyperplane<float,2>{borderup_}); //intersezione con sup
+        
+        const Eigen::Vector2f int_inf= trajectory.intersectionPoint(
+            Eigen::Hyperplane<float,2>{borderdown_}); //intersezione con inf
+
+        //
+        const posTypes pos_sup=getLocationType(int_sup);
+        const posTypes pos_inf=getLocationType(int_inf);
+
+        //test della correttezza
+        assert(pos_sup!=posTypes::Error);
+        assert(pos_inf!=posTypes::Error);
+
+        assert(pos_sup!=posTypes::BackHit);
+        assert(pos_inf!=posTypes::BackHit);
+
+        if(pos_sup==posTypes::Inside){//l'intersezione con il sup appartiene
+            return int_sup;
+        }else if(pos_inf==posTypes::Inside){ //con l'inf
+            return int_inf;
+        }else{
+            return int_sup;//scelta a caso, inf sarebbe equivalente
+        }
+
+    }
+
+    case vecOrientation::Up : {
         return trajectory.intersectionPoint(
             Eigen::Hyperplane<float,2>{borderup_}); //intersezione con sup
-        break;
+    }
 
-    case vecOrientation::Down :
+    case vecOrientation::Down : {
         return trajectory.intersectionPoint(
             Eigen::Hyperplane<float,2>{borderdown_}); //intersezione con inf
-        break;
+    }
 }
 }();
 
@@ -135,8 +160,10 @@ vecOrientation path::getHitDirection(Eigen::Vector2f const& v) const{
 
 vecOrientation path::getHitDirection(float angle) const{//nota: accetta angoli tra -pi e +pi
     assert(angle>=0 && angle <=2*pi);
-    if(std::abs(angle)<1e-3 || std::abs(angle-pi)<1e-3){//angolo nullo (con aritmetica floating point no ==0)
-        return vecOrientation::Horizontal;
+    if(std::abs(angle)<1e-3){//angolo nullo (con aritmetica floating point no ==0)
+        return vecOrientation::HorizontalRight;
+    }else if(std::abs(angle-pi)<1e-3){
+        return vecOrientation::HorizontalLeft;
     }else if(angle>=pi && angle<=2*pi){//negativo, verso il basso
         return vecOrientation::Down;
     }else if(angle>=0 && angle<=pi){//positivo, vai verso l'alto
