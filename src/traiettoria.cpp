@@ -117,7 +117,7 @@ void path::reflect(particle& p) const{
     Eigen::Vector2f dir{-std::cos(p.theta),
                             -std::sin(p.theta)};  // direzione particella, invertita per il calcolo della riflessione
     //angolo traiettoria
-    float dir_angle=arctan(dir.x(),dir.y());
+    float dir_angle=arctan(dir.y(),dir.x());
 
     float phi_inc=normal_angle-dir_angle; //angolo di incidenza
 
@@ -127,7 +127,7 @@ void path::reflect(particle& p) const{
 
     //aggiorna la particella
     p.pos=intsect;
-    p.theta=arctan(dir.x(),dir.y());
+    p.theta=arctan(dir.y(),dir.x());
 }
 
 float path::arctan(float y, float x){
