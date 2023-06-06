@@ -40,12 +40,12 @@ Eigen::Vector2f path::operator()(particle const& p) const {
 //casi
 //bordo su, bordo giu
 //vettore orizzontale verso x negative, o verso x positive
+ //calcola il bordo da colpire
 
-vecOrientation orientation{getHitDirection(p.theta)}; //calcola il bordo da colpire
+const Eigen::Vector2f intersec=[this,&trajectory,&p](){
+    vecOrientation orientation{getHitDirection(p.theta)};
 
-Eigen::Vector2f intersec{0,0};
-
-switch(orientation){
+    switch(orientation){
     case vecOrientation::Horizontal :{//Al momento gestiamo solo i casi semplici
         /*const Eigen::Vector2f intsect_up=trajectory.intersectionPoint( 
             Eigen::Hyperplane<float,2>{borderup_}); //intersezione con sup
@@ -58,15 +58,17 @@ switch(orientation){
     }
 
     case vecOrientation::Up :
-        intersec=trajectory.intersectionPoint(
+        return trajectory.intersectionPoint(
             Eigen::Hyperplane<float,2>{borderup_}); //intersezione con sup
         break;
 
     case vecOrientation::Down :
-        intersec = trajectory.intersectionPoint(
+        return trajectory.intersectionPoint(
             Eigen::Hyperplane<float,2>{borderdown_}); //intersezione con inf
         break;
 }
+}();
+
   
   assert(getLocationType(intersec)!=posTypes::Error);
   //TEST INTERSEZIONE
