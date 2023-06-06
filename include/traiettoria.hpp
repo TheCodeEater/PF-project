@@ -52,7 +52,7 @@ class path {  // contiene i bordi del biliardo
   path(float r1, float r2, float r3);
   Eigen::Vector2f operator()(particle const&)
       const;  // operatore () per calcolare la traiettoria riflessa
-  void reflect(particle& ) const;
+  float reflect(particle const& ) const;
   posTypes getLocationType(Eigen::Vector2f const&) const;
   //vecOrientation getHitDirection(Eigen::Vector2f const&) const;
   vecOrientation getHitDirection(float angle) const;
