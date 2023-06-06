@@ -104,7 +104,7 @@ const Eigen::Vector2f intersec=[this,&trajectory,&p](){
   }
 }
 
-float path::reflect(particle const& p) const{
+float path::reflect(particle& p) const{
     const Eigen::Vector2f intsect=operator()(p); //calcola il punto di collisione
     //determina se è il bordo su o il bordo giù, usando le coordinate del punto di intersezione
     Eigen::Vector2f const& normal_vect{(intsect.y()>0)? normal_up_ : normal_down_};
@@ -112,24 +112,15 @@ float path::reflect(particle const& p) const{
     //calcola l'angolo di incidenza
     //angolo della normale
     float normal_angle=arctan(normal_vect.y(),normal_vect.x());
-    //angolo traiettoria
-    //vettore traiettoria
-    //Eigen::Vector2f dir{-std::cos(p.theta),
-    //                        -std::sin(p.theta)};  // direzione particella, invertita per il calcolo della riflessione
-    //angolo traiettoria
+    //angolo vettore traiettoria ribaltato (per poi ruotarlo di 2* angolo rif)
     float dir_angle=p.theta+pi;
 
     float phi_inc=normal_angle-dir_angle; //angolo di incidenza
 
     dir_angle+=2*phi_inc; //esegui la rotazione
 
-    //ruota il vettore direzione
-    //const Eigen::Rotation2Df reflection{2*phi_inc};
-    //dir=reflection*dir; //esegui la rotazione
-
-    //aggiorna la particella
-    /*p.pos=intsect;
-    p.theta=*/
+    p.pos=intsect;
+    p.theta=dir_angle;
 
     return dir_angle;
 }
