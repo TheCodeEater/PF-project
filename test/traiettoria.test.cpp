@@ -6,6 +6,10 @@
 
 using pT=particleSimulator::posTypes;
 
+TEST_CASE("Test arcotangente"){
+    //alcuni test per la mia arctan
+}
+
 TEST_CASE("Test del calcolo delle traiettorie"){
     //dati del biliardo di esempio
     const int r1=10;
