@@ -11,7 +11,7 @@
 
 #include "../Eigen/Dense"
 
-static const inline float pi=std::atan(INFINITY);
+static const inline float pi=2*std::atan(INFINITY);
 
 using Line = Eigen::ParametrizedLine<float, 2>;
 namespace particleSimulator {
@@ -53,10 +53,10 @@ class path {  // contiene i bordi del biliardo
       const;  // operatore () per calcolare la traiettoria riflessa
   void reflect(particle& ) const;
   posTypes getLocationType(Eigen::Vector2f const&) const;
-  vecOrientation getHitDirection(Eigen::Vector2f const&) const;
+  //vecOrientation getHitDirection(Eigen::Vector2f const&) const;
   vecOrientation getHitDirection(float angle) const;
 
-  static float arctan(float x, float y);
+  static float arctan(float y, float x);
 };
 
 }  // namespace particleSimulator
