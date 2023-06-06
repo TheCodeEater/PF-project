@@ -47,4 +47,18 @@ TEST_CASE("Test del calcolo delle traiettorie"){
 
     }
 
+    //test punto di intersezione
+    SUBCASE("Test punto di intersezione"){
+        //particella 0
+        CHECK(int0.x()==doctest::Approx(9.5238095));
+        CHECK(int0.y()==doctest::Approx(9.5238095));
+    }
+
+    //calcolo angoli riflessi
+    SUBCASE("Test riflessione"){
+        float refl_0=biliardo.reflect(p0);
+
+        CHECK(refl_0==doctest::Approx(5.39786));
+    }
+
 }
