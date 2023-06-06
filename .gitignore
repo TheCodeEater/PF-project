@@ -3,6 +3,7 @@ build/
 build-debug/
 .vscode/
 build-debug/
+Eigen/
 
 #ignore files
 *.t
