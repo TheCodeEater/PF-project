@@ -1,6 +1,10 @@
 #include "../include/application.hpp"
 
+#include "../include/traiettoria.hpp"
+
 #include "../include/graphics.hpp"
+
+#include <iostream>
 
 namespace particleSimulator {
 Application::Application(options const& opt)
@@ -65,6 +69,23 @@ Application::Application(options const& opt)
 }
 
 int Application::loop() {
+  particleSimulator::path biliardo{optn_.r1,optn_.r2,optn_.l};//inizializza biliardo
+  //esegui il calcolo della traiettoria
+  particleSimulator::particle p0{{0,0}, std::atan(1)};
+  auto p1=p0;
+
+  std::vector<particleSimulator::dottedLine> trajs{};
+
+  for(int i{};i<4;i++){
+    std::cout<<"It: "<<i<<"\n";
+    std::cout<<"Angolo nuova traiettoria: "<<biliardo.reflect(p0); //calcola la riflessione
+    particleSimulator::dottedLine line{{p1.pos.x(),p1.pos.y()},{p0.pos.x(),p0.pos.y()}};
+    trajs.push_back(line);
+    p1=p0;
+  }
+
+  std::cout<<"Angolo ultima iterazione: "<<p0.theta<<"\n";
+
   // run the program as long as the window is open
   while (w_.isOpen()) {
     // check all the window's events that were triggered since the last
@@ -91,6 +112,10 @@ int Application::loop() {
     w_.draw(y_);
     w_.draw(line_inf_);
     w_.draw(line_sup_);
+    //
+    for(auto const& l:trajs){//disegna le traiettorie
+      l.draw(w_);
+    }
     // display
     w_.display();
   }
