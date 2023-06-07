@@ -173,9 +173,9 @@ float path::arctan(float y, float x){
 
 posTypes path::getLocationType(Eigen::Vector2f const& v) const{ //determina il luogo del biliardo in cui si trova
     //assert; verifica che la x di v corrisponda al corrispondente valore Y calcolato
-    if(v.x()>=0 && v.x()<=l_){//coordinata x entro i limiti del biliardo
+    if(v.x()>0 && v.x()<=l_){//coordinata x entro i limiti del biliardo
         return posTypes::Inside;
-    }else if(v.x()<0){//x negative: colpisci il fondo
+    }else if(v.x()<=0){//x negative: colpisci il fondo
         return posTypes::BackHit;
     }else if(v.x()>=l_){//fuori: fuggito
         return posTypes::Escaped;
