@@ -41,9 +41,9 @@ TEST_CASE("Test del calcolo delle traiettorie"){
 
     SUBCASE("Test collisioni dopo il lancio"){
         CHECK(biliardo.getLocationType(int0)==pT::Inside);
-        CHECK(biliardo.getLocationType(int1)==pT::Inside); //NOTA: sarebbe un colpo nel bordo, ma resta comunque dentro
+        CHECK(biliardo.getLocationType(int1)==pT::BackHit); //NOTA: sarebbe un colpo nel bordo, ma resta comunque dentro
         CHECK(biliardo.getLocationType(int2)==pT::Escaped);
-        CHECK(biliardo.getLocationType(int3)==pT::Inside);
+        CHECK(biliardo.getLocationType(int3)==pT::BackHit);
 
     }
 
