@@ -135,7 +135,7 @@ float path::reflect(particle& p) const{
     //angolo della normale
     const float normal_angle=arctan(normal_vect.y(),normal_vect.x());
     //vettore traiettoria ribaltato
-    Eigen::Vector2f dir{-std::cos(p.theta),-std::sin(p.theta)};
+    const Eigen::Vector2f dir{-std::cos(p.theta),-std::sin(p.theta)};
 
     const float dir_angle=arctan(dir.y(),dir.x()); //calcola angolo del vettore
 
@@ -151,9 +151,9 @@ float path::reflect(particle& p) const{
 
     const Eigen::Rotation2D rotation{2*phi_inc};//rotazione di 2*angolo incidenza
 
-    dir=rotation*dir; //esegui la rotazione
+    const Eigen::Vector2f new_dir=rotation*dir; //esegui la rotazione
 
-    const float new_angle=arctan(dir.y(),dir.x());
+    const float new_angle=arctan(new_dir.y(),new_dir.x());
 
     p.pos=intsect;
     p.theta=new_angle;
