@@ -46,6 +46,7 @@ class path {  // contiene i bordi del biliardo
   //direzioni normali ai bordi. I vettori puntano verso l'interno della scatola del biliardo
   Eigen::Vector2f normal_up_{};
   Eigen::Vector2f normal_down_{};
+  Eigen::Vector2f horizontal_{};
 
  public:
   //path(Line const&, Line const&);
