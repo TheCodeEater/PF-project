@@ -20,7 +20,7 @@ dottedLine::dottedLine(sf::Vector2f p0, sf::Vector2f p1, sf::Color c)
       vertices_{sf::Points, 2} {
   // genera punti con un dato step di incremento del parametro finché non superi
   // il punto finale
-  const float step{0.2f};
+  const float step{0.01f};
   // calcola la lunghezza della retta
   const double l =
       std::sqrt(direction_.x * direction_.x + direction_.y * direction_.y);
