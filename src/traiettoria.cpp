@@ -26,7 +26,7 @@ path::path(float r1, float r2, float l)
 
 Eigen::Vector2f path::operator()(particle const& p) const {
   //CONDIZIONI INIZIALI
-  assert(getLocationType(p.pos)==posTypes::Inside); //devi essere dentro il biliardo
+  assert(getLocationType(p.pos)==posTypes::Inside || getLocationType(p.pos)==posTypes::BackHit); //devi essere dentro il biliardo
   assert(p.theta>=0); //angolo tra 0 e 2pi
   assert(p.theta<=2*pi);
 
@@ -175,7 +175,7 @@ posTypes path::getLocationType(Eigen::Vector2f const& v) const{ //determina il l
     //assert; verifica che la x di v corrisponda al corrispondente valore Y calcolato
     if(v.x()>=0 && v.x()<=l_){//coordinata x entro i limiti del biliardo
         return posTypes::Inside;
-    }else if(v.x()<=0){//x negative: colpisci il fondo
+    }else if(v.x()<0){//x negative: colpisci il fondo
         return posTypes::BackHit;
     }else if(v.x()>=l_){//fuori: fuggito
         return posTypes::Escaped;
