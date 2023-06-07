@@ -59,6 +59,10 @@ TEST_CASE("Test del calcolo delle traiettorie"){
         float refl_0=biliardo.reflect(p0);
 
         CHECK(refl_0==doctest::Approx(5.39786));
+
+        CHECK(biliardo.getHitDirection(p0.theta)==particleSimulator::vecOrientation::Down);
+
+        biliardo.reflect(p0);
     }
 
 }
