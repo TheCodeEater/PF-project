@@ -6,7 +6,7 @@
 namespace particleSimulator {
 path::path(float r1, float r2, float l)
     : r1_{r1}, r2_{r2}, l_{l},
-    borderup_{Line::Through({0,r1_},{l_,r2_})}, borderdown_{Line::Through({0,-r1_},{l_,-r2_})} {
+    borderup_{Line::Through({0,r1_},{l_,r2_})}, borderdown_{Line::Through({0,-r1_},{l_,-r2_})}, horizontal_{1,0} {
         //TEST: correttezza parametri
         assert(r1_>0);
         assert(r2_>0);
@@ -103,33 +103,57 @@ const Eigen::Vector2f intersec=[this,&trajectory,&p](){
   }else{
     return intersec;
   }
+  //ATTENZIONE: rimuovere questo pezzo ed inserirlo in una funzione ad hoc, che richiama internamente l'operatore
 }
 
 float path::reflect(particle& p) const{
     const Eigen::Vector2f intsect=operator()(p); //calcola il punto di collisione
     //determina se è il bordo su o il bordo giù, usando le coordinate del punto di intersezione
-    Eigen::Vector2f const& normal_vect{(intsect.y()>0)? normal_up_ : normal_down_};
+    Eigen::Vector2f const& normal_vect=[this,&p,&intsect](){
+
+        switch(getHitDirection(p.theta)){
+            case vecOrientation::Up: {
+                return (intsect.y()>0) ? normal_up_ : horizontal_; //se vai verso l'alto, verifica se sbatti prima
+            }
+
+            case vecOrientation::Down:{
+                return (intsect.y()>0) ? horizontal_ : normal_down_;
+            }
+
+            case vecOrientation::HorizontalLeft: {
+                return horizontal_;
+            }
+
+            case vecOrientation::HorizontalRight: {
+                return (intsect.y()>0) ? normal_up_ : normal_down_;
+            }
+
+        }
+    }();
     const Line normal{intsect,  normal_vect}; //trova la normale
     //calcola l'angolo di incidenza
     //angolo della normale
-    float normal_angle=arctan(normal_vect.y(),normal_vect.x());
+    const float normal_angle=arctan(normal_vect.y(),normal_vect.x());
     //vettore traiettoria ribaltato
     Eigen::Vector2f dir{-std::cos(p.theta),-std::sin(p.theta)};
 
-    float dir_angle=arctan(dir.y(),dir.x()); //calcola angolo del vettore
+    const float dir_angle=arctan(dir.y(),dir.x()); //calcola angolo del vettore
 
     assert(dir_angle<=2*pi); //condizioni sulla convenzione degli angoli
     assert(dir_angle>=0);
 
-    float phi_inc=normal_angle-dir_angle; //angolo di incidenza
+    const float phi_inc=normal_angle-dir_angle; //angolo di incidenza
+    std::cout<<"Angolo normale: "<<normal_angle<<"\n";
+    std::cout<<"Angolo direzionale: "<<dir_angle<<"\n";
+     //NOTA: phi non deve rispettare la condizione, il segno determina il verso della rotazione
+    //const float phi_inc=std::acos(normal.direction().dot(dir));
+    //assert(std::abs(phi_inc)<=pi/2);
 
-    assert(std::abs(phi_inc)<=pi/2); //NOTA: phi non deve rispettare la condizione, il segno determina il verso della rotazione
-
-    Eigen::Rotation2D rotation{2*phi_inc};//rotazione di 2*angolo incidenza
+    const Eigen::Rotation2D rotation{2*phi_inc};//rotazione di 2*angolo incidenza
 
     dir=rotation*dir; //esegui la rotazione
 
-    float new_angle=arctan(dir.y(),dir.x());
+    const float new_angle=arctan(dir.y(),dir.x());
 
     p.pos=intsect;
     p.theta=new_angle;
