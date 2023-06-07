@@ -27,7 +27,8 @@ path::path(float r1, float r2, float l)
 Eigen::Vector2f path::operator()(particle const& p) const {
   //CONDIZIONI INIZIALI
   assert(getLocationType(p.pos)==posTypes::Inside); //devi essere dentro il biliardo
-  assert(p.theta>=0 && p.theta<=2*pi); //angolo tra 0 e 2pi
+  assert(p.theta>=0); //angolo tra 0 e 2pi
+  assert(p.theta<=2*pi);
 
   const Eigen::Vector2f dir{std::cos(p.theta),
                             std::sin(p.theta)};  // direzione particella
@@ -112,17 +113,28 @@ float path::reflect(particle& p) const{
     //calcola l'angolo di incidenza
     //angolo della normale
     float normal_angle=arctan(normal_vect.y(),normal_vect.x());
-    //angolo vettore traiettoria ribaltato (per poi ruotarlo di 2* angolo rif)
-    float dir_angle=p.theta+pi;
+    //vettore traiettoria ribaltato
+    Eigen::Vector2f dir{-std::cos(p.theta),-std::sin(p.theta)};
+
+    float dir_angle=arctan(dir.y(),dir.x()); //calcola angolo del vettore
+
+    assert(dir_angle<=2*pi); //condizioni sulla convenzione degli angoli
+    assert(dir_angle>=0);
 
     float phi_inc=normal_angle-dir_angle; //angolo di incidenza
 
-    dir_angle+=2*phi_inc; //esegui la rotazione
+    assert(std::abs(phi_inc)<=pi/2); //NOTA: phi non deve rispettare la condizione, il segno determina il verso della rotazione
+
+    Eigen::Rotation2D rotation{2*phi_inc};//rotazione di 2*angolo incidenza
+
+    dir=rotation*dir; //esegui la rotazione
+
+    float new_angle=arctan(dir.y(),dir.x());
 
     p.pos=intsect;
-    p.theta=dir_angle;
+    p.theta=new_angle;
 
-    return dir_angle;
+    return new_angle;
 }
 
 float path::arctan(float y, float x){
