@@ -76,7 +76,7 @@ int Application::loop() {
 
   std::vector<particleSimulator::dottedLine> trajs{};
 
-  for(int i{};i<4;i++){
+  for(int i{};i<13;i++){
     std::cout<<"It: "<<i<<"\n";
     std::cout<<"Angolo nuova traiettoria: "<<biliardo.reflect(p0); //calcola la riflessione
     particleSimulator::dottedLine line{{p1.pos.x(),p1.pos.y()},{p0.pos.x(),p0.pos.y()}};

@@ -113,11 +113,11 @@ float path::reflect(particle& p) const{
 
         switch(getHitDirection(p.theta)){
             case vecOrientation::Up: {
-                return (intsect.y()>0) ? normal_up_ : horizontal_; //se vai verso l'alto, verifica se sbatti prima
+                return (intsect.x()<1e-3) ? horizontal_ : normal_up_; //se vai verso l'alto, verifica se sbatti prima
             }
 
             case vecOrientation::Down:{
-                return (intsect.y()>0) ? horizontal_ : normal_down_;
+                return (intsect.x()<1e-3) ? horizontal_ : normal_down_;
             }
 
             case vecOrientation::HorizontalLeft: {
