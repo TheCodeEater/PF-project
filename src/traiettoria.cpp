@@ -209,4 +209,26 @@ simulation::simulation(float r1, float r2, float l, int max_cycles): //costrutto
   simulator_{r1,r2,l},
   max_iterations_{max_cycles} {}
 
+    std::vector<dottedLine> simulation::operator()(particle& p) const//operatore di simulazione
+    {
+      std::vector<dottedLine> trajs{};
+      for(int i{0}; i<max_iterations_; ++i){//up to the maximum number of iterations
+        //position vectors
+        const Eigen::Vector2f old_pos{p.pos};
+
+        simulator_.reflect(p); //run the particle reflection
+
+        Eigen::Vector2f const& curr_pos{p.pos}; //const reference to current position
+
+        particleSimulator::dottedLine line{{old_pos.x(),old_pos.y()},{curr_pos.x(),curr_pos.y()}}; //create line trajectory
+        trajs.push_back(line); //save into vector
+
+        if(simulator_.getLocationType(p.pos)==posTypes::Escaped){ //se la particella esce, termina il ciclo
+          break;
+        }
+      }
+
+      return trajs;
+    }
+
 }  // namespace particleSimulator
