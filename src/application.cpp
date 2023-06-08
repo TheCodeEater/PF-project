@@ -65,14 +65,20 @@ Application::Application(options const& opt)
 
         return l_inf;
       }()},
-      simulation_{optn_.r1, optn_.r2, optn_.l}, //initialize simulation
+      simulation_{optn_.r1, optn_.r2, optn_.l,50}, //initialize simulation
       particle_{{0,optn_.y0},optn_.theta0}//to do: initialize particle and assert its starting conditions
        {
+        //test sulla particella
+        assert(particle_.pos.x()<1e-3);
+        assert(particle_.pos.y()<=optn_.r1);
+        assert(particle_.pos.y()>=-optn_.r1);
+
   w_.setView(camera_);  // set the current view
 }
 
 int Application::loop() {
   //run trajectory calculation
+  simulation_(std::back_inserter(trajectories_),particle_);
   /*
   particleSimulator::path biliardo{optn_.r1,optn_.r2,optn_.l};//inizializza biliardo
   //esegui il calcolo della traiettoria

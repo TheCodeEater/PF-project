@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 #include "../include/traiettoria.hpp"
 #include "../include/graphics.hpp"
@@ -40,7 +41,7 @@ class Application {
   const sf::VertexArray line_inf_{};
 
   //logic objects
-  const path simulation_; //simulation object
+  const simulation simulation_; //simulation object
   particle particle_{}; //studied particle
   std::vector<dottedLine> trajectories_{}; //trajecotry history
 
