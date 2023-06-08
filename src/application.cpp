@@ -64,11 +64,16 @@ Application::Application(options const& opt)
         l_inf[1].color = sf::Color::Red;
 
         return l_inf;
-      }()} {
+      }()},
+      simulation_{optn_.r1, optn_.r2, optn_.l}, //initialize simulation
+      particle_{{0,optn_.y0},optn_.theta0}//to do: initialize particle and assert its starting conditions
+       {
   w_.setView(camera_);  // set the current view
 }
 
 int Application::loop() {
+  //run trajectory calculation
+  /*
   particleSimulator::path biliardo{optn_.r1,optn_.r2,optn_.l};//inizializza biliardo
   //esegui il calcolo della traiettoria
   particleSimulator::particle p0{{0,300}, std::atan(2)};
@@ -88,7 +93,7 @@ int Application::loop() {
     }
   }
 
-  std::cout<<"Angolo ultima iterazione: "<<p0.theta<<"\n";
+  std::cout<<"Angolo ultima iterazione: "<<p0.theta<<"\n";*/
 
   // run the program as long as the window is open
   while (w_.isOpen()) {
@@ -117,9 +122,9 @@ int Application::loop() {
     w_.draw(line_inf_);
     w_.draw(line_sup_);
     //
-    for(auto const& l:trajs){//disegna le traiettorie
-      l.draw(w_);
-    }
+    std::for_each(trajectories_.cbegin(),trajectories_.cend(), [this](dottedLine const& line){
+      line.draw(w_); //draw line on the current window
+    });
     // display
     w_.display();
   }

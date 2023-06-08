@@ -3,6 +3,9 @@
 
 #include <SFML/Graphics.hpp>
 #include <string>
+#include <vector>
+
+#include "../include/traiettoria.hpp"
 
 namespace particleSimulator {
 
@@ -18,6 +21,9 @@ struct options {
   float r1{};
   float r2{};
   float l{};
+  //particle setup
+  float y0{};
+  float theta0{};
 };
 
 class Application {
@@ -31,6 +37,11 @@ class Application {
 
   const sf::VertexArray line_sup_{};
   const sf::VertexArray line_inf_{};
+
+  //logic objects
+  const path simulation_; //simulation object
+  particle particle_{}; //studied particle
+  std::vector<dottedLine> trajectories_{}; //trajecotry history
 
  public:
   explicit Application(options const&);
