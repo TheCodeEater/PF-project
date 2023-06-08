@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "../include/traiettoria.hpp"
+#include "../include/graphics.hpp"
 
 namespace particleSimulator {
 
