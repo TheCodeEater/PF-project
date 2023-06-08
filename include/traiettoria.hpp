@@ -13,6 +13,8 @@
 
 #include "../include/graphics.hpp"
 
+#include <type_traits>
+
 static const inline float pi=2*std::atan(INFINITY);
 
 using Line = Eigen::ParametrizedLine<float, 2>;
@@ -70,9 +72,9 @@ class simulation{ //classe che gestisce la simulazione
   public:
     simulation(float r1, float r2, float l, int max_cycles); //construcotr
 
-    template<class OutputIterator>
-    void operator()(OutputIterator it, particle& p) const//operatore di simulazione
+    std::vector<dottedLine> operator()(particle& p) const//operatore di simulazione
     {
+      std::vector<dottedLine> trajs{};
       for(int i{0}; i<max_iterations_; ++i){//up to the maximum number of iterations
         //position vectors
         const Eigen::Vector2f old_pos{p.pos};
@@ -82,14 +84,14 @@ class simulation{ //classe che gestisce la simulazione
         Eigen::Vector2f const& curr_pos{p.pos}; //const reference to current position
 
         particleSimulator::dottedLine line{{old_pos.x(),old_pos.y()},{curr_pos.x(),curr_pos.y()}}; //create line trajectory
-
-        *it=line; //add to vector
-        ++it;
+        trajs.push_back(line); //save into vector
 
         if(simulator_.getLocationType(p.pos)==posTypes::Escaped){ //se la particella esce, termina il ciclo
           break;
         }
       }
+
+      return trajs;
     }
 
 };

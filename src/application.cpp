@@ -78,7 +78,7 @@ Application::Application(options const& opt)
 
 int Application::loop() {
   //run trajectory calculation
-  simulation_(std::back_inserter(trajectories_),particle_);
+  trajectories_=simulation_(particle_);
   /*
   particleSimulator::path biliardo{optn_.r1,optn_.r2,optn_.l};//inizializza biliardo
   //esegui il calcolo della traiettoria
