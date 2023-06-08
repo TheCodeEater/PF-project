@@ -143,11 +143,12 @@ float path::reflect(particle& p) const{
     assert(dir_angle>=0);
 
     const float phi_inc=normal_angle-dir_angle; //angolo di incidenza
-    std::cout<<"Angolo normale: "<<normal_angle<<"\n";
-    std::cout<<"Angolo direzionale: "<<dir_angle<<"\n";
+    
      //NOTA: phi non deve rispettare la condizione, il segno determina il verso della rotazione
     //const float phi_inc=std::acos(normal.direction().dot(dir));
     //assert(std::abs(phi_inc)<=pi/2);
+    //assert al momento non ripristinabile, fornisce problemi di geometria per gli urti con il bordo posteriore
+    //risoluzione: prodotto scalare (vettoriale) e con e sin
 
     const Eigen::Rotation2D rotation{2*phi_inc};//rotazione di 2*angolo incidenza
 
