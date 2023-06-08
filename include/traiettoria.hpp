@@ -11,6 +11,8 @@
 
 #include "../Eigen/Dense"
 
+#include "../include/graphics.hpp"
+
 static const inline float pi=2*std::atan(INFINITY);
 
 using Line = Eigen::ParametrizedLine<float, 2>;
@@ -59,6 +61,37 @@ class path {  // contiene i bordi del biliardo
   vecOrientation getHitDirection(float angle) const;
 
   static float arctan(float y, float x);
+};
+
+class simulation{ //classe che gestisce la simulazione
+  path simulator_;
+  int max_iterations_{};
+
+  public:
+    simulation(float r1, float r2, float l, int max_cycles); //construcotr
+
+    template<class OutputIterator>
+    void operator()(OutputIterator it, particle& p) const//operatore di simulazione
+    {
+      for(int i{0}; i<max_iterations_; ++i){//up to the maximum number of iterations
+        //position vectors
+        const Eigen::Vector2f old_pos{p.pos};
+
+        simulator_.reflect(p); //run the particle reflection
+
+        Eigen::Vector2f const& curr_pos{p.pos}; //const reference to current position
+
+        particleSimulator::dottedLine line{{old_pos.x(),old_pos.y()},{curr_pos.x(),curr_pos.y()}}; //create line trajectory
+
+        *it=line; //add to vector
+        ++it;
+
+        if(simulator_.getLocationType(p.pos)==posTypes::Escaped){ //se la particella esce, termina il ciclo
+          break;
+        }
+      }
+    }
+
 };
 
 }  // namespace particleSimulator

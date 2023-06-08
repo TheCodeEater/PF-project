@@ -205,4 +205,8 @@ vecOrientation path::getHitDirection(float angle) const{//nota: accetta angoli t
     }
 }
 
+simulation::simulation(float r1, float r2, float l, int max_cycles): //costruttore
+  simulator_{r1,r2,l},
+  max_iterations_{max_cycles} {}
+
 }  // namespace particleSimulator
