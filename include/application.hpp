@@ -2,12 +2,12 @@
 #define APPLICATION_HPP
 
 #include <SFML/Graphics.hpp>
+#include <algorithm>
 #include <string>
 #include <vector>
-#include <algorithm>
 
-#include "../include/traiettoria.hpp"
 #include "../include/graphics.hpp"
+#include "../include/traiettoria.hpp"
 
 namespace particleSimulator {
 
@@ -23,7 +23,7 @@ struct options {
   float r1{};
   float r2{};
   float l{};
-  //particle setup
+  // particle setup
   float y0{};
   float theta0{};
 };
@@ -40,10 +40,10 @@ class Application {
   const sf::VertexArray line_sup_{};
   const sf::VertexArray line_inf_{};
 
-  //logic objects
-  const simulation simulation_; //simulation object
-  particle particle_{}; //studied particle
-  std::vector<dottedLine> trajectories_{}; //trajecotry history
+  // logic objects
+  const simulation simulation_;             // simulation object
+  particle particle_{};                     // studied particle
+  std::vector<dottedLine> trajectories_{};  // trajecotry history
 
  public:
   explicit Application(options const&);

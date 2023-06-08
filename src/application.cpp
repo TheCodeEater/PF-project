@@ -1,10 +1,9 @@
 #include "../include/application.hpp"
 
-#include "../include/traiettoria.hpp"
+#include <iostream>
 
 #include "../include/graphics.hpp"
-
-#include <iostream>
+#include "../include/traiettoria.hpp"
 
 namespace particleSimulator {
 Application::Application(options const& opt)
@@ -65,22 +64,24 @@ Application::Application(options const& opt)
 
         return l_inf;
       }()},
-      simulation_{optn_.r1, optn_.r2, optn_.l,50}, //initialize simulation
-      particle_{{0,optn_.y0},optn_.theta0}//to do: initialize particle and assert its starting conditions
-       {
-        //test sulla particella
-        assert(particle_.pos.x()<1e-3);
-        assert(particle_.pos.y()<=optn_.r1);
-        assert(particle_.pos.y()>=-optn_.r1);
+      simulation_{optn_.r1, optn_.r2, optn_.l, 50},  // initialize simulation
+      particle_{{0, optn_.y0}, optn_.theta0}
+// to do: initialize particle and assert its starting conditions
+{
+  // test sulla particella
+  assert(particle_.pos.x() < 1e-3);
+  assert(particle_.pos.y() <= optn_.r1);
+  assert(particle_.pos.y() >= -optn_.r1);
 
   w_.setView(camera_);  // set the current view
 }
 
 int Application::loop() {
-  //run trajectory calculation
-  trajectories_=simulation_(particle_);
+  // run trajectory calculation
+  trajectories_ = simulation_(particle_);
   /*
-  particleSimulator::path biliardo{optn_.r1,optn_.r2,optn_.l};//inizializza biliardo
+  particleSimulator::path biliardo{optn_.r1,optn_.r2,optn_.l};//inizializza
+  biliardo
   //esegui il calcolo della traiettoria
   particleSimulator::particle p0{{0,300}, std::atan(2)};
   auto p1=p0;
@@ -90,8 +91,8 @@ int Application::loop() {
   for(int i{};i<50;i++){
     std::cout<<"It: "<<i<<"\n";
     biliardo.reflect(p0); //calcola la riflessione
-    particleSimulator::dottedLine line{{p1.pos.x(),p1.pos.y()},{p0.pos.x(),p0.pos.y()}};
-    trajs.push_back(line);
+    particleSimulator::dottedLine
+  line{{p1.pos.x(),p1.pos.y()},{p0.pos.x(),p0.pos.y()}}; trajs.push_back(line);
     p1=p0;
 
     if(biliardo.getLocationType(p0.pos)==posTypes::Escaped){
@@ -128,9 +129,10 @@ int Application::loop() {
     w_.draw(line_inf_);
     w_.draw(line_sup_);
     //
-    std::for_each(trajectories_.cbegin(),trajectories_.cend(), [this](dottedLine const& line){
-      line.draw(w_); //draw line on the current window
-    });
+    std::for_each(trajectories_.cbegin(), trajectories_.cend(),
+                  [this](dottedLine const& line) {
+                    line.draw(w_);  // draw line on the current window
+                  });
     // display
     w_.display();
   }
