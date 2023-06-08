@@ -5,14 +5,6 @@
 #include <iostream>
 namespace particleSimulator {
 
-sf::Vector2f operator*(float t, sf::Vector2f const& v) {
-  return {t * v.x, t * v.y};
-}
-
-sf::Vector2f operator*(sf::Vector2f const& v, float t) {
-  return {t * v.x, t * v.y};
-}
-
 dottedLine::dottedLine(vType p0, vType p1, sf::Color c)
     : first_{p0},
       last_{p1},

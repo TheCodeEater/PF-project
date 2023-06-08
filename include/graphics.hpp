@@ -42,10 +42,6 @@ class dottedLine {
   void push_back(value_type);
 };
 
-sf::Vector2f operator*(float t, sf::Vector2f const& v);
-
-sf::Vector2f operator*(sf::Vector2f const& v, float t);
-
 }  // namespace particleSimulator
 
 #endif
