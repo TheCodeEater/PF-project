@@ -1,7 +1,6 @@
 #include "../include/traiettoria.hpp"
 
 #include <cmath>
-#include <iostream>
 
 namespace particleSimulator {
 path::path(float r1, float r2, float l)

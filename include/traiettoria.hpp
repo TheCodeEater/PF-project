@@ -13,8 +13,6 @@
 
 #include "../include/graphics.hpp"
 
-#include <type_traits>
-
 static const inline float pi=2*std::atan(INFINITY);
 
 using Line = Eigen::ParametrizedLine<float, 2>;
