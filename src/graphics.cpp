@@ -13,7 +13,7 @@ sf::Vector2f operator*(sf::Vector2f const& v, float t) {
   return {t * v.x, t * v.y};
 }
 
-dottedLine::dottedLine(sf::Vector2f p0, sf::Vector2f p1, sf::Color c)
+dottedLine::dottedLine(vType p0, vType p1, sf::Color c)
     : first_{p0},
       last_{p1},
       direction_{last_ - first_},
@@ -22,20 +22,21 @@ dottedLine::dottedLine(sf::Vector2f p0, sf::Vector2f p1, sf::Color c)
   // il punto finale
   const float step{0.01f};
   // calcola la lunghezza della retta
-  const double l =
-      std::sqrt(direction_.x * direction_.x + direction_.y * direction_.y);
+  const double l = direction_.norm();
   // calcola un segmentino
-  const sf::Vector2f q{step * direction_};
+  const vType q{step * direction_};
   // norma del segmento tra punto zero e primo punto
-  const double l_1 = std::sqrt(q.x * q.x + q.y * q.y);
+  const double l_1 = q.norm();
   // calcola il numero di punti per rappresentare la retta con il dato step al
   // parametro e arrotonda
   const int N{static_cast<int>(std::round(l / l_1))};
   // genera N punti della linea e inseriscili mediante back inserter
   float t{0.f};
+  //Eigen::ParametrizedLine<float,2> line{Eigen::ParametrizedLine<float,2>::Through(first_,last_)};
   std::generate_n(std::back_inserter(*this), N, [this, &t, &step, &c]() {
     // calcola la posizione
-    sf::Vertex vertex{first_ + t * direction_};
+    const Eigen::Vector2f pos=first_+t*direction_;
+    sf::Vertex vertex{{pos.x(),pos.y()}};
     vertex.color = c;
 
     t += step;
@@ -46,7 +47,7 @@ dottedLine::dottedLine(sf::Vector2f p0, sf::Vector2f p1, sf::Color c)
 
 void dottedLine::draw(sf::RenderWindow& w_) const { w_.draw(vertices_); }
 
-std::pair<sf::Vector2f, sf::Vector2f> dottedLine::getExtremes() const {
+std::pair<dottedLine::vType, dottedLine::vType> dottedLine::getExtremes() const {
   return {first_, last_};
 }
 
