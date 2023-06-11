@@ -21,4 +21,11 @@ particle randSimulator::operator()() {//niente const, i generatori cambiano lo s
     return particle{{0,y},(theta<0)? 2*pi+theta : theta}; //se l'angolo e' negativo, adatta la convenzione sugli angoli
 }
 
+std::normal_distribution<float> const& randSimulator::getPosGenerator() const{
+    return pos_dist_;
+}
+std::normal_distribution<float> const& randSimulator::getAngleGenerator() const{
+    return angle_dist_;
+}
+
 }
