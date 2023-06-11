@@ -4,6 +4,7 @@
 
 #include "../include/application.hpp"
 #include "../include/io.hpp"
+#include "../include/particleGenerator.hpp"
 
 // alias for namespace
 namespace ps = particleSimulator;
@@ -66,8 +67,16 @@ int main() {
           break;
         }
 
-        case 'r':{
+        case 'r':{//generazione random con output: parametro opzionale: numero di iterazioni
+          int N_iter{200};
 
+          if(!args.eof()){
+            args>>N_iter;
+          }
+
+          ps::path simulator{400,200,700};
+          ps::randSimulator rand{0.f,80.f,0.f,pi/4,simulator,10};
+          rand.run(100,N_iter);
           break;
         }
         case 'o':{
