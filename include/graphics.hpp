@@ -1,20 +1,29 @@
 #ifndef GRAPHICS_HPP
 #define GRAPHICS_HPP
 
+#if __INTELLISENSE__
+#undef __ARM_NEON
+#undef __ARM_NEON__
+#endif
+
 #include <SFML/Graphics.hpp>
 #include <utility>
+
+#include "../Eigen/Dense"
 
 namespace particleSimulator {
 
 class dottedLine {
-  sf::Vector2f first_{};
-  sf::Vector2f last_{};
-  sf::Vector2f direction_{};
+  using vType=Eigen::Vector2f; //vetor type
+
+  vType first_{};
+  vType last_{};
+  vType direction_{};
 
   sf::VertexArray vertices_{};
 
  public:
-  dottedLine(sf::Vector2f p0, sf::Vector2f p1, sf::Color c = sf::Color::White);
+  dottedLine(vType p0, vType p1, sf::Color c = sf::Color::White);
 
   typedef sf::Vertex value_type;
 
@@ -24,7 +33,7 @@ class dottedLine {
 
   // member access
   sf::VertexArray const& getVertexArray() const;
-  std::pair<sf::Vector2f, sf::Vector2f> getExtremes() const;
+  std::pair<vType, vType> getExtremes() const;
 
   // drawing
   void draw(sf::RenderWindow&) const;
@@ -32,10 +41,6 @@ class dottedLine {
   // vertex access
   void push_back(value_type);
 };
-
-sf::Vector2f operator*(float t, sf::Vector2f const& v);
-
-sf::Vector2f operator*(sf::Vector2f const& v, float t);
 
 }  // namespace particleSimulator
 

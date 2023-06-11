@@ -250,8 +250,8 @@ std::vector<dottedLine> simulation::operator()(
         p.pos};  // const reference to current position
 
     particleSimulator::dottedLine line{
-        {old_pos.x(), old_pos.y()},
-        {curr_pos.x(), curr_pos.y()}};  // create line trajectory
+        old_pos,
+        curr_pos};  // create line trajectory
     trajs.push_back(line);              // save into vector
 
     if (simulator_.getLocationType(p.pos) ==
