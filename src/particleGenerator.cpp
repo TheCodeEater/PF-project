@@ -21,7 +21,7 @@ std::normal_distribution<float> const& randSimulator::getAngleGenerator() const{
     return angle_dist_;
 }
 
-void randSimulator::run(int n,int max_iterations){
+std::vector<particle> randSimulator::run(int n,int max_iterations){
     std::vector<particle> particles{};
 
     //std::function<particle(void)> f{std::bind(&randSimulator::getParticle,this)};
@@ -30,25 +30,27 @@ void randSimulator::run(int n,int max_iterations){
         return getParticle();
     }); //esegui la generazione delle particelle
 
+    //vettore dati di uscita
+    std::vector<particle> exit_p{};
     //loop di calcolo
-    std::for_each(particles.begin(),particles.end(),[this,&max_iterations](particle& p){
+    std::for_each(particles.begin(),particles.end(),[this,&max_iterations,&exit_p](particle& p){
         //esegui la riflessione
     for (int i{0}; i < max_iterations;
         ++i) {  // up to the maximum number of iterations
         // position vectors
-        const Eigen::Vector2f old_pos{p.pos};
+        const particle old_p{p};
 
         simulator_.reflect(p);  // run the particle reflection
 
-        Eigen::Vector2f const& curr_pos{
-            p.pos};  // const reference to current position
-
         if (simulator_.getLocationType(p.pos) ==
             posTypes::Escaped) {  // se la particella esce, termina il ciclo
+            exit_p.push_back(old_p);
             break;
         }
         }
     });
+
+    return exit_p;
 }
 
 }
