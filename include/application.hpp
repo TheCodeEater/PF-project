@@ -57,7 +57,7 @@ class Application {
   Application& operator=(Application const&) = delete;
   Application& operator=(Application&&) = delete;
 
-  int loop();  // run application loop
+  particle loop();  // run application loop
 };
 
 }  // namespace particleSimulator

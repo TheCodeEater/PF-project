@@ -47,4 +47,8 @@ sf::VertexArray const& dottedLine::getVertexArray() const { return vertices_; }
 
 void dottedLine::push_back(value_type vertex) { vertices_.append(vertex); }
 
+Eigen::Vector2f dottedLine::getDirection() const{
+  return direction_;
+}
+
 }  // namespace particleSimulator

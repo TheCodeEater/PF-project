@@ -49,11 +49,9 @@ int main() {
 
             ps::Application sim{cfg.getOptions(y0,theta0,N)};
 
-            int ret=sim.loop();
+            ps::particle p_exit=sim.loop(); //particella all'uscita
 
-            if(ret!=EXIT_SUCCESS){
-              throw std::runtime_error("Error");
-            }
+            std::cout<<"Particella uscita con: xf="<<p_exit.pos.x()<<" | Phi="<<p_exit.theta<<"\n";
 
           break;
         }

@@ -76,7 +76,7 @@ Application::Application(options const& opt)
   w_.setView(camera_);  // set the current view
 }
 
-int Application::loop() {
+particle Application::loop() {
   // run trajectory calculation
   trajectories_ = simulation_(particle_);
 
@@ -114,7 +114,15 @@ int Application::loop() {
     // display
     w_.display();
   }
+  //calcolo dei dati di uscit
+  dottedLine const& last_traj{trajectories_.back()}; //prendi l'ultima traiettori
+  const Eigen::Vector2f dir=last_traj.getDirection(); //get direction
+  auto p0=last_traj.getExtremes().first;
 
-  return 0;
+  float phi=std::atan2f(dir.y(),dir.x());
+  Eigen::ParametrizedLine<float,2> line(p0,dir);
+  const Eigen::Vector2f pf=line.intersectionPoint(Eigen::Hyperplane<float,2>::Through({0,0},{1,0})); //asse x
+
+  return particle{pf,phi};
 }
 }  // namespace particleSimulator

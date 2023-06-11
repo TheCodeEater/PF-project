@@ -34,6 +34,7 @@ class dottedLine {
   // member access
   sf::VertexArray const& getVertexArray() const;
   std::pair<vType, vType> getExtremes() const;
+  Eigen::Vector2f getDirection() const;
 
   // drawing
   void draw(sf::RenderWindow&) const;
