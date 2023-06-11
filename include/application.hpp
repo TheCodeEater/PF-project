@@ -6,28 +6,14 @@
 #include <string>
 #include <vector>
 
-#include "../include/graphics.hpp"
-#include "../include/traiettoria.hpp"
+#include "graphics.hpp"
+#include "traiettoria.hpp"
+#include "io.hpp"
 
 namespace particleSimulator {
 
 // alias for sfml render window
 using W = sf::RenderWindow;
-
-// simulation options
-struct options {
-  float w_width{};
-  float w_height{};
-  std::string w_name{};
-  // experiment setup
-  float r1{};
-  float r2{};
-  float l{};
-  // particle setup
-  float y0{};
-  float theta0{};
-  int N{};
-};
 
 class Application {
   const options optn_{};  // window options

@@ -9,21 +9,26 @@ config::config(){
   const fs::path cfg_path{"/cfg/particleSimulator.cfg"};
   //exe_path+=rel_cfg_path;
   //exe_path=fs::canonical(exe_path);
-  std::ifstream settings{cfg_path};
+  std::ifstream cfg_file{cfg_path};
 
   //leggi riga per riga
-  while(settings.good()){
-    
+  while(cfg_file.good()){
+    std::string line{};
+    std::getline(cfg_file,line);
+    //ottieni lo stringstream
+    std::istringstream settings{line};
+
+    //ignora spazi bianchi
+    settings>>std::ws;
+
+    if(settings.peek()!='#'){//continua, altrimenti non fai nulla e passi al prossimo ciclo
+
+    }
   }
 
 }
 
-options config::getOptions() const {
-  return {2200, 1230,         "Simulatore di particelle", 400, 200, 700,
-          300,  std::atanf(2)};
-}
-
-options config::getOptions(float y0, float theta0, int N) const {
+options config::getApplicationOptions(float y0, float theta0, int N) const {
   return {2200, 1230, "Simulatore di particelle", 400, 200, 700, y0, theta0, N};
 }
 }  // namespace particleSimulator

@@ -51,7 +51,7 @@ int main() {
             args >> N;
           }
 
-          ps::Application sim{cfg.getOptions(y0, theta0, N)};
+          ps::Application sim{cfg.getApplicationOptions(y0, theta0, N)};
 
           ps::particle p_exit = sim.loop();  // particella all'uscita
 
