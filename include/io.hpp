@@ -2,11 +2,13 @@
 #define IO_HPP
 
 #include "application.hpp"
+#include <filesystem>
+#include <fstream>
 namespace particleSimulator {
 
-class config {
+class config {//classe per caricare le impostazioni
  public:
-  config() = default;
+  config();
   options getOptions() const;
   options getOptions(float y0, float theta0, int N) const;
 };

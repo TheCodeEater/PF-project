@@ -18,9 +18,9 @@ void printPrompt() {
 }
 
 int main() {
-  ps::config cfg{};
 
   try {
+    ps::config cfg{};
     // menu
     printInit();
     while (1) {
@@ -93,11 +93,17 @@ int main() {
           std::cout << "Comando sconosciuto\n";
       }
     }
-  } catch (std::runtime_error const e) {
+  } catch(std::filesystem::filesystem_error const& e){
     std::cout << e.what() << "\n";
     return EXIT_FAILURE;
-  } catch (...) {
-    std::cout << "Che cavolo hai combinato?\n";
+  }catch (std::runtime_error const& e) {
+    std::cout << e.what() << "\n";
+    return EXIT_FAILURE;
+  } catch(std::exception const& e){
+    std::cout << e.what() << "\n";
+    return EXIT_FAILURE;
+  } catch(...) {
+    std::cout << "Gotta catch em all!\n";
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;
