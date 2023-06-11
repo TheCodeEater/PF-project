@@ -2,7 +2,23 @@
 
 namespace particleSimulator {
 
-randSimulator::randSimulator(float pos_mean, float pos_sigma, float angle_mean, float angle_sigma): //constructor
-    engine_{std::random_device{}()}, pos_dist_{pos_mean,pos_sigma}, angle_dist_{angle_mean,angle_sigma} {}
+randSimulator::randSimulator(float pos_mean, float pos_sigma, float angle_mean, float angle_sigma, float r1, float seed=std::random_device{}()): //constructor
+    r1_{r1}, engine_{seed}, pos_dist_{pos_mean,pos_sigma}, angle_dist_{angle_mean,angle_sigma} {
+        //test sugli angoli
+        assert(angle_dist_.max()<=pi/2);
+        assert(angle_dist_.min()>=-pi/2);
+        //test su y
+        assert(pos_dist_.max()<=r1_);
+        assert(pos_dist_.min()>=-r1_);
+    }
+
+
+particle randSimulator::operator()() {//niente const, i generatori cambiano lo stato interno
+    //genera angolo - NOTA: angolo tra -pi/2 pi/2
+    const float theta=angle_dist_(engine_); 
+    const float y=pos_dist_(engine_);
+
+    return particle{{0,y},(theta<0)? 2*pi+theta : theta}; //se l'angolo e' negativo, adatta la convenzione sugli angoli
+}
 
 }
