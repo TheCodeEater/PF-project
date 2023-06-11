@@ -7,7 +7,7 @@
 namespace particleSimulator {
 
 class randSimulator{ //classe per la simulazione con i numeri casuali
-    float r1_{};
+    path simulator_;
 
     std::default_random_engine engine_; //generatore
 
@@ -15,9 +15,11 @@ class randSimulator{ //classe per la simulazione con i numeri casuali
     std::normal_distribution<float> angle_dist_;
 
     public:
-        randSimulator(float pos_mean, float pos_sigma, float angle_mean, float angle_sigma, float r1, unsigned int seed=std::random_device{}()); //costruttore
+        randSimulator(float pos_mean, float pos_sigma, float angle_mean, float angle_sigma, path const& simul, unsigned int seed=std::random_device{}()); //costruttore
         
-        particle operator()(); //genera le particelle
+        particle getParticle(); //genera le particelle
+
+        void run(int n, int max_iterations); //esegui la simulazione
 
         std::normal_distribution<float> const& getPosGenerator() const;
         std::normal_distribution<float> const& getAngleGenerator() const;
