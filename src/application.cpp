@@ -65,7 +65,9 @@ Application::Application(options const& opt)
         return l_inf;
       }()},
       simulation_{optn_.r1, optn_.r2, optn_.l, optn_.N},  // initialize simulation
-      particle_{{0, optn_.y0}, optn_.theta0}
+      path_{optn_.r1, optn_.r2, optn_.l},
+      particle_{{0, optn_.y0}, optn_.theta0},
+      escapeLine_{Eigen::Hyperplane<float,2>::Through({optn_.l,optn_.r2},{optn_.l,-optn_.r2})}
 // to do: initialize particle and assert its starting conditions
 {
   // test sulla particella
@@ -115,14 +117,22 @@ particle Application::loop() {
     w_.display();
   }
   //calcolo dei dati di uscit
-  dottedLine const& last_traj{trajectories_.back()}; //prendi l'ultima traiettori
-  const Eigen::Vector2f dir=last_traj.getDirection(); //get direction
-  auto p0=last_traj.getExtremes().first;
+  if(path_.getLocationType(particle_.pos)==posTypes::Escaped){//se e' fuggita, calcola il punto di fuga
+    dottedLine const& last_traj{trajectories_.back()}; //prendi l'ultima traiettori
+    const Eigen::Vector2f dir=last_traj.getDirection(); //get direction
+    auto p0=last_traj.getExtremes().first;
 
-  float phi=std::atan2f(dir.y(),dir.x());
-  Eigen::ParametrizedLine<float,2> line(p0,dir);
-  const Eigen::Vector2f pf=line.intersectionPoint(Eigen::Hyperplane<float,2>::Through({0,0},{1,0})); //asse x
+    //calcolo angolo
+    float phi=std::atan2f(dir.y(),dir.x());
 
-  return particle{pf,phi};
+    //calcolo yf
+    Eigen::ParametrizedLine<float,2> line(p0,dir);
+    const Eigen::Vector2f pf=line.intersectionPoint(escapeLine_); //traguardo di uscita
+
+    return particle{pf,phi};
+  }else{//restituisci numeri fissi
+    return {{0,0},0};
+  }
+
 }
 }  // namespace particleSimulator

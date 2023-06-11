@@ -51,7 +51,11 @@ int main() {
 
             ps::particle p_exit=sim.loop(); //particella all'uscita
 
-            std::cout<<"Particella uscita con: xf="<<p_exit.pos.x()<<" | Phi="<<p_exit.theta<<"\n";
+            if(std::abs(p_exit.theta)<1e-3 && p_exit.pos==Eigen::Vector2f{0,0}){
+              std::cout<<"Particella non uscita. Prova ad aumentare il numero di iterazioni\n";
+            }else{
+              std::cout<<"Particella uscita con: Yf="<<p_exit.pos.y()<<" | Phi="<<p_exit.theta<<"\n";
+            } 
 
           break;
         }
