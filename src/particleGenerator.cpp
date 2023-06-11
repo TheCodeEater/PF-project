@@ -50,6 +50,15 @@ std::vector<particle> randSimulator::run(int n,int max_iterations){
         }
     });
 
+    //normalizza l'angolo tra pi/2 e -pi/2 per analisi dati ottimale
+    std::transform(exit_p.begin(),exit_p.end(),exit_p.begin(),[](particle p){
+        if(p.theta>=1.5f*pi){
+            return particle{p.pos,-(2*pi-p.theta)};
+        }else{
+            return p;
+        }
+    });
+
     return exit_p;
 }
 
