@@ -3,6 +3,8 @@
 
 #include <filesystem>
 #include <fstream>
+#include <string>
+#include <sstream>
 namespace particleSimulator {
 
   // simulation options
@@ -20,11 +22,28 @@ struct options {
   int N{};
 };
 
+struct randOptions{
+  float r1{};
+  float r2{};
+  float l{};
+
+  float pos_mean{};
+  float pos_sigma{};
+  float angle_mean{};
+  float angle_sigma{};
+};
+
 class config {//classe per caricare le impostazioni
+  //impostazioni
+  options wOptn_{}; //
+  randOptions rOptn_{};
+  int N_iter_{};
 
  public:
   config();
-  options getApplicationOptions(float y0, float theta0, int N) const;
+  options const& getApplicationOptions(float y0, float theta0, int N) const;
+  randOptions const& getRandomOptions() const;
+  int getIterations() const;
 };
 }  // namespace particleSimulator
 
