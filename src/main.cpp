@@ -18,10 +18,8 @@ void printPrompt(){
 
 int main() {
   ps::config cfg{};
-  /*ps::Application app{c.getOptions()};
-
-  return app.loop();*/
-
+  
+  try{
   //menu
   printInit();
   while(1){
@@ -41,7 +39,11 @@ int main() {
             float theta0{};
             int N{200};//numero iterazioni di default
 
-            args>>y0>>theta0; //leggi i parametri della particella
+            args>>y0;
+            if(args.eof()){
+              throw std::runtime_error("Not enough arguments");
+            }
+            args>>theta0; //leggi i parametri della particella
             //controlla se vi e il parametro opzionale
             if(!args.eof()){
               args>>N;
@@ -65,6 +67,13 @@ int main() {
         default:
           std::cout<<"Comando sconosciuto\n";
       }
-      
   }
-}
+  }catch(std::runtime_error const e){
+      std::cout<<e.what()<<"\n";
+      return EXIT_FAILURE;
+  }catch(...){
+    std::cout<<"Che cavolo hai combinato?\n";
+    return EXIT_FAILURE;
+  }
+      return EXIT_SUCCESS;
+  }
