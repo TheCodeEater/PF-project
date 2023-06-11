@@ -10,3 +10,4 @@ Eigen/
 *.t
 *.bin
 test/doctest.h
+*.txt
