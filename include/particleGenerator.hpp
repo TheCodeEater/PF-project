@@ -15,7 +15,7 @@ class randSimulator{ //classe per la simulazione con i numeri casuali
     std::normal_distribution<float> angle_dist_;
 
     public:
-        randSimulator(float pos_mean, float pos_sigma, float angle_mean, float angle_sigma, float r1, float seed=std::random_device{}()); //costruttore
+        randSimulator(float pos_mean, float pos_sigma, float angle_mean, float angle_sigma, float r1, unsigned int seed=std::random_device{}()); //costruttore
         
         particle operator()(); //genera le particelle
 
