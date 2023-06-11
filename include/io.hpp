@@ -8,6 +8,7 @@ class config {
  public:
   config() = default;
   options getOptions() const;
+  options getOptions(float y0, float theta0, int N) const;
 };
 }  // namespace particleSimulator
 
