@@ -24,20 +24,20 @@ TEST_CASE("Test della generazione in range dei numeri"){
     }*/
 
     //TEST
-    for(int i{};i<1106;++i){
+    /*for(int i{};i<1106;++i){
         particleSimulator::particle p{rs.getParticle()};
     }
 
     particleSimulator::particle bad_p=rs.getParticle();
 
-    std::cout<<bad_p.pos<<"\n"<<bad_p.theta<<"\n";
+    std::cout<<bad_p.pos<<"\n"<<bad_p.theta<<"\n";*/
 
-    /*std::vector<particleSimulator::particle> exit=rs.run(1106,200);
+    std::vector<particleSimulator::particle> exit=rs.run(1105,200);
 
     std::ofstream f{"output.txt"};
 
     for(auto const& v:exit){
         f<<v.theta<<"\n";
-    }*/
+    }
 
 }
