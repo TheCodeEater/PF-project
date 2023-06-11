@@ -3,14 +3,7 @@
 namespace particleSimulator {
 
 randSimulator::randSimulator(float pos_mean, float pos_sigma, float angle_mean, float angle_sigma, float r1, unsigned int seed): //constructor
-    r1_{r1}, engine_{seed}, pos_dist_{pos_mean,pos_sigma}, angle_dist_{angle_mean,angle_sigma} {
-        //test sugli angoli
-        assert(angle_dist_.max()<=pi/2);
-        assert(angle_dist_.min()>=-pi/2);
-        //test su y
-        assert(pos_dist_.max()<=r1_);
-        assert(pos_dist_.min()>=-r1_);
-    }
+    r1_{r1}, engine_{seed}, pos_dist_{pos_mean,pos_sigma}, angle_dist_{angle_mean,angle_sigma} {}
 
 
 particle randSimulator::operator()() {//niente const, i generatori cambiano lo stato interno
