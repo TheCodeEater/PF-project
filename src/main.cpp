@@ -65,8 +65,20 @@ int main() {
 
           break;
         }
-        case 'q':
-          return 0;
+
+        case 'r':{
+
+          break;
+        }
+        case 'o':{
+          break;
+        }
+        case 'a':{
+          break;
+        }
+        case 'q':{
+          return EXIT_SUCCESS;
+        }
 
         default:
           std::cout << "Comando sconosciuto\n";
