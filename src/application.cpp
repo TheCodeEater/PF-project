@@ -64,7 +64,7 @@ Application::Application(options const& opt)
 
         return l_inf;
       }()},
-      simulation_{optn_.r1, optn_.r2, optn_.l, 50},  // initialize simulation
+      simulation_{optn_.r1, optn_.r2, optn_.l, optn_.N},  // initialize simulation
       particle_{{0, optn_.y0}, optn_.theta0}
 // to do: initialize particle and assert its starting conditions
 {
@@ -79,28 +79,6 @@ Application::Application(options const& opt)
 int Application::loop() {
   // run trajectory calculation
   trajectories_ = simulation_(particle_);
-  /*
-  particleSimulator::path biliardo{optn_.r1,optn_.r2,optn_.l};//inizializza
-  biliardo
-  //esegui il calcolo della traiettoria
-  particleSimulator::particle p0{{0,300}, std::atan(2)};
-  auto p1=p0;
-
-  std::vector<particleSimulator::dottedLine> trajs{};
-
-  for(int i{};i<50;i++){
-    std::cout<<"It: "<<i<<"\n";
-    biliardo.reflect(p0); //calcola la riflessione
-    particleSimulator::dottedLine
-  line{{p1.pos.x(),p1.pos.y()},{p0.pos.x(),p0.pos.y()}}; trajs.push_back(line);
-    p1=p0;
-
-    if(biliardo.getLocationType(p0.pos)==posTypes::Escaped){
-      break;
-    }
-  }
-
-  std::cout<<"Angolo ultima iterazione: "<<p0.theta<<"\n";*/
 
   // run the program as long as the window is open
   while (w_.isOpen()) {

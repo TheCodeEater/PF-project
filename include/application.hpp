@@ -26,6 +26,7 @@ struct options {
   // particle setup
   float y0{};
   float theta0{};
+  int N{};
 };
 
 class Application {
