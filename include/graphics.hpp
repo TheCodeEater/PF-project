@@ -14,7 +14,7 @@
 namespace particleSimulator {
 
 class dottedLine {
-  using vType=Eigen::Vector2f; //vetor type
+  using vType = Eigen::Vector2f;  // vetor type
 
   vType first_{};
   vType last_{};

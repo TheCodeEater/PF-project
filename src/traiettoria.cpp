@@ -249,10 +249,9 @@ std::vector<dottedLine> simulation::operator()(
     Eigen::Vector2f const& curr_pos{
         p.pos};  // const reference to current position
 
-    particleSimulator::dottedLine line{
-        old_pos,
-        curr_pos};  // create line trajectory
-    trajs.push_back(line);              // save into vector
+    particleSimulator::dottedLine line{old_pos,
+                                       curr_pos};  // create line trajectory
+    trajs.push_back(line);                         // save into vector
 
     if (simulator_.getLocationType(p.pos) ==
         posTypes::Escaped) {  // se la particella esce, termina il ciclo
