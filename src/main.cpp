@@ -74,8 +74,7 @@ int main() {
             args>>N_iter;
           }
 
-          ps::path simulator{400,200,700};
-          ps::randSimulator rand{0.f,80.f,0.f,pi/4,simulator,10};
+          ps::randSimulator rand{cfg.getRandomOptions()};
           rand.run(100,N_iter);
           break;
         }

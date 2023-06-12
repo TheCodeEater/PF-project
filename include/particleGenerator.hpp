@@ -4,9 +4,13 @@
 #include <random>
 
 #include "traiettoria.hpp"
+#include "io.hpp"
 namespace particleSimulator {
 
 class randSimulator{ //classe per la simulazione con i numeri casuali
+    //options
+    randOptions optn_{};
+
     path simulator_;
 
     std::default_random_engine engine_; //generatore
@@ -15,7 +19,7 @@ class randSimulator{ //classe per la simulazione con i numeri casuali
     std::normal_distribution<float> angle_dist_;
 
     public:
-        randSimulator(float pos_mean, float pos_sigma, float angle_mean, float angle_sigma, path const& simul, unsigned int seed=std::random_device{}()); //costruttore
+        randSimulator(randOptions options, unsigned int seed=std::random_device{}()); //costruttore
         
         particle getParticle(); //genera le particelle
 

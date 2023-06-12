@@ -2,8 +2,11 @@
 
 namespace particleSimulator {
 
-randSimulator::randSimulator(float pos_mean, float pos_sigma, float angle_mean, float angle_sigma, path const& simul, unsigned int seed): //constructor
-     simulator_{simul}, engine_{seed}, pos_dist_{pos_mean,pos_sigma}, angle_dist_{angle_mean,angle_sigma} {}
+randSimulator::randSimulator(randOptions options, unsigned int seed): //constructor
+     simulator_{options.r1,options.r2,options.l}, 
+     engine_{seed}, 
+     pos_dist_{options.pos_mean,options.pos_sigma}, 
+     angle_dist_{options.angle_mean,options.angle_sigma} {}
 
 
 particle randSimulator::getParticle() {//niente const, i generatori cambiano lo stato interno
