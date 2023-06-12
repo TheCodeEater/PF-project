@@ -39,7 +39,7 @@ int main() {
                      // con y0 e theta0
           float y0{};
           float theta0{};
-          int N{200};  // numero iterazioni di default
+          int N{cfg.getIterations()};  // numero iterazioni di default
 
           args >> y0;
           if (args.eof()) {
@@ -68,7 +68,7 @@ int main() {
         }
 
         case 'r':{//generazione random con output: parametro opzionale: numero di iterazioni
-          int N_iter{200};
+          int N_iter{cfg.getIterations()};
 
           if(!args.eof()){
             args>>N_iter;

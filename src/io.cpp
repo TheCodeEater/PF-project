@@ -29,4 +29,19 @@ randOptions const& config::getRandomOptions() const{
 int config::getIterations() const{
   return N_iter_;
 }
+
+void config::exportData(std::vector<particle> const& v,std::string const& filename) const{
+  std::ofstream output{filename};
+
+  if(!output.is_open()){
+    throw std::runtime_error("Impossibile creare file di output!");
+  }
+
+  std::for_each(v.cbegin(),v.cend(),[&output](particle const& p){
+      std::ostringstream line{};
+      line<<p.pos.y()<<" "<<p.theta<<"\n";
+      output<<line.str(); //scrivi la stringa
+  });
+}
+
 }  // namespace particleSimulator

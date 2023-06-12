@@ -5,6 +5,8 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+
+#include "traiettoria.hpp"
 namespace particleSimulator {
 
   // simulation options
@@ -41,9 +43,11 @@ class config {//classe per caricare le impostazioni
 
  public:
   config();
+
   options const& getApplicationOptions(float y0, float theta0, int N) const;
   randOptions const& getRandomOptions() const;
   int getIterations() const;
+  void exportData(std::vector<particle> const& v,std::string const& filename) const;
 };
 }  // namespace particleSimulator
 
