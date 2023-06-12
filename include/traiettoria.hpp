@@ -32,6 +32,11 @@ struct exit_point{
   float theta{};
 };
 
+struct intsect{
+  path::vec point{};
+  hitBorder border{};
+};
+
 class path {  // contiene i bordi del biliardo
   // parametri biliardo
   float r1_{};
@@ -51,9 +56,10 @@ class path {  // contiene i bordi del biliardo
   Eigen::Vector2f horizontal_{};
 
  public:
+ using vec=Eigen::Vector2f;
   // path(Line const&, Line const&);
   path(float r1, float r2, float r3);
-  Eigen::Vector2f operator()(particle const&)
+  intsect operator()(particle const&)
       const;  // operatore () per calcolare la traiettoria riflessa
   float reflect(particle&) const;
   posTypes getLocationType(Eigen::Vector2f const&) const;
