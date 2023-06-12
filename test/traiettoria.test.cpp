@@ -32,9 +32,9 @@ TEST_CASE("Test del calcolo delle traiettorie") {
   // Calcolo orientazione particella
   SUBCASE("Test calcolo orientazione traiettoria") {
     CHECK(biliardo.getHitDirection(p0.theta) ==
-          particleSimulator::vecOrientation::Up);
+          particleSimulator::vecOrientation::UpRight);
     CHECK(biliardo.getHitDirection(p1.theta) ==
-          particleSimulator::vecOrientation::Down);
+          particleSimulator::vecOrientation::DownLeft);
     CHECK(biliardo.getHitDirection(p2.theta) ==
           particleSimulator::vecOrientation::HorizontalRight);
     CHECK(biliardo.getHitDirection(p3.theta) ==
@@ -42,10 +42,10 @@ TEST_CASE("Test del calcolo delle traiettorie") {
   }
 
   // calcolo intersezioni
-  const Eigen::Vector2f int0 = biliardo(p0);
-  const Eigen::Vector2f int1 = biliardo(p1);
-  const Eigen::Vector2f int2 = biliardo(p2);
-  const Eigen::Vector2f int3 = biliardo(p3);
+  const Eigen::Vector2f int0 = biliardo(p0).point;
+  const Eigen::Vector2f int1 = biliardo(p1).point;
+  const Eigen::Vector2f int2 = biliardo(p2).point;
+  const Eigen::Vector2f int3 = biliardo(p3).point;
 
   SUBCASE("Test collisioni dopo il lancio") {
     CHECK(biliardo.getLocationType(int0) == pT::Inside);
@@ -70,7 +70,7 @@ TEST_CASE("Test del calcolo delle traiettorie") {
     CHECK(refl_0 == doctest::Approx(5.39786));
 
     CHECK(biliardo.getHitDirection(p0.theta) ==
-          particleSimulator::vecOrientation::Down);
+          particleSimulator::vecOrientation::DownRight);
 
     biliardo.reflect(p0);
   }
