@@ -20,7 +20,7 @@ void printPrompt() {
 int main() {
 
   try {
-    ps::config cfg{};
+    const ps::config cfg{};
     // menu
     printInit();
     while (1) {
@@ -76,12 +76,6 @@ int main() {
 
           ps::randSimulator rand{cfg.getRandomOptions()};
           rand.run(100,N_iter);
-          break;
-        }
-        case 'o':{
-          break;
-        }
-        case 'a':{
           break;
         }
         case 'q':{
