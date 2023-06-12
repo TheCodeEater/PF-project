@@ -71,6 +71,7 @@ class path {  // contiene i bordi del biliardo
   static float arctan(float y, float x);
 
   exit_point getEscapePoint(std::vector<dottedLine> const& trajectiories) const;
+  exit_point getEscapePoint(vec const& p0, vec const& p1) const;
 
   //getter
   float getR1() const;
