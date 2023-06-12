@@ -108,10 +108,10 @@ intsect path::operator()(particle const& p) const {
             Eigen::Hyperplane<float, 2>{borderdown_}),hitBorder::Bottom};  // intersezione con inf
       }
 
-      case vecOrientation::DownLeft:{ //in basso a sx: bordo dietro o basso
+      case vecOrientation::UpLeft:{ //in basso a sx: bordo dietro o basso
           const Eigen::Vector2f back_intsect{trajectory.intersectionPoint(Eigen::Hyperplane<float,2>::Through({0,0},{0,1}))}; //intsect con la verticale
           //test intersezione verticale
-          if(std::abs(back_intsect.y())-r1_<1e-3){ //colpo all'angolo: distanza da r1 entro i limiti di float
+          if(std::abs(std::abs(back_intsect.y())-r1_)<1e-3){ //colpo all'angolo: distanza da r1 entro i limiti di float
               return {back_intsect,hitBorder::Angle};
           }else if(std::abs(back_intsect.y())<=r1_-1e-3){//colpo al bordo dietro
               return {back_intsect,hitBorder::Back};
@@ -120,10 +120,10 @@ intsect path::operator()(particle const& p) const {
                   Eigen::Hyperplane<float, 2>{borderup_}), hitBorder::Top};  // intersezione con sup
           }
       }
-      case vecOrientation::UpLeft:{ //in alto a sx: bordo dietro o alto
+      case vecOrientation::DownLeft:{ //in alto a sx: bordo dietro o alto
           const Eigen::Vector2f back_intsect{trajectory.intersectionPoint(Eigen::Hyperplane<float,2>::Through({0,0},{0,1}))}; //intsect con la verticale
           //test intersezione verticale
-          if(std::abs(back_intsect.y())-r1_<1e-3){ //colpo all'angolo
+          if(std::abs(std::abs(back_intsect.y())-r1_)<1e-3){ //colpo all'angolo
               return {back_intsect,hitBorder::Angle};
           }else if(std::abs(back_intsect.y())<=r1_-1e-3){//colpo al bordo dietro
               return {back_intsect,hitBorder::Back};
@@ -131,6 +131,13 @@ intsect path::operator()(particle const& p) const {
               return {trajectory.intersectionPoint(
                   Eigen::Hyperplane<float, 2>{borderdown_}),hitBorder::Bottom};  // intersezione con inf
           }
+
+        case vecOrientation::VerticalUp:{
+            throw std::logic_error("Particella particolare 1");
+        }
+        case vecOrientation::VerticalDown:{
+            throw std::logic_error("Particella particolare 2");
+        }
       }
     }
   }();

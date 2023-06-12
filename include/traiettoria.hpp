@@ -33,7 +33,7 @@ struct exit_point{
 };
 
 struct intsect{
-  path::vec point{};
+  Eigen::Vector2f point{};
   hitBorder border{};
 };
 
