@@ -40,7 +40,7 @@ std::normal_distribution<float> const& randSimulator::getAngleGenerator() const{
     return angle_dist_;
 }
 
-std::vector<particle> randSimulator::run(int n,int max_iterations){
+std::vector<exit_point> randSimulator::run(int n,int max_iterations){
     std::vector<particle> particles{};
 
     //std::function<particle(void)> f{std::bind(&randSimulator::getParticle,this)};
@@ -50,7 +50,7 @@ std::vector<particle> randSimulator::run(int n,int max_iterations){
     }); //esegui la generazione delle particelle
 
     //vettore dati di uscita
-    std::vector<particle> exit_p{};
+    std::vector<exit_point> exit_p{};
     //loop di calcolo
     std::for_each(particles.begin(),particles.end(),[this,&max_iterations,&exit_p](particle& p){
         //esegui la riflessione
@@ -63,18 +63,20 @@ std::vector<particle> randSimulator::run(int n,int max_iterations){
 
         if (simulator_.getLocationType(p.pos) ==
             posTypes::Escaped) {  // se la particella esce, termina il ciclo
-            exit_p.push_back(old_p);
+            exit_p.push_back(exit_point{old_p.pos.y(),static_cast<float>(old_p.theta)}); //brutta cosa da togliere
             break;
         }
         }
     });
 
     //normalizza l'angolo tra pi/2 e -pi/2 per analisi dati ottimale
-    std::transform(exit_p.begin(),exit_p.end(),exit_p.begin(),[](particle p){
-        if(p.theta>=1.5f*pi){
-            return particle{p.pos,-(2*pi-p.theta)};
-        }else{
-            return p;
+    std::for_each(exit_p.begin(),exit_p.end(),[](exit_point& p){
+        float& phi=p.theta; 
+        //tra 3/2 pi e 2pi
+        if(phi>=1.5f*pi && phi<=2*pi+1e-3){
+            phi=-(2*pi-phi);
+        }else if(phi>=pi/2 && phi<=1.5f*phi){
+            throw std::runtime_error("Angolo di uscita errato, non esci all'incontrario");
         }
     });
 

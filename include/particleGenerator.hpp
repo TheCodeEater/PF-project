@@ -21,7 +21,7 @@ class randSimulator{ //classe per la simulazione con i numeri casuali
         
         particle getParticle(); //genera le particelle
 
-        std::vector<particle> run(int n, int max_iterations); //esegui la simulazione
+        std::vector<exit_point> run(int n, int max_iterations); //esegui la simulazione
 
         std::normal_distribution<float> const& getPosGenerator() const;
         std::normal_distribution<float> const& getAngleGenerator() const;
