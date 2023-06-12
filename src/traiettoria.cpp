@@ -58,10 +58,6 @@ intsect path::operator()(particle const& p) const {
   const intsect intersec = [this, &trajectory, &p] () -> intsect {//tipo esplicito
     vecOrientation orientation{getHitDirection(p.theta)};
 
-    //al momento
-    assert(orientation!=vecOrientation::VerticalDown);
-    assert(orientation!=vecOrientation::VerticalUp);
-
     switch (orientation) {
       case vecOrientation::HorizontalLeft: {  // sbatti sempre sul bordo
         return {trajectory.intersectionPoint(
