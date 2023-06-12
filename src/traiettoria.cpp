@@ -112,7 +112,7 @@ intsect path::operator()(particle const& p) const {
           const Eigen::Vector2f back_intsect{trajectory.intersectionPoint(Eigen::Hyperplane<float,2>::Through({0,0},{0,1}))}; //intsect con la verticale
           //test intersezione verticale
           if(std::abs(back_intsect.y())-r1_<1e-3){ //colpo all'angolo: distanza da r1 entro i limiti di float
-              return {back_intsect,hitBorder::Back};
+              return {back_intsect,hitBorder::Angle};
           }else if(std::abs(back_intsect.y())<=r1_-1e-3){//colpo al bordo dietro
               return {back_intsect,hitBorder::Back};
           }else if(std::abs(back_intsect.y())>=r1_+1e-3){//intersezione con il sup
@@ -124,7 +124,7 @@ intsect path::operator()(particle const& p) const {
           const Eigen::Vector2f back_intsect{trajectory.intersectionPoint(Eigen::Hyperplane<float,2>::Through({0,0},{0,1}))}; //intsect con la verticale
           //test intersezione verticale
           if(std::abs(back_intsect.y())-r1_<1e-3){ //colpo all'angolo
-              return {back_intsect,hitBorder::Back};
+              return {back_intsect,hitBorder::Angle};
           }else if(std::abs(back_intsect.y())<=r1_-1e-3){//colpo al bordo dietro
               return {back_intsect,hitBorder::Back};
           }else if(std::abs(back_intsect.y())>=r1_+1e-3){//intersezione con inf
@@ -141,32 +141,29 @@ intsect path::operator()(particle const& p) const {
 }
 
 float path::reflect(particle& p) const {
-  const Eigen::Vector2f intsect = operator()(
+  const intsect intsect = operator()(
       p);  // calcola il punto di collisione
   // determina se è il bordo su o il bordo giù, usando le coordinate del punto
   // di intersezione
-  Eigen::Vector2f const& normal_vect = [this, &p, &intsect]() {
-    switch (getHitDirection(p.theta)) {
-      case vecOrientation::Up: {
-        return (intsect.x() < 1e-3) ? horizontal_
-                                    : normal_up_;  // se vai verso l'alto,
-                                                   // verifica se sbatti prima
+  Eigen::Vector2f const& normal_vect = [this,&intsect,&p]() -> vec{
+    switch (intsect.border) { //esamina il bordo
+      case hitBorder::Top:{
+        return normal_up_;
+      }
+      case hitBorder::Bottom : {
+        return normal_down_;
       }
 
-      case vecOrientation::Down: {
-        return (intsect.x() < 1e-3) ? horizontal_ : normal_down_;
-      }
-
-      case vecOrientation::HorizontalLeft: {
+      case hitBorder::Back:{
         return horizontal_;
       }
-
-      case vecOrientation::HorizontalRight: {
-        return (intsect.y() > 0) ? normal_up_ : normal_down_;
+      case hitBorder::Angle:{
+        //fai la parallela, orientata nella medesima direzione del vettore riflesso (angolo di incidenza 0)
+        return {-std::cos(p.theta),-std::sin(p.theta)};
       }
     }
   }();
-  const Line normal{intsect, normal_vect};  // trova la normale
+  const Line normal{intsect.point, normal_vect};  // trova la normale
   // calcola l'angolo di incidenza
   // angolo della normale
   const float normal_angle = arctan(normal_vect.y(), normal_vect.x());
@@ -196,7 +193,7 @@ float path::reflect(particle& p) const {
 
   const float new_angle = arctan(new_dir.y(), new_dir.x());
 
-  p.pos = intsect;
+  p.pos = intsect.point;
   p.theta = new_angle;
 
   return new_angle;
