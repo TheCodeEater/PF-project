@@ -64,16 +64,16 @@ int config::getParticleNumber() const{
   return N_particles_;
 }
 
-void config::exportData(std::vector<particle> const& v,std::string const& filename) const{
+void config::exportData(std::vector<exit_point> const& v,std::string const& filename) const{
   std::ofstream output{filename};
 
   if(!output.is_open()){
     throw std::runtime_error("Impossibile creare file di output!");
   }
 
-  std::for_each(v.cbegin(),v.cend(),[&output](particle const& p){
+  std::for_each(v.cbegin(),v.cend(),[&output](exit_point const& p){
       std::ostringstream line{};
-      line<<p.pos.y()<<" "<<p.theta<<"\n";
+      line<<p.y<<" "<<p.theta<<"\n";
       output<<line.str(); //scrivi la stringa
   });
 }

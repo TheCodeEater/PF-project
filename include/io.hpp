@@ -55,7 +55,7 @@ class config {//classe per caricare le impostazioni
   randOptions const& getRandomOptions() const;
   int getIterations() const;
   int getParticleNumber() const;
-  void exportData(std::vector<particle> const& v,std::string const& filename) const;
+  void exportData(std::vector<exit_point> const& v,std::string const& filename) const;
 };
 }  // namespace particleSimulator
 
