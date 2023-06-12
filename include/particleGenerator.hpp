@@ -8,8 +8,6 @@
 namespace particleSimulator {
 
 class randSimulator{ //classe per la simulazione con i numeri casuali
-    //options
-    randOptions optn_{};
 
     path simulator_;
 
