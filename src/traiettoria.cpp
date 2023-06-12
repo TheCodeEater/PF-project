@@ -131,6 +131,7 @@ intsect path::operator()(particle const& p) const {
               return {trajectory.intersectionPoint(
                   Eigen::Hyperplane<float, 2>{borderdown_}),hitBorder::Bottom};  // intersezione con inf
           }
+      }
 
         case vecOrientation::VerticalUp:{
             throw std::logic_error("Particella particolare 1");
@@ -138,7 +139,6 @@ intsect path::operator()(particle const& p) const {
         case vecOrientation::VerticalDown:{
             throw std::logic_error("Particella particolare 2");
         }
-      }
     }
   }();
 
