@@ -11,10 +11,26 @@ randSimulator::randSimulator(randOptions options, unsigned int seed): //construc
 
 particle randSimulator::getParticle() {//niente const, i generatori cambiano lo stato interno
     //genera angolo - NOTA: angolo tra -pi/2 pi/2
-    const float theta=angle_dist_(engine_); 
-    const float y=pos_dist_(engine_);
+    float theta=angle_dist_(engine_); 
+    //test sull'angolo
+    if(theta>=pi/2+1e-3){ //angolo in overflow
+        theta=pi/2-1e-1;
+    }else if(theta<=-pi/2-1e-3){
+        theta=-pi/2+1e-1;
+    }
+    assert(std::abs(theta) < pi/2 + 1e-3); //test sull'angolo di generazione
 
-    return particle{{0,y},(theta<0)? 2*pi+theta : theta}; //se l'angolo e' negativo, adatta la convenzione sugli angoli
+    float y=pos_dist_(engine_);
+
+    if(y>=simulator_.getR1()){ //adatta in range la y nel caso
+        y=simulator_.getR1()-1e-2;
+    }else if(y<=-simulator_.getR1()){
+        y=simulator_.getR1()+1e-2;
+    }
+
+    const particle p{{0,y},(theta<0)? 2*pi+theta : theta}; //se l'angolo e' negativo, adatta la convenzione sugli angoli
+
+    return p;
 }
 
 std::normal_distribution<float> const& randSimulator::getPosGenerator() const{
