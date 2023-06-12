@@ -236,18 +236,27 @@ vecOrientation path::getHitDirection(Eigen::Vector2f const& v) const{
 vecOrientation path::getHitDirection(
     float angle) const {  // nota: accetta angoli tra -pi e +pi
   assert(angle >= 0 && angle <= 2 * pi);
-  if (std::abs(angle) <
-      1e-3) {  // angolo nullo (con aritmetica floating point no ==0)
+  
+  if(angle<=1e-3){ //angolo nullo: orizzontale destra
     return vecOrientation::HorizontalRight;
-  } else if (std::abs(angle - pi) < 1e-3) {
+  }else if(angle>1e-3 && angle<pi/2-1e-3){ //alto a dx
+    return vecOrientation::UpRight;
+  }else if(std::abs(angle-pi/2)<=1e-3){
+    return vecOrientation::VerticalUp;
+  }else if(angle>pi/2+1e-3 && angle<pi-1e-3){
+    return vecOrientation::UpLeft;
+  }else if(std::abs(angle-pi)<=1e-3){
     return vecOrientation::HorizontalLeft;
-  } else if (angle >= pi && angle <= 2 * pi) {  // negativo, verso il basso
-    return vecOrientation::Down;
-  } else if (angle >= 0 && angle <= pi) {  // positivo, vai verso l'alto
-    return vecOrientation::Up;
-  } else {
-    throw std::logic_error(
-        "Impossibile determinare l'orientazione del vettore!");
+  }else if(angle>pi+1e-3 && angle < 1.5f*pi-1e-3){
+    return vecOrientation::DownLeft;
+  }else if(std::abs(angle-1.5f*pi)<=1e-3){
+    return vecOrientation::VerticalDown;
+  }else if(angle>1.5f*pi+1e-3 && angle < 2*pi-1e-3){
+    return vecOrientation::DownRight;
+  }else if(std::abs(angle-2*pi)<=1e-3){
+    return vecOrientation::HorizontalRight;
+  }else{
+    throw std::logic_error("Impossibile determinare la direzione del vettore!");
   }
 }
 
