@@ -63,7 +63,7 @@ std::vector<exit_point> randSimulator::run(int n,int max_iterations){
 
         if (simulator_.getLocationType(p.pos) ==
             posTypes::Escaped) {  // se la particella esce, termina il ciclo
-            exit_p.push_back(exit_point{old_p.pos.y(),static_cast<float>(old_p.theta)}); //brutta cosa da togliere
+            exit_p.push_back(simulator_.getEscapePoint(old_p.pos,p.pos)); 
             break;
         }
         }
