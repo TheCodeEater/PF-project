@@ -35,6 +35,7 @@ config::config(){
 
   N_iter_=tree.get<int>("Iterations");
   N_particles_=tree.get<int>("particleNumber");
+  rOptn_.seed=tree.get<unsigned>("seed",std::random_device{}());
 
   rOptn_.pos_mean=tree.get<float>("positionMean");
   rOptn_.pos_sigma=tree.get<float>("positionRMS");

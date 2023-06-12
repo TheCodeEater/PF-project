@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <random>
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
@@ -36,6 +37,8 @@ struct randOptions{
   float pos_sigma{};
   float angle_mean{};
   float angle_sigma{};
+
+  unsigned seed{};
 };
 
 class config {//classe per caricare le impostazioni

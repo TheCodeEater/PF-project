@@ -14,7 +14,7 @@ TEST_CASE("Test della generazione in range dei numeri"){
 
     particleSimulator::path biliardo{r1,r2,l};
 
-    particleSimulator::randSimulator rs{{r1,r2,l,0.f,80.f,0.f,pi/8},100};
+    particleSimulator::randSimulator rs{{r1,r2,l,0.f,80.f,0.f,pi/8,100}};
 
     /*for(int i{};i<1e3;++i){
         particleSimulator::particle p{rs.getParticle()};

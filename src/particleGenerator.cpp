@@ -2,9 +2,9 @@
 
 namespace particleSimulator {
 
-randSimulator::randSimulator(randOptions options, unsigned int seed): //constructor
+randSimulator::randSimulator(randOptions options): //constructor
      simulator_{options.r1,options.r2,options.l}, 
-     engine_{seed}, 
+     engine_{options.seed}, 
      pos_dist_{options.pos_mean,options.pos_sigma}, 
      angle_dist_{options.angle_mean,options.angle_sigma} {}
 
