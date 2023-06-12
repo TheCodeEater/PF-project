@@ -16,33 +16,6 @@ config::config(){
   if(!cfg_file.is_open()){
     throw std::runtime_error("Cannot open config file!");
   }
-  /*
-  //leggi riga per riga
-  while(cfg_file.good()){
-    std::string line{};
-    std::getline(cfg_file,line);
-    //ottieni lo stringstream
-    std::istringstream settings{line};
-
-    //ignora spazi bianchi
-    settings>>std::ws;
-
-    const char first=settings.peek();
-    if(first!='#' && std::isalnum(first)){//continua, altrimenti non fai nulla e passi al prossimo ciclo
-      std::cout<<line.c_str()<<"\n";
-
-      //lettura fino a uguale
-      std::string init{};
-      std::getline(settings,init,'='); //prendi fino ad uguale
-
-      //assegna la variabile
-      if(init=="I:\"width\""){
-
-      }
-      
-    }
-  }*/
-
 }
 
 options const& config::getApplicationOptions(float y0, float theta0, int N) const {
