@@ -18,8 +18,12 @@ config::config(){
   }
 }
 
-options const& config::getApplicationOptions(float y0, float theta0, int N) const {
-  return wOptn_;
+options config::getApplicationOptions(float y0, float theta0, int N) const {
+  options opt{wOptn_};
+  opt.y0=y0;
+  opt.theta0=theta0;
+  opt.N=N;
+  return opt;
 }
 
 randOptions const& config::getRandomOptions() const{
