@@ -75,7 +75,7 @@ int main() {
           }
 
           ps::randSimulator rand{cfg.getRandomOptions()};
-          auto data=rand.run(100,N_iter);
+          auto data=rand.run(cfg.getParticleNumber(),N_iter);
           cfg.exportData(data,"output.txt");
           break;
         }
