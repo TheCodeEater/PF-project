@@ -53,14 +53,14 @@ int main() {
 
           ps::Application sim{cfg.getApplicationOptions(y0, theta0, N)};
 
-          ps::particle p_exit = sim.loop();  // particella all'uscita
+          ps::exit_point p_exit = sim.loop();  // particella all'uscita
 
-          if (std::abs(p_exit.theta) < 1e-3 &&
-              p_exit.pos == Eigen::Vector2f{0, 0}) {
+          if (std::abs(p_exit.theta+10) < 1e-3 &&
+              std::abs(p_exit.y+10)< 1e-3) {
             std::cout << "Particella non uscita. Prova ad aumentare il numero "
                          "di iterazioni\n";
           } else {
-            std::cout << "Particella uscita con: Yf=" << p_exit.pos.y()
+            std::cout << "Particella uscita con: Yf=" << p_exit.y
                       << " | Phi=" << p_exit.theta << "\n";
           }
 

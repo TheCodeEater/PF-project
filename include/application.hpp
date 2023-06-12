@@ -30,7 +30,7 @@ class Application {
   // logic objects
   const simulation simulation_;             // simulation object
   particle particle_{};                     // studied particle
-  std::vector<dottedLine> trajectories_{};  // trajecotry history
+  std::pair<std::vector<dottedLine>,exit_point> result_{};
 
  public:
   explicit Application(options const&);
@@ -43,7 +43,7 @@ class Application {
   Application& operator=(Application const&) = delete;
   Application& operator=(Application&&) = delete;
 
-  particle loop();  // run application loop
+  exit_point loop();  // run application loop
 };
 
 }  // namespace particleSimulator

@@ -244,7 +244,7 @@ simulation::simulation(float r1, float r2, float l, int max_cycles)
       simulator_{r1, r2, l},
       max_iterations_{max_cycles} {}
 
-std::vector<dottedLine> simulation::operator()(
+std::pair<std::vector<dottedLine>,exit_point> simulation::operator()(
     particle& p) const  // operatore di simulazione
 {
   std::vector<dottedLine> trajs{};
@@ -269,8 +269,11 @@ std::vector<dottedLine> simulation::operator()(
   }
 
   //calcolo posizione finale
-
-  return trajs;
+  if(simulator_.getLocationType(p.pos)==posTypes::Escaped){
+    return std::make_pair(trajs,getEscapePoint(trajs)); //restituisci la coppia di dati
+  }else{
+    return std::make_pair(trajs,exit_point{-10,-10}); //restituisci le traiettorie e un indicatore di failure
+  }
 }
 
   exit_point simulation::getEscapePoint(std::vector<dottedLine> const& trajectiories) const{

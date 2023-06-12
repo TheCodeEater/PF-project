@@ -77,9 +77,10 @@ Application::Application(options const& opt)
   w_.setView(camera_);  // set the current view
 }
 
-particle Application::loop() {
+exit_point Application::loop() {
   // run trajectory calculation
-  trajectories_ = simulation_(particle_);
+  result_ = simulation_(particle_);
+  std::vector<dottedLine> const& trajectories = result_.first;
 
   // run the program as long as the window is open
   while (w_.isOpen()) {
@@ -108,12 +109,14 @@ particle Application::loop() {
     w_.draw(line_inf_);
     w_.draw(line_sup_);
     //
-    std::for_each(trajectories_.cbegin(), trajectories_.cend(),
+    std::for_each(trajectories.cbegin(), trajectories.cend(),
                   [this](dottedLine const& line) {
                     line.draw(w_);  // draw line on the current window
                   });
     // display
     w_.display();
   }
+
+  return result_.second;
 }
 }  // namespace particleSimulator

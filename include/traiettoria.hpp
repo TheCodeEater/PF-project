@@ -22,7 +22,7 @@ enum class posTypes { Inside, Escaped, BackHit, Error };
 enum class vecOrientation { Up, Down, HorizontalLeft, HorizontalRight };
 struct particle {
   Eigen::Vector2f pos{};  // pos sta per position
-  float theta{};         // pos e theta da input (distribuzione)
+  double theta{};         // pos e theta da input (distribuzione)
 };
 
 struct exit_point{
@@ -70,7 +70,7 @@ class simulation {  // classe che gestisce la simulazione
  public:
   simulation(float r1, float r2, float l, int max_cycles);  // construcotr
 
-  std::vector<dottedLine> operator()(
+  std::pair<std::vector<dottedLine>,exit_point> operator()(
       particle& p) const;  // operatore di simulazione
   
   exit_point getEscapePoint(std::vector<dottedLine> const& trajectiories) const;
