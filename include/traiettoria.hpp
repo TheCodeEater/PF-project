@@ -61,6 +61,11 @@ class path {  // contiene i bordi del biliardo
   Eigen::Vector2f exitIntersection(Line const&) const;
 
   static float arctan(float y, float x);
+
+  //getter
+  float getR1() const;
+  float getR2() const;
+  float getL() const;
 };
 
 class simulation {  // classe che gestisce la simulazione

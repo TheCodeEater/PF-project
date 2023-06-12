@@ -239,6 +239,16 @@ Eigen::Vector2f path::exitIntersection(Line const& l) const{ //intersezione dell
   return l.intersectionPoint(exit_line_);
 }
 
+float path::getR1() const{
+  return r1_;
+}
+float path::getR2() const{
+  return r2_;
+}
+float path::getL() const{
+  return l_;
+}
+
 simulation::simulation(float r1, float r2, float l, int max_cycles)
     :  // costruttore
       simulator_{r1, r2, l},
@@ -283,10 +293,18 @@ std::pair<std::vector<dottedLine>,exit_point> simulation::operator()(
       const auto extremes=last.getExtremes();
       const Eigen::Vector2f p0=extremes.first;
       const Eigen::Vector2f p1=extremes.second;
+
+      //test che sia effettivamente fuggita
+      assert(simulator_.getLocationType(p1)==posTypes::Escaped);
+
       const Eigen::ParametrizedLine<float,2> line{Eigen::ParametrizedLine<float,2>::Through(p0,p1)};
 
       //calcolo Y: interseca con asse di uscita
       const Eigen::Vector2f escape_intersection{simulator_.exitIntersection(line)}; //ottieni punto di fuga
+      //test intersezo
+      assert(escape_intersection.y()<=simulator_.getR2());
+      assert(escape_intersection.y()>=-simulator_.getR2());
+
       const float escape_phi{std::atanf(line.direction().y()/line.direction().x())}; //angolo di uscita tra -pi/2 e pi/2
 
       return {escape_intersection.y(),escape_phi}; //restituisci il punto di fuga
