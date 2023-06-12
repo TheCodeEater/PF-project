@@ -70,6 +70,8 @@ class path {  // contiene i bordi del biliardo
 
   static float arctan(float y, float x);
 
+  exit_point getEscapePoint(std::vector<dottedLine> const& trajectiories) const;
+
   //getter
   float getR1() const;
   float getR2() const;
@@ -86,7 +88,6 @@ class simulation {  // classe che gestisce la simulazione
   std::pair<std::vector<dottedLine>,exit_point> operator()(
       particle& p) const;  // operatore di simulazione
   
-  exit_point getEscapePoint(std::vector<dottedLine> const& trajectiories) const;
 };
 
 }  // namespace particleSimulator

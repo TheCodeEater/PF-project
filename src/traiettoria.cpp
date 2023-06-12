@@ -308,13 +308,13 @@ std::pair<std::vector<dottedLine>,exit_point> simulation::operator()(
 
   //calcolo posizione finale
   if(simulator_.getLocationType(p.pos)==posTypes::Escaped){
-    return std::make_pair(trajs,getEscapePoint(trajs)); //restituisci la coppia di dati
+    return std::make_pair(trajs,simulator_.getEscapePoint(trajs)); //restituisci la coppia di dati
   }else{
     return std::make_pair(trajs,exit_point{-10,-10}); //restituisci le traiettorie e un indicatore di failure
   }
 }
 
-  exit_point simulation::getEscapePoint(std::vector<dottedLine> const& trajectiories) const{
+  exit_point path::getEscapePoint(std::vector<dottedLine> const& trajectiories) const{
       //to do: aggiungere dei getter a path cosi da poter fare i test con gli assert
       //la funzione assume che la particella sia fuggita
       dottedLine const& last=trajectiories.back(); //ottieni traiettoria di
@@ -323,15 +323,15 @@ std::pair<std::vector<dottedLine>,exit_point> simulation::operator()(
       const Eigen::Vector2f p1=extremes.second;
 
       //test che sia effettivamente fuggita
-      assert(simulator_.getLocationType(p1)==posTypes::Escaped);
+      assert(getLocationType(p1)==posTypes::Escaped);
 
       const Eigen::ParametrizedLine<float,2> line{Eigen::ParametrizedLine<float,2>::Through(p0,p1)};
 
       //calcolo Y: interseca con asse di uscita
-      const Eigen::Vector2f escape_intersection{simulator_.exitIntersection(line)}; //ottieni punto di fuga
+      const Eigen::Vector2f escape_intersection{exitIntersection(line)}; //ottieni punto di fuga
       //test intersezo
-      assert(escape_intersection.y()<=simulator_.getR2());
-      assert(escape_intersection.y()>=-simulator_.getR2());
+      assert(escape_intersection.y()<=getR2());
+      assert(escape_intersection.y()>=-getR2());
 
       const float escape_phi{std::atanf(line.direction().y()/line.direction().x())}; //angolo di uscita tra -pi/2 e pi/2
 
