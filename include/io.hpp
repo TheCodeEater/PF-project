@@ -6,6 +6,9 @@
 #include <string>
 #include <sstream>
 
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ini_parser.hpp>
+
 #include "traiettoria.hpp"
 namespace particleSimulator {
 
@@ -40,6 +43,7 @@ class config {//classe per caricare le impostazioni
   options wOptn_{}; //
   randOptions rOptn_{};
   int N_iter_{};
+  int N_particles_{};
 
  public:
   config();
@@ -47,6 +51,7 @@ class config {//classe per caricare le impostazioni
   options getApplicationOptions(float y0, float theta0, int N) const;
   randOptions const& getRandomOptions() const;
   int getIterations() const;
+  int getParticleNumber() const;
   void exportData(std::vector<particle> const& v,std::string const& filename) const;
 };
 }  // namespace particleSimulator

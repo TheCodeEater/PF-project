@@ -5,17 +5,42 @@
 namespace particleSimulator {
   
 namespace fs=std::filesystem;
+namespace pt=boost::property_tree;
 
 config::config(){
-  //fs::path exe_path{fs::canonical(fs::path{"/proc/self/exe"})}; //get absolute path to current directory
   const fs::path cfg_path{"cfg/particleSimulator.cfg"};
-  //exe_path+=rel_cfg_path;
-  //exe_path=fs::canonical(exe_path);
-  std::ifstream cfg_file{cfg_path};
+  pt::ptree tree;
 
-  if(!cfg_file.is_open()){
-    throw std::runtime_error("Cannot open config file!");
+  pt::read_ini(cfg_path,tree);
+
+  //load settings - specifica i valori di default
+  wOptn_.w_width=tree.get<int>("width",2200);
+  wOptn_.w_height=tree.get<int>("height",1230);
+  wOptn_.w_name=tree.get<std::string>("windowTitle","Simulatore di particelle");
+  //parametri biliardo
+  {
+    const float r1=tree.get<float>("R1");
+    const float r2=tree.get<float>("R2");
+    const float l=tree.get<float>("L");
+
+    wOptn_.r1=r1;
+    rOptn_.r1=r1;
+
+    wOptn_.r2=r2;
+    rOptn_.r2=r2;
+
+    wOptn_.l=l;
+    rOptn_.l=l;
   }
+
+  N_iter_=tree.get<int>("Iterations");
+  N_particles_=tree.get<int>("particleNumber");
+
+  rOptn_.pos_mean=tree.get<float>("positionMean");
+  rOptn_.pos_sigma=tree.get<float>("positionRMS");
+  rOptn_.angle_mean=tree.get<float>("angleMean");
+  rOptn_.angle_sigma=tree.get<float>("angleRMS");
+  
 }
 
 options config::getApplicationOptions(float y0, float theta0, int N) const {
@@ -32,6 +57,10 @@ randOptions const& config::getRandomOptions() const{
 
 int config::getIterations() const{
   return N_iter_;
+}
+
+int config::getParticleNumber() const{
+  return N_particles_;
 }
 
 void config::exportData(std::vector<particle> const& v,std::string const& filename) const{
