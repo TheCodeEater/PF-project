@@ -29,10 +29,8 @@ class Application {
 
   // logic objects
   const simulation simulation_;             // simulation object
-  const path path_;                         // path object
   particle particle_{};                     // studied particle
   std::vector<dottedLine> trajectories_{};  // trajecotry history
-  const Eigen::Hyperplane<float, 2> escapeLine_{};
 
  public:
   explicit Application(options const&);

@@ -22,7 +22,12 @@ enum class posTypes { Inside, Escaped, BackHit, Error };
 enum class vecOrientation { Up, Down, HorizontalLeft, HorizontalRight };
 struct particle {
   Eigen::Vector2f pos{};  // pos sta per position
-  double theta{};         // pos e theta da input (distribuzione)
+  float theta{};         // pos e theta da input (distribuzione)
+};
+
+struct exit_point{
+  float y{};
+  float theta{};
 };
 
 class path {  // contiene i bordi del biliardo
@@ -33,6 +38,9 @@ class path {  // contiene i bordi del biliardo
 
   Line borderup_{};
   Line borderdown_{};
+
+  //linea di uscita
+  Eigen::Hyperplane<float,2> exit_line_{};
 
   // direzioni normali ai bordi. I vettori puntano verso l'interno della scatola
   // del biliardo
@@ -50,6 +58,8 @@ class path {  // contiene i bordi del biliardo
   // vecOrientation getHitDirection(Eigen::Vector2f const&) const;
   vecOrientation getHitDirection(float angle) const;
 
+  Eigen::Vector2f exitIntersection(Line const&) const;
+
   static float arctan(float y, float x);
 };
 
@@ -62,6 +72,8 @@ class simulation {  // classe che gestisce la simulazione
 
   std::vector<dottedLine> operator()(
       particle& p) const;  // operatore di simulazione
+  
+  exit_point getEscapePoint(std::vector<dottedLine> const& trajectiories) const;
 };
 
 }  // namespace particleSimulator

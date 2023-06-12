@@ -10,6 +10,7 @@ path::path(float r1, float r2, float l)
       l_{l},
       borderup_{Line::Through({0, r1_}, {l_, r2_})},
       borderdown_{Line::Through({0, -r1_}, {l_, -r2_})},
+      exit_line_{Eigen::Hyperplane<float,2>::Through({l_,r2},{l,-r2})},
       horizontal_{1, 0} {
   // TEST: correttezza parametri
   assert(r1_ > 0);
@@ -234,6 +235,10 @@ vecOrientation path::getHitDirection(
   }
 }
 
+Eigen::Vector2f path::exitIntersection(Line const& l) const{ //intersezione della retta data con quella di uscita
+  return l.intersectionPoint(exit_line_);
+}
+
 simulation::simulation(float r1, float r2, float l, int max_cycles)
     :  // costruttore
       simulator_{r1, r2, l},
@@ -263,7 +268,25 @@ std::vector<dottedLine> simulation::operator()(
     }
   }
 
+  //calcolo posizione finale
+
   return trajs;
 }
+
+  exit_point simulation::getEscapePoint(std::vector<dottedLine> const& trajectiories) const{
+      //to do: aggiungere dei getter a path cosi da poter fare i test con gli assert
+      //la funzione assume che la particella sia fuggita
+      dottedLine const& last=trajectiories.back(); //ottieni traiettoria di
+      const auto extremes=last.getExtremes();
+      const Eigen::Vector2f p0=extremes.first;
+      const Eigen::Vector2f p1=extremes.second;
+      const Eigen::ParametrizedLine<float,2> line{Eigen::ParametrizedLine<float,2>::Through(p0,p1)};
+
+      //calcolo Y: interseca con asse di uscita
+      const Eigen::Vector2f escape_intersection{simulator_.exitIntersection(line)}; //ottieni punto di fuga
+      const float escape_phi{std::atanf(line.direction().y()/line.direction().x())}; //angolo di uscita tra -pi/2 e pi/2
+
+      return {escape_intersection.y(),escape_phi}; //restituisci il punto di fuga
+  }
 
 }  // namespace particleSimulator
