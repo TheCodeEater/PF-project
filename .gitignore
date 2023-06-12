@@ -4,6 +4,7 @@ build-debug/
 .vscode/
 build-debug/
 Eigen/
+Boost/
 
 #ignore files
 .DS_Store
@@ -11,3 +12,4 @@ Eigen/
 *.bin
 test/doctest.h
 *.txt
+*.tar.gz
