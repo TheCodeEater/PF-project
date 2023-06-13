@@ -21,7 +21,7 @@ enum class posTypes { Inside, Escaped, BackHit, Error };
 
 enum class vecOrientation { UpRight, UpLeft, DownLeft, DownRight, HorizontalLeft, HorizontalRight, VerticalUp, VerticalDown };
 
-enum class hitBorder {Top, Bottom, Back, /*Front,*/ Angle};
+enum class hitBorder {Top, Bottom, Back, Front, Angle};
 struct particle {
   Eigen::Vector2f pos{};  // pos sta per position
   double theta{};         // pos e theta da input (distribuzione)

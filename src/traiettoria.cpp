@@ -95,13 +95,35 @@ intsect path::operator()(particle const& p) const {
         }
       }
       case vecOrientation::UpRight: {
-        return {trajectory.intersectionPoint(
+        //verifica se esce
+        const Eigen::Vector2f exit_intsec=exitIntersection(trajectory); //intersezione con la barra di uscita
+        if(exit_intsec.y()<r2_ && exit_intsec.y()>-r2_){
+          return {exit_intsec,hitBorder::Front};
+        }else if(exit_intsec.y()>=r2_){
+          return {trajectory.intersectionPoint(
             Eigen::Hyperplane<float, 2>{borderup_}),hitBorder::Top};  // intersezione con sup
+        }else if(exit_intsec.y()<=-r2_){
+          return {trajectory.intersectionPoint(
+            Eigen::Hyperplane<float, 2>{borderdown_}),hitBorder::Bottom};  // intersezione con inf
+        }else{
+          throw std::logic_error("Impossibile determinare l'intersezione!");
+        }
       }
 
       case vecOrientation::DownRight: {
-        return {trajectory.intersectionPoint(
+        //verifica se esce - temporaneo copia incolla, da mettere in una funzione a parte
+        const Eigen::Vector2f exit_intsec=exitIntersection(trajectory); //intersezione con la barra di uscita
+        if(exit_intsec.y()<r2_ && exit_intsec.y()>-r2_){
+          return {exit_intsec,hitBorder::Front};
+        }else if(exit_intsec.y()>=r2_){
+          return {trajectory.intersectionPoint(
+            Eigen::Hyperplane<float, 2>{borderup_}),hitBorder::Top};  // intersezione con sup
+        }else if(exit_intsec.y()<=-r2_){
+          return {trajectory.intersectionPoint(
             Eigen::Hyperplane<float, 2>{borderdown_}),hitBorder::Bottom};  // intersezione con inf
+        }else{
+          throw std::logic_error("Impossibile determinare l'intersezione!");
+        }
       }
 
       case vecOrientation::UpLeft:{ //in basso a sx: bordo dietro o basso
@@ -163,6 +185,11 @@ float path::reflect(particle& p) const {
       case hitBorder::Angle:{
         //fai la parallela, orientata nella medesima direzione del vettore riflesso (angolo di incidenza 0)
         return {-std::cos(p.theta),-std::sin(p.theta)};
+      }
+      case hitBorder::Front:{//esci
+        p.pos=intsect.point; //imposta posizione
+        //l'angolo resta invariato
+        return exit_line_;
       }
     }
   }();
