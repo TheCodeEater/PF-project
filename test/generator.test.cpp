@@ -32,7 +32,10 @@ TEST_CASE("Test della generazione in range dei numeri"){
 
     std::cout<<bad_p.pos<<"\n"<<bad_p.theta<<"\n";*/
 
-    std::vector<particleSimulator::exit_point> exit=rs.run(1105,200);
+    std::vector<particleSimulator::exit_point> exit=rs.run(233,200);
+
+    auto p=rs.getParticle();
+    std::cout<<p.pos<<"\n"<<p.theta<<"\n";
 
     std::ofstream f{"output.txt"};
 
