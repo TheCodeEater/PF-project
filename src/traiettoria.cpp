@@ -152,10 +152,12 @@ intsect path::operator()(particle const& p) const {
       }
 
         case vecOrientation::VerticalUp:{
-            throw std::logic_error("Particella particolare 1");
+              return {trajectory.intersectionPoint(
+                  Eigen::Hyperplane<float, 2>{borderup_}), hitBorder::Top};  // intersezione con sup
         }
         case vecOrientation::VerticalDown:{
-            throw std::logic_error("Particella particolare 2");
+              return {trajectory.intersectionPoint(
+                  Eigen::Hyperplane<float, 2>{borderdown_}),hitBorder::Bottom};  // intersezione con inf
         }
     }
   }();
