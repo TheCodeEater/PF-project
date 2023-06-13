@@ -22,10 +22,10 @@ particle randSimulator::getParticle() {//niente const, i generatori cambiano lo 
 
     float y=pos_dist_(engine_);
 
-    if(y>=simulator_.getR1()){ //adatta in range la y nel caso
-        y=simulator_.getR1()-1e-2;
-    }else if(y<=-simulator_.getR1()){
-        y=simulator_.getR1()+1e-2;
+    if(y>=simulator_.getR1()-2){ //adatta in range la y nel caso
+        y=simulator_.getR1()-1e-2-2;
+    }else if(y<=-simulator_.getR1()+2){
+        y=simulator_.getR1()+1e-2+2;
     }
 
     const particle p{{0,y},(theta<0)? 2*pi+theta : theta}; //se l'angolo e' negativo, adatta la convenzione sugli angoli
