@@ -170,6 +170,10 @@ float path::reflect(particle& p) const {
       p);  // calcola il punto di collisione
   // determina se è il bordo su o il bordo giù, usando le coordinate del punto
   // di intersezione
+  if(intsect.border==hitBorder::Front){ //particella uscita
+    p.pos=intsect.point; //punto finale
+    return p.theta;
+  }else{
   Eigen::Vector2f const& normal_vect = [this,&intsect,&p]() -> vec{
     switch (intsect.border) { //esamina il bordo
       case hitBorder::Top:{
@@ -186,10 +190,8 @@ float path::reflect(particle& p) const {
         //fai la parallela, orientata nella medesima direzione del vettore riflesso (angolo di incidenza 0)
         return {-std::cos(p.theta),-std::sin(p.theta)};
       }
-      case hitBorder::Front:{//esci
-        p.pos=intsect.point; //imposta posizione
-        //l'angolo resta invariato
-        return exit_line_;
+      case hitBorder::Front:{
+        throw std::logic_error("Non possibile, dovevi averlo gia gestito!");
       }
     }
   }();
@@ -227,6 +229,7 @@ float path::reflect(particle& p) const {
   p.theta = new_angle;
 
   return new_angle;
+  }
 }
 
 float path::arctan(float y, float x) {
