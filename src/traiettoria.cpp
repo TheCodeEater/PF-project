@@ -83,28 +83,19 @@ intsect path::operator()(particle const& p) const {
         }
       }
 
-      case vecOrientation::UpLeft:{ //in basso a sx: bordo dietro o basso
-          const Eigen::Vector2f back_intsect{trajectory.intersectionPoint(Eigen::Hyperplane<float,2>::Through({0,0},{0,1}))}; //intsect con la verticale
+      case vecOrientation::Left:{ //in basso a sx: bordo dietro o basso
+          const Eigen::Vector2f back_intsect{trajectory.intersectionPoint(HLine::Through({0,0},{0,1}))}; //intsect con la verticale
           //test intersezione verticale
           if(std::abs(std::abs(back_intsect.y())-r1_)<1e-3){ //colpo all'angolo: distanza da r1 entro i limiti di float
               return {back_intsect,hitBorder::Angle};
           }else if(std::abs(back_intsect.y())<=r1_-1e-3){//colpo al bordo dietro
               return {back_intsect,hitBorder::Back};
-          }else if(std::abs(back_intsect.y())>=r1_+1e-3){//intersezione con il sup
+          }else if(back_intsect.y()>=r1_+1e-3){//intersezione con il sup
               return {trajectory.intersectionPoint(
                   HLine{borderup_}), hitBorder::Top};  // intersezione con sup
-          }
-      }
-      case vecOrientation::DownLeft:{ //in alto a sx: bordo dietro o alto
-          const Eigen::Vector2f back_intsect{trajectory.intersectionPoint(Eigen::Hyperplane<float,2>::Through({0,0},{0,1}))}; //intsect con la verticale
-          //test intersezione verticale
-          if(std::abs(std::abs(back_intsect.y())-r1_)<1e-3){ //colpo all'angolo
-              return {back_intsect,hitBorder::Angle};
-          }else if(std::abs(back_intsect.y())<=r1_-1e-3){//colpo al bordo dietro
-              return {back_intsect,hitBorder::Back};
-          }else if(std::abs(back_intsect.y())>=r1_+1e-3){//intersezione con inf
+          }else if(back_intsect.y()<=-r1_-1e-3){
               return {trajectory.intersectionPoint(
-                  HLine{borderdown_}),hitBorder::Bottom};  // intersezione con inf
+                  HLine{borderdown_}), hitBorder::Bottom};  // intersezione con sup
           }
       }
 
@@ -232,11 +223,11 @@ vecOrientation path::getHitDirection( //determina l'orientazione del vettore
   }else if(std::abs(angle-pi/2)<=1e-3){
     return vecOrientation::VerticalUp;
   }else if(angle>pi/2+1e-3 && angle<pi-1e-3){
-    return vecOrientation::UpLeft;
+    return vecOrientation::Left;
   }else if(std::abs(angle-pi)<=1e-3){
     return vecOrientation::HorizontalLeft;
   }else if(angle>pi+1e-3 && angle < 1.5f*pi-1e-3){
-    return vecOrientation::DownLeft;
+    return vecOrientation::Left;
   }else if(std::abs(angle-1.5f*pi)<=1e-3){
     return vecOrientation::VerticalDown;
   }else if(angle>1.5f*pi+1e-3 && angle < 2*pi-1e-3){
