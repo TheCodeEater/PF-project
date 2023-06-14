@@ -14,7 +14,10 @@ TEST_CASE("Test della generazione in range dei numeri"){
 
     particleSimulator::path biliardo{r1,r2,l};
 
-    particleSimulator::randSimulator rs{{r1,r2,l,0.f,80.f,0.f,pi/8,100}};
+    const unsigned seed{std::random_device{}()};
+    std::cout<<"Seed: "<<seed<<"\n";
+
+    particleSimulator::randSimulator rs{{r1,r2,l,0.f,80.f,0.f,pi/8,seed}};
 
     /*for(int i{};i<1e3;++i){
         particleSimulator::particle p{rs.getParticle()};
@@ -32,10 +35,10 @@ TEST_CASE("Test della generazione in range dei numeri"){
 
     std::cout<<bad_p.pos<<"\n"<<bad_p.theta<<"\n";*/
 
-    std::vector<particleSimulator::exit_point> exit=rs.run(233,200);
+    std::vector<particleSimulator::exit_point> exit=rs.run(1000000,200);
 
-    auto p=rs.getParticle();
-    std::cout<<p.pos<<"\n"<<p.theta<<"\n";
+   // auto p=rs.getParticle();
+    //std::cout<<p.pos<<"\n"<<p.theta<<"\n";
 
     std::ofstream f{"output.txt"};
 
