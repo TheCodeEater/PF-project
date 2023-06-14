@@ -24,10 +24,6 @@ TEST_CASE("Test della generazione in range dei numeri"){
 
     try{
         exit=rs.run(1000000,200);
-        std::ofstream f{"output.txt"};
-        for(auto const& v:exit){
-            f<<v.theta<<"\n";
-        }
     }catch(std::exception const& e){
         std::cout<<e.what()<<"\n";
         throw;
