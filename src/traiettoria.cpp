@@ -66,12 +66,12 @@ intsect path::operator()(particle const& p) const {
       case vecOrientation::Right: { 
         //verifica se esce
         const Eigen::Vector2f exit_intsec=exitIntersection(trajectory); //intersezione con la barra di uscita
-        if(exit_intsec.y()<r2_+1e-3 && exit_intsec.y()>-r2_-1e-3){
+        if(exit_intsec.y()<r2_+1e-3 && exit_intsec.y()>-r2_){
           return {exit_intsec,hitBorder::Front};
-        }else if(exit_intsec.y()>=r2_+1e-3){
+        }else if(exit_intsec.y()>=r2_){
           return {trajectory.intersectionPoint(
             borderup_),hitBorder::Top};  // intersezione con sup
-        }else if(exit_intsec.y()<=-r2_-1e-3){
+        }else if(exit_intsec.y()<=-r2_){
           return {trajectory.intersectionPoint(
             borderdown_),hitBorder::Bottom};  // intersezione con inf
         }else{
@@ -84,12 +84,12 @@ intsect path::operator()(particle const& p) const {
           //test intersezione verticale
           if(std::abs(std::abs(back_intsect.y())-r1_)<1e-3){ //colpo all'angolo: distanza da r1 entro i limiti di float
               return {back_intsect,hitBorder::Angle};
-          }else if(std::abs(back_intsect.y())<=r1_-1e-3){//colpo al bordo dietro
+          }else if(std::abs(back_intsect.y())<=r1_){//colpo al bordo dietro
               return {back_intsect,hitBorder::Back};
-          }else if(back_intsect.y()>=r1_+1e-3){//intersezione con il sup
+          }else if(back_intsect.y()>=r1_){//intersezione con il sup
               return {trajectory.intersectionPoint(
                   borderup_), hitBorder::Top};  // intersezione con sup
-          }else if(back_intsect.y()<=-r1_-1e-3){
+          }else if(back_intsect.y()<=-r1_){
               return {trajectory.intersectionPoint(
                   borderdown_), hitBorder::Bottom};  // intersezione con sup
           }else{
@@ -210,15 +210,15 @@ vecOrientation path::getHitDirection( //determina l'orientazione del vettore
   assert(angle >= 0 && angle <= 2 * pi);
   
   //assert garantisce che l'angolo sia positivo
-  if(angle<pi/2-1e-3){ //alto a dx
+  if(angle<pi/2){ //alto a dx
     return vecOrientation::Right;
   }else if(std::abs(angle-pi/2)<=1e-3){
     return vecOrientation::VerticalUp;
-  }else if(angle>pi/2+1e-3 && angle < 1.5f*pi-1e-3){
+  }else if(angle>pi/2 && angle < 1.5f*pi){
     return vecOrientation::Left;
   }else if(std::abs(angle-1.5f*pi)<=1e-3){
     return vecOrientation::VerticalDown;
-  }else if(angle>1.5f*pi+1e-3 && angle < 2*pi-1e-3){
+  }else if(angle>1.5f*pi&& angle < 2*pi){
     return vecOrientation::Right;
   }else if(std::abs(angle-2*pi)<=1e-3){
     return vecOrientation::Right;
