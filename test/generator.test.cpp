@@ -11,7 +11,7 @@ TEST_CASE("Test della generazione in range dei numeri"){
     const float r1{400}; //parametro r1
     const float r2{200};
     const float l{700};
-    const unsigned seed{3067172026};
+    const unsigned seed{std::random_device{}()};
 
     particleSimulator::path biliardo{r1,r2,l};
 
