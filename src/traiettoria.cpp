@@ -92,6 +92,8 @@ intsect path::operator()(particle const& p) const {
           }else if(back_intsect.y()<=-r1_-1e-3){
               return {trajectory.intersectionPoint(
                   borderdown_), hitBorder::Bottom};  // intersezione con sup
+          }else{
+            throw std::logic_error("Impossibile determinare l'intersezione!");
           }
       }
 
@@ -207,17 +209,12 @@ vecOrientation path::getHitDirection( //determina l'orientazione del vettore
     float angle) const {  // nota: accetta angoli tra -pi e +pi
   assert(angle >= 0 && angle <= 2 * pi);
   
-  if(angle<=1e-3){ //angolo nullo: orizzontale destra
-    return vecOrientation::Right;
-  }else if(angle>1e-3 && angle<pi/2-1e-3){ //alto a dx
+  //assert garantisce che l'angolo sia positivo
+  if(angle<pi/2-1e-3){ //alto a dx
     return vecOrientation::Right;
   }else if(std::abs(angle-pi/2)<=1e-3){
     return vecOrientation::VerticalUp;
-  }else if(angle>pi/2+1e-3 && angle<pi-1e-3){
-    return vecOrientation::Left;
-  }else if(std::abs(angle-pi)<=1e-3){
-    return vecOrientation::Left;
-  }else if(angle>pi+1e-3 && angle < 1.5f*pi-1e-3){
+  }else if(angle>pi/2+1e-3 && angle < 1.5f*pi-1e-3){
     return vecOrientation::Left;
   }else if(std::abs(angle-1.5f*pi)<=1e-3){
     return vecOrientation::VerticalDown;

@@ -75,7 +75,7 @@ std::vector<exit_point> randSimulator::run(int n,int max_iterations){
         //tra 3/2 pi e 2pi
         if(phi>=1.5f*pi && phi<=2*pi+1e-3){
             phi=-(2*pi-phi);
-        }else if(phi>=pi/2 && phi<=1.5f*phi){
+        }else if(phi>=pi/2 && phi<=1.5f*phi+1e-3){
             throw std::runtime_error("Angolo di uscita errato, non esci all'incontrario");
         }
     });
