@@ -280,34 +280,5 @@ std::pair<std::vector<dottedLine>,exit_point> simulation::operator()(
     return std::make_pair(trajs,exit_point{-10,-10}); //restituisci le traiettorie e un indicatore di failure
   }
 }
-/*
-exit_point path::getEscapePoint(vec const& p0, vec const& p1) const{
-      //test che sia effettivamente fuggita
-      assert(getLocationType(p1)==posTypes::Escaped);
-
-      const Eigen::ParametrizedLine<float,2> line{Eigen::ParametrizedLine<float,2>::Through(p0,p1)};
-
-      //calcolo Y: interseca con asse di uscita
-      const Eigen::Vector2f escape_intersection{exitIntersection(line)}; //ottieni punto di fuga
-      //test intersezo
-      assert(escape_intersection.y()<=getR2());
-      assert(escape_intersection.y()>=-getR2());
-
-      const float escape_phi{std::atanf(line.direction().y()/line.direction().x())}; //angolo di uscita tra -pi/2 e pi/2
-
-      return {escape_intersection.y(),escape_phi}; //restituisci il punto di fuga
-}
-
-  exit_point path::getEscapePoint(std::vector<dottedLine> const& trajectiories) const{
-      //to do: aggiungere dei getter a path cosi da poter fare i test con gli assert
-      //la funzione assume che la particella sia fuggita
-      dottedLine const& last=trajectiories.back(); //ottieni traiettoria di
-      const auto extremes=last.getExtremes();
-      const Eigen::Vector2f p0=extremes.first;
-      const Eigen::Vector2f p1=extremes.second;
-
-      return getEscapePoint(p0,p1);
-
-  }*/
 
 }  // namespace particleSimulator
