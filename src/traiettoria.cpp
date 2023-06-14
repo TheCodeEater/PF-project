@@ -62,35 +62,6 @@ intsect path::operator()(particle const& p) const {
       case vecOrientation::HorizontalLeft: {  // sbatti sempre sul bordo
         return {trajectory.intersectionPoint(borderback_),hitBorder::Back};
       }
-
-      case vecOrientation::HorizontalRight: {  // puoi sbattere sopra o sotto
-        // e' importante selezionare il bordo corretto poiche l'intersezione con
-        // entrambi si trova, ma una e' fuori mentre l'altra no idea: le fai
-        // entrambi e restituisci quella che sta dentro, se c'è
-        const Eigen::Vector2f int_sup = trajectory.intersectionPoint(borderup_);  // intersezione con sup
-
-        const Eigen::Vector2f int_inf = trajectory.intersectionPoint(borderdown_);  // intersezione con inf
-
-        //
-        const posTypes pos_sup = getLocationType(int_sup);
-        const posTypes pos_inf = getLocationType(int_inf);
-
-        // test della correttezza
-        assert(pos_sup != posTypes::Error);
-        assert(pos_inf != posTypes::Error);
-
-        assert(pos_sup != posTypes::BackHit);
-        assert(pos_inf != posTypes::BackHit);
-
-        if (pos_sup ==
-            posTypes::Inside) {  // l'intersezione con il sup appartiene
-          return {int_sup,hitBorder::Top};
-        } else if (pos_inf == posTypes::Inside) {  // con l'inf
-          return {int_inf,hitBorder::Bottom};
-        } else {
-          return {int_sup,hitBorder::Top};  // scelta a caso, inf sarebbe equivalente
-        }
-      }
       case vecOrientation::Right: {
         //verifica se esce
         const Eigen::Vector2f exit_intsec=exitIntersection(trajectory); //intersezione con la barra di uscita
@@ -245,7 +216,7 @@ vecOrientation path::getHitDirection(
   assert(angle >= 0 && angle <= 2 * pi);
   
   if(angle<=1e-3){ //angolo nullo: orizzontale destra
-    return vecOrientation::HorizontalRight;
+    return vecOrientation::Right;
   }else if(angle>1e-3 && angle<pi/2-1e-3){ //alto a dx
     return vecOrientation::Right;
   }else if(std::abs(angle-pi/2)<=1e-3){
@@ -261,7 +232,7 @@ vecOrientation path::getHitDirection(
   }else if(angle>1.5f*pi+1e-3 && angle < 2*pi-1e-3){
     return vecOrientation::Right;
   }else if(std::abs(angle-2*pi)<=1e-3){
-    return vecOrientation::HorizontalRight;
+    return vecOrientation::Right;
   }else{
     throw std::logic_error("Impossibile determinare la direzione del vettore!");
   }

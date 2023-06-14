@@ -36,7 +36,7 @@ TEST_CASE("Test del calcolo delle traiettorie") {
     CHECK(biliardo.getHitDirection(p1.theta) ==
           particleSimulator::vecOrientation::DownLeft);
     CHECK(biliardo.getHitDirection(p2.theta) ==
-          particleSimulator::vecOrientation::HorizontalRight);
+          particleSimulator::vecOrientation::Right);
     CHECK(biliardo.getHitDirection(p3.theta) ==
           particleSimulator::vecOrientation::HorizontalLeft);
   }

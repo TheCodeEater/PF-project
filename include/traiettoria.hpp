@@ -20,7 +20,7 @@ namespace particleSimulator {
 
 enum class posTypes { Inside, Escaped, BackHit, Error };
 
-enum class vecOrientation {  UpLeft, DownLeft, Right, HorizontalLeft, HorizontalRight, VerticalUp, VerticalDown };
+enum class vecOrientation {  UpLeft, DownLeft, Right, HorizontalLeft, VerticalUp, VerticalDown };
 
 enum class hitBorder {Top, Bottom, Back, Front, Angle};
 struct particle {
