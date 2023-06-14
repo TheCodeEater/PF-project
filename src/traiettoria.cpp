@@ -217,19 +217,19 @@ vecOrientation path::getHitDirection(
   
   if(angle<=eps){ //angolo nullo: orizzontale destra
     return vecOrientation::Right;
-  }else if(angle>1e-3 && angle<pi/2-eps){ //alto a dx
+  }else if(angle>eps && angle<pi/2-eps){ //alto a dx
     return vecOrientation::Right;
   }else if(std::abs(angle-pi/2)<=eps){
     return vecOrientation::VerticalUp;
-  }else if(angle>pi/2+1e-3 && angle<pi-eps){
+  }else if(angle>pi/2+eps && angle<pi-eps){
     return vecOrientation::UpLeft;
   }else if(std::abs(angle-pi)<=eps){
     return vecOrientation::HorizontalLeft;
-  }else if(angle>pi+1e-3 && angle < 1.5f*pi-eps){
+  }else if(angle>pi+eps && angle < 1.5f*pi-eps){
     return vecOrientation::DownLeft;
   }else if(std::abs(angle-1.5f*pi)<=eps){
     return vecOrientation::VerticalDown;
-  }else if(angle>1.5f*pi+1e-3 && angle < 2*pi-eps){
+  }else if(angle>1.5f*pi+eps && angle < 2*pi-eps){
     return vecOrientation::Right;
   }else if(std::abs(angle-2*pi)<=eps){
     return vecOrientation::Right;
