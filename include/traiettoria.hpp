@@ -29,7 +29,7 @@ struct particle {
 
 struct exit_point{
   float y{};
-  float theta{};
+  double theta{};
 };
 
 struct intsect{
@@ -70,8 +70,8 @@ class path {  // contiene i bordi del biliardo
 
   static float arctan(float y, float x);
 
-  exit_point getEscapePoint(std::vector<dottedLine> const& trajectiories) const;
-  exit_point getEscapePoint(vec const& p0, vec const& p1) const;
+  //exit_point getEscapePoint(std::vector<dottedLine> const& trajectiories) const;
+  //exit_point getEscapePoint(vec const& p0, vec const& p1) const;
 
   //getter
   float getR1() const;
