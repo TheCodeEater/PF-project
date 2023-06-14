@@ -13,6 +13,8 @@ TEST_CASE("Test della generazione in range dei numeri"){
     const float l{700};
     const unsigned seed{std::random_device{}()};
 
+    std::cout<<"Seed: "<<seed<<"\n";
+
     particleSimulator::path biliardo{r1,r2,l};
 
     particleSimulator::randSimulator rs{{r1,r2,l,0.f,80.f,0.f,pi/8,seed}};
@@ -28,7 +30,6 @@ TEST_CASE("Test della generazione in range dei numeri"){
         }
     }catch(std::exception const& e){
         std::cout<<e.what()<<"\n";
-        std::cout<<"Seed incriminato: "<<seed<<"\n";
         throw;
     }
 
