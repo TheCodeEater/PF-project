@@ -12,7 +12,7 @@ dottedLine::dottedLine(vType p0, vType p1, sf::Color c)
       vertices_{sf::Points, 2} {
   // genera punti con un dato step di incremento del parametro finché non superi
   // il punto finale
-  const float step{0.01f};
+  const double step{0.01f};
   // calcola la lunghezza della retta
   const double l = direction_.norm();
   // calcola un segmentino
@@ -23,12 +23,12 @@ dottedLine::dottedLine(vType p0, vType p1, sf::Color c)
   // parametro e arrotonda
   const int N{static_cast<int>(std::round(l / l_1))};
   // genera N punti della linea e inseriscili mediante back inserter
-  float t{0.f};
-  // Eigen::ParametrizedLine<float,2>
-  // line{Eigen::ParametrizedLine<float,2>::Through(first_,last_)};
+  double t{0.f};
+  // Eigen::ParametrizedLine<double,2>
+  // line{Eigen::ParametrizedLine<double,2>::Through(first_,last_)};
   std::generate_n(std::back_inserter(*this), N, [this, &t, &step, &c]() {
     // calcola la posizione
-    const Eigen::Vector2f pos = first_ + t * direction_;
+    const Eigen::Vector2d pos = first_ + t * direction_;
     sf::Vertex vertex{{pos.x(), pos.y()}};
     vertex.color = c;
 
@@ -49,6 +49,6 @@ sf::VertexArray const& dottedLine::getVertexArray() const { return vertices_; }
 
 void dottedLine::push_back(value_type vertex) { vertices_.append(vertex); }
 
-Eigen::Vector2f dottedLine::getDirection() const { return direction_; }
+Eigen::Vector2d dottedLine::getDirection() const { return direction_; }
 
 }  // namespace particleSimulator

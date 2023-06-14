@@ -4,7 +4,7 @@
 #include <iostream>
 
 namespace particleSimulator {
-path::path(float r1, float r2, float l)
+path::path(double r1, double r2, double l)
     : r1_{r1},
       r2_{r2},
       l_{l},
@@ -41,12 +41,12 @@ intsect path::operator()(particle const& p) const {
   assert(p.theta >= 0);           // angolo tra 0 e 2pi
   assert(p.theta <= 2 * pi);
 
-  const Eigen::Vector2f dir{std::cos(p.theta),
+  const Eigen::Vector2d dir{std::cos(p.theta),
                             std::sin(p.theta)};  // direzione particella
   // piccolo test
   assert(std::abs(dir.norm() - 1) <
          1e-3);  // test della norma del vettore uguale a 1
-  const Eigen::ParametrizedLine<float, 2> trajectory{
+  const Eigen::ParametrizedLine<double, 2> trajectory{
       p.pos, dir};  // retta della direzione della particella
 
   // determina quale bordo puoi colpire
@@ -64,7 +64,7 @@ intsect path::operator()(particle const& p) const {
       }
       case vecOrientation::Right: {
         //verifica se esce
-        const Eigen::Vector2f exit_intsec=exitIntersection(trajectory); //intersezione con la barra di uscita
+        const Eigen::Vector2d exit_intsec=exitIntersection(trajectory); //intersezione con la barra di uscita
         if(exit_intsec.y()<r2_ && exit_intsec.y()>-r2_){
           return {exit_intsec,hitBorder::Front};
         }else if(exit_intsec.y()>=r2_){
@@ -77,9 +77,9 @@ intsect path::operator()(particle const& p) const {
       }
 
       case vecOrientation::UpLeft:{ //in basso a sx: bordo dietro o basso
-          const Eigen::Vector2f back_intsect{trajectory.intersectionPoint(borderback_)}; //intsect con la verticale
+          const Eigen::Vector2d back_intsect{trajectory.intersectionPoint(borderback_)}; //intsect con la verticale
           //test intersezione verticale
-          if(std::abs(std::abs(back_intsect.y())-r1_)<eps){ //colpo all'angolo: distanza da r1 entro i limiti di float
+          if(std::abs(std::abs(back_intsect.y())-r1_)<eps){ //colpo all'angolo: distanza da r1 entro i limiti di double
               return {back_intsect,hitBorder::Angle};
           }else if(std::abs(back_intsect.y())<=r1_-eps){//colpo al bordo dietro
               return {back_intsect,hitBorder::Back};
@@ -88,7 +88,7 @@ intsect path::operator()(particle const& p) const {
           }
       }
       case vecOrientation::DownLeft:{ //in alto a sx: bordo dietro o alto
-          const Eigen::Vector2f back_intsect{trajectory.intersectionPoint(borderback_)}; //intsect con la verticale
+          const Eigen::Vector2d back_intsect{trajectory.intersectionPoint(borderback_)}; //intsect con la verticale
           //test intersezione verticale
           if(std::abs(std::abs(back_intsect.y())-r1_)<eps){ //colpo all'angolo
               return {back_intsect,hitBorder::Angle};
@@ -113,7 +113,7 @@ intsect path::operator()(particle const& p) const {
   return intersec;
 }
 
-float path::reflect(particle& p) const {
+double path::reflect(particle& p) const {
   const intsect intsect = operator()(
       p);  // calcola il punto di collisione
   // determina se è il bordo su o il bordo giù, usando le coordinate del punto
@@ -122,7 +122,7 @@ float path::reflect(particle& p) const {
     p.pos=intsect.point; //punto finale
     return p.theta;
   }else{
-  Eigen::Vector2f const& normal_vect = [this,&intsect,&p]() -> vec{
+  Eigen::Vector2d const& normal_vect = [this,&intsect,&p]() -> vec{
     switch (intsect.border) { //esamina il bordo
       case hitBorder::Top:{
         return normal_up_;
@@ -146,21 +146,21 @@ float path::reflect(particle& p) const {
   const Line normal{intsect.point, normal_vect};  // trova la normale
   // calcola l'angolo di incidenza
   // angolo della normale
-  const float normal_angle = arctan(normal_vect.y(), normal_vect.x());
+  const double normal_angle = arctan(normal_vect.y(), normal_vect.x());
   // vettore traiettoria ribaltato
-  const Eigen::Vector2f dir{-std::cos(p.theta), -std::sin(p.theta)};
+  const Eigen::Vector2d dir{-std::cos(p.theta), -std::sin(p.theta)};
 
-  const float dir_angle =
+  const double dir_angle =
       arctan(dir.y(), dir.x());  // calcola angolo del vettore
 
   assert(dir_angle <= 2 * pi);  // condizioni sulla convenzione degli angoli
   assert(dir_angle >= 0);
 
-  const float phi_inc = normal_angle - dir_angle;  // angolo di incidenza
+  const double phi_inc = normal_angle - dir_angle;  // angolo di incidenza
 
   // NOTA: phi non deve rispettare la condizione, il segno determina il verso
   // della rotazione
-  // const float phi_inc=std::acos(normal.direction().dot(dir));
+  // const double phi_inc=std::acos(normal.direction().dot(dir));
   // assert(std::abs(phi_inc)<=pi/2);
   // assert al momento non ripristinabile, fornisce problemi di geometria per
   // gli urti con il bordo posteriore risoluzione: prodotto scalare (vettoriale)
@@ -169,9 +169,9 @@ float path::reflect(particle& p) const {
   const Eigen::Rotation2D rotation{2 *
                                    phi_inc};  // rotazione di 2*angolo incidenza
 
-  const Eigen::Vector2f new_dir = rotation * dir;  // esegui la rotazione
+  const Eigen::Vector2d new_dir = rotation * dir;  // esegui la rotazione
 
-  const float new_angle = arctan(new_dir.y(), new_dir.x());
+  const double new_angle = arctan(new_dir.y(), new_dir.x());
 
   p.pos = intsect.point;
   p.theta = new_angle;
@@ -180,8 +180,8 @@ float path::reflect(particle& p) const {
   }
 }
 
-float path::arctan(float y, float x) {
-  const float theta = std::atan2f(y, x);
+double path::arctan(double y, double x) {
+  const double theta = std::atan2f(y, x);
   // correggi l'angolo risultante in modo tale che sia compreso tra zero e 2pi,
   // non tra -pi e pi
   if (theta < 0) {
@@ -191,7 +191,7 @@ float path::arctan(float y, float x) {
   }
 }
 
-posTypes path::getLocationType(Eigen::Vector2f const& v)
+posTypes path::getLocationType(Eigen::Vector2d const& v)
     const {  // determina il luogo del biliardo in cui si trova
   // assert; verifica che la x di v corrisponda al corrispondente valore Y
   // calcolato
@@ -206,13 +206,13 @@ posTypes path::getLocationType(Eigen::Vector2f const& v)
   }
 }
 /*
-vecOrientation path::getHitDirection(Eigen::Vector2f const& v) const{
-    float angle=arctan(v.y(),v.x());
+vecOrientation path::getHitDirection(Eigen::Vector2d const& v) const{
+    double angle=arctan(v.y(),v.x());
     return getHitDirection(angle);
 }*/
 
 vecOrientation path::getHitDirection(
-    float angle) const {  // nota: accetta angoli tra -pi e +pi
+    double angle) const {  // nota: accetta angoli tra -pi e +pi
   assert(angle >= 0 && angle <= 2 * pi);
   
   if(angle<=eps){ //angolo nullo: orizzontale destra
@@ -238,21 +238,21 @@ vecOrientation path::getHitDirection(
   }
 }
 
-Eigen::Vector2f path::exitIntersection(Line const& l) const{ //intersezione della retta data con quella di uscita
+Eigen::Vector2d path::exitIntersection(Line const& l) const{ //intersezione della retta data con quella di uscita
   return l.intersectionPoint(exit_line_);
 }
 
-float path::getR1() const{
+double path::getR1() const{
   return r1_;
 }
-float path::getR2() const{
+double path::getR2() const{
   return r2_;
 }
-float path::getL() const{
+double path::getL() const{
   return l_;
 }
 
-simulation::simulation(float r1, float r2, float l, int max_cycles)
+simulation::simulation(double r1, double r2, double l, int max_cycles)
     :  // costruttore
       simulator_{r1, r2, l},
       max_iterations_{max_cycles} {}
@@ -264,11 +264,11 @@ std::pair<std::vector<dottedLine>,exit_point> simulation::operator()(
   for (int i{0}; i < max_iterations_;
        ++i) {  // up to the maximum number of iterations
     // position vectors
-    const Eigen::Vector2f old_pos{p.pos};
+    const Eigen::Vector2d old_pos{p.pos};
 
     simulator_.reflect(p);  // run the particle reflection
 
-    Eigen::Vector2f const& curr_pos{
+    Eigen::Vector2d const& curr_pos{
         p.pos};  // const reference to current position
 
     particleSimulator::dottedLine line{old_pos,
@@ -293,15 +293,15 @@ exit_point path::getEscapePoint(vec const& p0, vec const& p1) const{
       //test che sia effettivamente fuggita
       assert(getLocationType(p1)==posTypes::Escaped);
 
-      const Eigen::ParametrizedLine<float,2> line{Eigen::ParametrizedLine<float,2>::Through(p0,p1)};
+      const Eigen::ParametrizedLine<double,2> line{Eigen::ParametrizedLine<double,2>::Through(p0,p1)};
 
       //calcolo Y: interseca con asse di uscita
-      const Eigen::Vector2f escape_intersection{exitIntersection(line)}; //ottieni punto di fuga
+      const Eigen::Vector2d escape_intersection{exitIntersection(line)}; //ottieni punto di fuga
       //test intersezo
       assert(escape_intersection.y()<=getR2()+1e-3);
       assert(escape_intersection.y()>=-getR2()-1e-3);
 
-      const float escape_phi{std::atanf(line.direction().y()/line.direction().x())}; //angolo di uscita tra -pi/2 e pi/2
+      const double escape_phi{std::atanf(line.direction().y()/line.direction().x())}; //angolo di uscita tra -pi/2 e pi/2
 
       return {escape_intersection.y(),escape_phi}; //restituisci il punto di fuga
 }
@@ -311,8 +311,8 @@ exit_point path::getEscapePoint(vec const& p0, vec const& p1) const{
       //la funzione assume che la particella sia fuggita
       dottedLine const& last=trajectiories.back(); //ottieni traiettoria di
       const auto extremes=last.getExtremes();
-      const Eigen::Vector2f p0=extremes.first;
-      const Eigen::Vector2f p1=extremes.second;
+      const Eigen::Vector2d p0=extremes.first;
+      const Eigen::Vector2d p1=extremes.second;
 
       return getEscapePoint(p0,p1);
 

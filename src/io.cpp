@@ -19,9 +19,9 @@ config::config(){
   wOptn_.w_name=tree.get<std::string>("windowTitle","Simulatore di particelle");
   //parametri biliardo
   {
-    const float r1=tree.get<float>("R1");
-    const float r2=tree.get<float>("R2");
-    const float l=tree.get<float>("L");
+    const double r1=tree.get<double>("R1");
+    const double r2=tree.get<double>("R2");
+    const double l=tree.get<double>("L");
 
     wOptn_.r1=r1;
     rOptn_.r1=r1;
@@ -37,14 +37,14 @@ config::config(){
   N_particles_=tree.get<int>("particleNumber");
   rOptn_.seed=tree.get<unsigned>("seed",std::random_device{}());
 
-  rOptn_.pos_mean=tree.get<float>("positionMean");
-  rOptn_.pos_sigma=tree.get<float>("positionRMS");
-  rOptn_.angle_mean=tree.get<float>("angleMean");
-  rOptn_.angle_sigma=tree.get<float>("angleRMS");
+  rOptn_.pos_mean=tree.get<double>("positionMean");
+  rOptn_.pos_sigma=tree.get<double>("positionRMS");
+  rOptn_.angle_mean=tree.get<double>("angleMean");
+  rOptn_.angle_sigma=tree.get<double>("angleRMS");
   
 }
 
-options config::getApplicationOptions(float y0, float theta0, int N) const {
+options config::getApplicationOptions(double y0, double theta0, int N) const {
   options opt{wOptn_};
   opt.y0=y0;
   opt.theta0=theta0;

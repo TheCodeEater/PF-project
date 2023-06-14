@@ -8,9 +8,9 @@
 #include <fstream>
 
 TEST_CASE("Test della generazione in range dei numeri"){
-    const float r1{400}; //parametro r1
-    const float r2{200};
-    const float l{700};
+    const double r1{400}; //parametro r1
+    const double r2{200};
+    const double l{700};
     const unsigned seed{std::random_device{}()};
 
     std::cout<<"Seed: "<<seed<<"\n";

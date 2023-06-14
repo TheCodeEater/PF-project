@@ -12,11 +12,12 @@
 #include "../Eigen/Dense"
 #include "../include/graphics.hpp"
 
-static const inline float pi = 2 * std::atan(INFINITY);
+static const inline double pi = 2 * std::atan(INFINITY);
 
-using Line = Eigen::ParametrizedLine<float, 2>;
-using HLine = Eigen::Hyperplane<float,2>;
 namespace particleSimulator {
+
+using Line = Eigen::ParametrizedLine<double, 2>;
+using HLine = Eigen::Hyperplane<double,2>;
 
 enum class posTypes { Inside, Escaped, BackHit, Error };
 
@@ -24,25 +25,25 @@ enum class vecOrientation {  UpLeft, DownLeft, Right, HorizontalLeft, VerticalUp
 
 enum class hitBorder {Top, Bottom, Back, Front, Angle};
 struct particle {
-  Eigen::Vector2f pos{};  // pos sta per position
+  Eigen::Vector2d pos{};  // pos sta per position
   double theta{};         // pos e theta da input (distribuzione)
 };
 
 struct exit_point{
-  float y{};
-  float theta{};
+  double y{};
+  double theta{};
 };
 
 struct intsect{
-  Eigen::Vector2f point{};
+  Eigen::Vector2d point{};
   hitBorder border{};
 };
 
 class path {  // contiene i bordi del biliardo
   // parametri biliardo
-  float r1_{};
-  float r2_{};
-  float l_{};
+  double r1_{};
+  double r2_{};
+  double l_{};
 
   HLine borderup_{};
   HLine borderdown_{};
@@ -53,33 +54,33 @@ class path {  // contiene i bordi del biliardo
 
   // direzioni normali ai bordi. I vettori puntano verso l'interno della scatola
   // del biliardo
-  Eigen::Vector2f normal_up_{};
-  Eigen::Vector2f normal_down_{};
-  Eigen::Vector2f horizontal_{};
+  Eigen::Vector2d normal_up_{};
+  Eigen::Vector2d normal_down_{};
+  Eigen::Vector2d horizontal_{};
 
  public:
- using vec=Eigen::Vector2f;
+ using vec=Eigen::Vector2d;
   // path(Line const&, Line const&);
-  path(float r1, float r2, float r3);
+  path(double r1, double r2, double r3);
   intsect operator()(particle const&)
       const;  // operatore () per calcolare la traiettoria riflessa
-  float reflect(particle&) const;
-  posTypes getLocationType(Eigen::Vector2f const&) const;
-  // vecOrientation getHitDirection(Eigen::Vector2f const&) const;
-  vecOrientation getHitDirection(float angle) const;
+  double reflect(particle&) const;
+  posTypes getLocationType(Eigen::Vector2d const&) const;
+  // vecOrientation getHitDirection(Eigen::Vector2d const&) const;
+  vecOrientation getHitDirection(double angle) const;
 
-  Eigen::Vector2f exitIntersection(Line const&) const;
+  Eigen::Vector2d exitIntersection(Line const&) const;
 
-  static float arctan(float y, float x);
-  static constexpr float eps{1e-3};
+  static double arctan(double y, double x);
+  static constexpr double eps{1e-3};
 
   exit_point getEscapePoint(std::vector<dottedLine> const& trajectiories) const;
   exit_point getEscapePoint(vec const& p0, vec const& p1) const;
 
   //getter
-  float getR1() const;
-  float getR2() const;
-  float getL() const;
+  double getR1() const;
+  double getR2() const;
+  double getL() const;
 };
 
 class simulation {  // classe che gestisce la simulazione
@@ -87,7 +88,7 @@ class simulation {  // classe che gestisce la simulazione
   int max_iterations_{};
 
  public:
-  simulation(float r1, float r2, float l, int max_cycles);  // construcotr
+  simulation(double r1, double r2, double l, int max_cycles);  // construcotr
 
   std::pair<std::vector<dottedLine>,exit_point> operator()(
       particle& p) const;  // operatore di simulazione

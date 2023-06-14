@@ -11,7 +11,7 @@ randSimulator::randSimulator(randOptions options): //constructor
 
 particle randSimulator::getParticle() {//niente const, i generatori cambiano lo stato interno
     //genera angolo - NOTA: angolo tra -pi/2 pi/2
-    float theta=angle_dist_(engine_); 
+    double theta=angle_dist_(engine_); 
     //test sull'angolo
     if(theta>=pi/3+1e-3){ //angolo in overflow
         theta=pi/3-1e-1;
@@ -20,7 +20,7 @@ particle randSimulator::getParticle() {//niente const, i generatori cambiano lo 
     }
     assert(std::abs(theta) < pi/2 + 1e-3); //test sull'angolo di generazione
 
-    float y=pos_dist_(engine_);
+    double y=pos_dist_(engine_);
 
     if(y>=simulator_.getR1()){ //adatta in range la y nel caso
         y=simulator_.getR1()-1e-2;
@@ -33,10 +33,10 @@ particle randSimulator::getParticle() {//niente const, i generatori cambiano lo 
     return p;
 }
 
-std::normal_distribution<float> const& randSimulator::getPosGenerator() const{
+std::normal_distribution<double> const& randSimulator::getPosGenerator() const{
     return pos_dist_;
 }
-std::normal_distribution<float> const& randSimulator::getAngleGenerator() const{
+std::normal_distribution<double> const& randSimulator::getAngleGenerator() const{
     return angle_dist_;
 }
 
@@ -71,7 +71,7 @@ std::vector<exit_point> randSimulator::run(int n,int max_iterations){
 
     //normalizza l'angolo tra pi/2 e -pi/2 per analisi dati ottimale
     std::for_each(exit_p.begin(),exit_p.end(),[](exit_point& p){
-        float& phi=p.theta; 
+        double& phi=p.theta; 
         //tra 3/2 pi e 2pi
         if(phi>=1.5f*pi && phi<=2*pi+1e-3){
             phi=-(2*pi-phi);

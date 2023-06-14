@@ -13,8 +13,8 @@ class randSimulator{ //classe per la simulazione con i numeri casuali
 
     std::default_random_engine engine_; //generatore
 
-    std::normal_distribution<float> pos_dist_; //pdf
-    std::normal_distribution<float> angle_dist_;
+    std::normal_distribution<double> pos_dist_; //pdf
+    std::normal_distribution<double> angle_dist_;
 
     public:
         randSimulator(randOptions options); //costruttore
@@ -23,8 +23,8 @@ class randSimulator{ //classe per la simulazione con i numeri casuali
 
         std::vector<exit_point> run(int n, int max_iterations); //esegui la simulazione
 
-        std::normal_distribution<float> const& getPosGenerator() const;
-        std::normal_distribution<float> const& getAngleGenerator() const;
+        std::normal_distribution<double> const& getPosGenerator() const;
+        std::normal_distribution<double> const& getAngleGenerator() const;
 };
 
 }

@@ -14,7 +14,7 @@
 namespace particleSimulator {
 
 class dottedLine {
-  using vType = Eigen::Vector2f;  // vetor type
+  using vType = Eigen::Vector2d;  // vetor type
 
   vType first_{};
   vType last_{};
@@ -34,7 +34,7 @@ class dottedLine {
   // member access
   sf::VertexArray const& getVertexArray() const;
   std::pair<vType, vType> getExtremes() const;
-  Eigen::Vector2f getDirection() const;
+  Eigen::Vector2d getDirection() const;
 
   // drawing
   void draw(sf::RenderWindow&) const;

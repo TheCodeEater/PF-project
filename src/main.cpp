@@ -37,8 +37,8 @@ int main() {
       switch (in) {
         case 's': {  // s : simulate. Esegue la simulazione per una particella
                      // con y0 e theta0
-          float y0{};
-          float theta0{};
+          double y0{};
+          double theta0{};
           int N{cfg.getIterations()};  // numero iterazioni di default
 
           args >> y0;

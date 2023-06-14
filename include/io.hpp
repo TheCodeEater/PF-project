@@ -15,28 +15,28 @@ namespace particleSimulator {
 
   // simulation options
 struct options {
-  float w_width{};
-  float w_height{};
+  double w_width{};
+  double w_height{};
   std::string w_name{};
   // experiment setup
-  float r1{};
-  float r2{};
-  float l{};
+  double r1{};
+  double r2{};
+  double l{};
   // particle setup
-  float y0{};
-  float theta0{};
+  double y0{};
+  double theta0{};
   int N{};
 };
 
 struct randOptions{
-  float r1{};
-  float r2{};
-  float l{};
+  double r1{};
+  double r2{};
+  double l{};
 
-  float pos_mean{};
-  float pos_sigma{};
-  float angle_mean{};
-  float angle_sigma{};
+  double pos_mean{};
+  double pos_sigma{};
+  double angle_mean{};
+  double angle_sigma{};
 
   unsigned seed{};
 };
@@ -51,7 +51,7 @@ class config {//classe per caricare le impostazioni
  public:
   config();
 
-  options getApplicationOptions(float y0, float theta0, int N) const;
+  options getApplicationOptions(double y0, double theta0, int N) const;
   randOptions const& getRandomOptions() const;
   int getIterations() const;
   int getParticleNumber() const;

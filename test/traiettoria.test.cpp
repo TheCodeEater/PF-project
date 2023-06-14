@@ -42,10 +42,10 @@ TEST_CASE("Test del calcolo delle traiettorie") {
   }
 
   // calcolo intersezioni
-  const Eigen::Vector2f int0 = biliardo(p0).point;
-  const Eigen::Vector2f int1 = biliardo(p1).point;
-  const Eigen::Vector2f int2 = biliardo(p2).point;
-  const Eigen::Vector2f int3 = biliardo(p3).point;
+  const Eigen::Vector2d int0 = biliardo(p0).point;
+  const Eigen::Vector2d int1 = biliardo(p1).point;
+  const Eigen::Vector2d int2 = biliardo(p2).point;
+  const Eigen::Vector2d int3 = biliardo(p3).point;
 
   SUBCASE("Test collisioni dopo il lancio") {
     CHECK(biliardo.getLocationType(int0) == pT::Inside);
@@ -65,7 +65,7 @@ TEST_CASE("Test del calcolo delle traiettorie") {
 
   // calcolo angoli riflessi
   SUBCASE("Test riflessione") {
-    float refl_0 = biliardo.reflect(p0);
+    double refl_0 = biliardo.reflect(p0);
 
     CHECK(refl_0 == doctest::Approx(5.39786));
 
