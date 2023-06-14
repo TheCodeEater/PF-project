@@ -280,12 +280,12 @@ std::pair<std::vector<dottedLine>,exit_point> simulation::operator()(
 
   //calcolo posizione finale
   if(simulator_.getLocationType(p.pos)==posTypes::Escaped){
-    return std::make_pair(trajs,simulator_.getEscapePoint(trajs)); //restituisci la coppia di dati
+    return std::make_pair(trajs,exit_point{p.pos.y(),p.theta}); //restituisci la coppia di dati
   }else{
     return std::make_pair(trajs,exit_point{-10,-10}); //restituisci le traiettorie e un indicatore di failure
   }
 }
-
+/*
 exit_point path::getEscapePoint(vec const& p0, vec const& p1) const{
       //test che sia effettivamente fuggita
       assert(getLocationType(p1)==posTypes::Escaped);
@@ -313,6 +313,6 @@ exit_point path::getEscapePoint(vec const& p0, vec const& p1) const{
 
       return getEscapePoint(p0,p1);
 
-  }
+  }*/
 
 }  // namespace particleSimulator
