@@ -8,29 +8,29 @@ path::path(float r1, float r2, float l)
     : r1_{r1},
       r2_{r2},
       l_{l},
-      borderup_{Line::Through({0, r1_}, {l_, r2_})},
-      borderdown_{Line::Through({0, -r1_}, {l_, -r2_})},
-      exit_line_{Eigen::Hyperplane<float,2>::Through({l_,r2},{l,-r2})},
+      borderup_{HLine::Through({0, r1_}, {l_, r2_})},
+      borderdown_{HLine::Through({0, -r1_}, {l_, -r2_})},
+      borderback_{HLine::Through({0,0},{0,1})},
+      exit_line_{HLine::Through({l_,r2},{l,-r2})},
       horizontal_{1, 0} {
   // TEST: correttezza parametri
   assert(r1_ > 0);
   assert(r2_ > 0);
   assert(l_ > 0);
-  // TEST: correttezza della direzione dei vettori
-  assert(borderup_.direction().x() > 0);
-  assert(borderup_.direction().y() < 0);  // test bordo sopra
-  assert(borderdown_.direction().x() > 0);
-  assert(borderdown_.direction().y() > 0);  // test bordo sotto
+
+  Line up{borderup_};
+  Line down{borderdown_};
+
 
   // Costruzione vettore normale - bordo sup
   const Eigen::Rotation2Df rot_sup{
       -pi / 2};  // rotazione di -pi/2 verso l'interno del biliardo
-  normal_up_ = rot_sup * borderup_.direction();
+  normal_up_ = rot_sup * up.direction();
 
   // Vettore normale bordo giu
   const Eigen::Rotation2Df rot_inf{
       pi / 2};  // rotazione di -pi/2 verso l'interno del biliardo
-  normal_down_ = rot_inf * borderdown_.direction();
+  normal_down_ = rot_inf * down.direction();
 }
 
 intsect path::operator()(particle const& p) const {
@@ -60,19 +60,16 @@ intsect path::operator()(particle const& p) const {
 
     switch (orientation) {
       case vecOrientation::HorizontalLeft: {  // sbatti sempre sul bordo
-        return {trajectory.intersectionPoint(
-            Eigen::Hyperplane<float, 2>{Line::Through({0, 0}, {0, 1})}),hitBorder::Back};
+        return {trajectory.intersectionPoint(borderback_),hitBorder::Back};
       }
 
       case vecOrientation::HorizontalRight: {  // puoi sbattere sopra o sotto
         // e' importante selezionare il bordo corretto poiche l'intersezione con
         // entrambi si trova, ma una e' fuori mentre l'altra no idea: le fai
         // entrambi e restituisci quella che sta dentro, se c'è
-        const Eigen::Vector2f int_sup = trajectory.intersectionPoint(
-            Eigen::Hyperplane<float, 2>{borderup_});  // intersezione con sup
+        const Eigen::Vector2f int_sup = trajectory.intersectionPoint(borderup_);  // intersezione con sup
 
-        const Eigen::Vector2f int_inf = trajectory.intersectionPoint(
-            Eigen::Hyperplane<float, 2>{borderdown_});  // intersezione con inf
+        const Eigen::Vector2f int_inf = trajectory.intersectionPoint(borderdown_);  // intersezione con inf
 
         //
         const posTypes pos_sup = getLocationType(int_sup);
@@ -100,11 +97,9 @@ intsect path::operator()(particle const& p) const {
         if(exit_intsec.y()<r2_ && exit_intsec.y()>-r2_){
           return {exit_intsec,hitBorder::Front};
         }else if(exit_intsec.y()>=r2_){
-          return {trajectory.intersectionPoint(
-            Eigen::Hyperplane<float, 2>{borderup_}),hitBorder::Top};  // intersezione con sup
+          return {trajectory.intersectionPoint(borderup_),hitBorder::Top};  // intersezione con sup
         }else if(exit_intsec.y()<=-r2_){
-          return {trajectory.intersectionPoint(
-            Eigen::Hyperplane<float, 2>{borderdown_}),hitBorder::Bottom};  // intersezione con inf
+          return {trajectory.intersectionPoint(borderdown_),hitBorder::Bottom};  // intersezione con inf
         }else{
           throw std::logic_error("Impossibile determinare l'intersezione!");
         }
@@ -116,48 +111,42 @@ intsect path::operator()(particle const& p) const {
         if(exit_intsec.y()<r2_ && exit_intsec.y()>-r2_){
           return {exit_intsec,hitBorder::Front};
         }else if(exit_intsec.y()>=r2_){
-          return {trajectory.intersectionPoint(
-            Eigen::Hyperplane<float, 2>{borderup_}),hitBorder::Top};  // intersezione con sup
+          return {trajectory.intersectionPoint(borderup_),hitBorder::Top};  // intersezione con sup
         }else if(exit_intsec.y()<=-r2_){
-          return {trajectory.intersectionPoint(
-            Eigen::Hyperplane<float, 2>{borderdown_}),hitBorder::Bottom};  // intersezione con inf
+          return {trajectory.intersectionPoint(borderdown_),hitBorder::Bottom};  // intersezione con inf
         }else{
           throw std::logic_error("Impossibile determinare l'intersezione!");
         }
       }
 
       case vecOrientation::UpLeft:{ //in basso a sx: bordo dietro o basso
-          const Eigen::Vector2f back_intsect{trajectory.intersectionPoint(Eigen::Hyperplane<float,2>::Through({0,0},{0,1}))}; //intsect con la verticale
+          const Eigen::Vector2f back_intsect{trajectory.intersectionPoint(borderback_)}; //intsect con la verticale
           //test intersezione verticale
           if(std::abs(std::abs(back_intsect.y())-r1_)<1e-3){ //colpo all'angolo: distanza da r1 entro i limiti di float
               return {back_intsect,hitBorder::Angle};
           }else if(std::abs(back_intsect.y())<=r1_-1e-3){//colpo al bordo dietro
               return {back_intsect,hitBorder::Back};
           }else if(std::abs(back_intsect.y())>=r1_+1e-3){//intersezione con il sup
-              return {trajectory.intersectionPoint(
-                  Eigen::Hyperplane<float, 2>{borderup_}), hitBorder::Top};  // intersezione con sup
+              return {trajectory.intersectionPoint(borderup_), hitBorder::Top};  // intersezione con sup
           }
       }
       case vecOrientation::DownLeft:{ //in alto a sx: bordo dietro o alto
-          const Eigen::Vector2f back_intsect{trajectory.intersectionPoint(Eigen::Hyperplane<float,2>::Through({0,0},{0,1}))}; //intsect con la verticale
+          const Eigen::Vector2f back_intsect{trajectory.intersectionPoint(borderback_)}; //intsect con la verticale
           //test intersezione verticale
           if(std::abs(std::abs(back_intsect.y())-r1_)<1e-3){ //colpo all'angolo
               return {back_intsect,hitBorder::Angle};
           }else if(std::abs(back_intsect.y())<=r1_-1e-3){//colpo al bordo dietro
               return {back_intsect,hitBorder::Back};
           }else if(std::abs(back_intsect.y())>=r1_+1e-3){//intersezione con inf
-              return {trajectory.intersectionPoint(
-                  Eigen::Hyperplane<float, 2>{borderdown_}),hitBorder::Bottom};  // intersezione con inf
+              return {trajectory.intersectionPoint(borderdown_),hitBorder::Bottom};  // intersezione con inf
           }
       }
 
         case vecOrientation::VerticalUp:{
-              return {trajectory.intersectionPoint(
-                  Eigen::Hyperplane<float, 2>{borderup_}), hitBorder::Top};  // intersezione con sup
+              return {trajectory.intersectionPoint(borderup_), hitBorder::Top};  // intersezione con sup
         }
         case vecOrientation::VerticalDown:{
-              return {trajectory.intersectionPoint(
-                  Eigen::Hyperplane<float, 2>{borderdown_}),hitBorder::Bottom};  // intersezione con inf
+              return {trajectory.intersectionPoint(borderdown_),hitBorder::Bottom};  // intersezione con inf
         }
     }
   }();

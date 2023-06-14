@@ -15,6 +15,7 @@
 static const inline float pi = 2 * std::atan(INFINITY);
 
 using Line = Eigen::ParametrizedLine<float, 2>;
+using HLine = Eigen::Hyperplane<float,2>;
 namespace particleSimulator {
 
 enum class posTypes { Inside, Escaped, BackHit, Error };
@@ -43,11 +44,12 @@ class path {  // contiene i bordi del biliardo
   float r2_{};
   float l_{};
 
-  Line borderup_{};
-  Line borderdown_{};
+  HLine borderup_{};
+  HLine borderdown_{};
+  HLine borderback_{};
 
   //linea di uscita
-  Eigen::Hyperplane<float,2> exit_line_{};
+  HLine exit_line_{};
 
   // direzioni normali ai bordi. I vettori puntano verso l'interno della scatola
   // del biliardo
