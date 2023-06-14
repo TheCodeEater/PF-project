@@ -10,7 +10,7 @@ path::path(float r1, float r2, float l)
       l_{l},
       borderup_{Line::Through({0, r1_}, {l_, r2_})},
       borderdown_{Line::Through({0, -r1_}, {l_, -r2_})},
-      exit_line_{Eigen::Hyperplane<float,2>::Through({l_,r2},{l,-r2})},
+      exit_line_{HLine::Through({l_,r2},{l,-r2})},
       horizontal_{1, 0} {
   // TEST: correttezza parametri
   assert(r1_ > 0);
@@ -39,7 +39,7 @@ intsect path::operator()(particle const& p) const {
          getLocationType(p.pos) ==
              posTypes::BackHit);  // devi essere dentro il biliardo oppure sul bordo
   assert(p.theta >= 0);           // angolo tra 0 e 2pi (convenzione degli angoli)
-  assert(p.theta <= 2 * pi);
+  assert(p.theta <= 2 * pi + 1e-3); //approx floating point
 
   const Eigen::Vector2f dir{std::cos(p.theta),
                             std::sin(p.theta)};  // direzione particella
@@ -92,7 +92,7 @@ intsect path::operator()(particle const& p) const {
               return {back_intsect,hitBorder::Back};
           }else if(std::abs(back_intsect.y())>=r1_+1e-3){//intersezione con il sup
               return {trajectory.intersectionPoint(
-                  Eigen::Hyperplane<float, 2>{borderup_}), hitBorder::Top};  // intersezione con sup
+                  HLine{borderup_}), hitBorder::Top};  // intersezione con sup
           }
       }
       case vecOrientation::DownLeft:{ //in alto a sx: bordo dietro o alto
@@ -104,17 +104,17 @@ intsect path::operator()(particle const& p) const {
               return {back_intsect,hitBorder::Back};
           }else if(std::abs(back_intsect.y())>=r1_+1e-3){//intersezione con inf
               return {trajectory.intersectionPoint(
-                  Eigen::Hyperplane<float, 2>{borderdown_}),hitBorder::Bottom};  // intersezione con inf
+                  HLine{borderdown_}),hitBorder::Bottom};  // intersezione con inf
           }
       }
 
         case vecOrientation::VerticalUp:{
               return {trajectory.intersectionPoint(
-                  Eigen::Hyperplane<float, 2>{borderup_}), hitBorder::Top};  // intersezione con sup
+                  HLine{borderup_}), hitBorder::Top};  // intersezione con sup
         }
         case vecOrientation::VerticalDown:{
               return {trajectory.intersectionPoint(
-                  Eigen::Hyperplane<float, 2>{borderdown_}),hitBorder::Bottom};  // intersezione con inf
+                  HLine{borderdown_}),hitBorder::Bottom};  // intersezione con inf
         }
     }
     

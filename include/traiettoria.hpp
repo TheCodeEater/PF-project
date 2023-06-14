@@ -50,7 +50,7 @@ class path {  // contiene i bordi del biliardo
   Line borderdown_{};
 
   //linea di uscita
-  Eigen::Hyperplane<float,2> exit_line_{};
+  HLine exit_line_{};
 
   // direzioni normali ai bordi. I vettori puntano verso l'interno della scatola
   // del biliardo
