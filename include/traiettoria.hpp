@@ -46,11 +46,12 @@ class path {  // contiene i bordi del biliardo
   float r2_{};
   float l_{};
 
-  Line borderup_{};
-  Line borderdown_{};
+  HLine borderup_{};
+  HLine borderdown_{};
 
   //linea di uscita
   HLine exit_line_{};
+  HLine vertical_line_{};
 
   // direzioni normali ai bordi. I vettori puntano verso l'interno della scatola
   // del biliardo

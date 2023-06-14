@@ -8,29 +8,29 @@ path::path(float r1, float r2, float l)
     : r1_{r1},
       r2_{r2},
       l_{l},
-      borderup_{Line::Through({0, r1_}, {l_, r2_})},
-      borderdown_{Line::Through({0, -r1_}, {l_, -r2_})},
+      borderup_{HLine::Through({0, r1_}, {l_, r2_})},
+      borderdown_{HLine::Through({0, -r1_}, {l_, -r2_})},
       exit_line_{HLine::Through({l_,r2},{l,-r2})},
+      vertical_line_{HLine::Through({0,0},{0,1})},
       horizontal_{1, 0} {
   // TEST: correttezza parametri
   assert(r1_ > 0);
   assert(r2_ > 0);
   assert(l_ > 0);
-  // TEST: correttezza della direzione dei vettori
-  assert(borderup_.direction().x() > 0);
-  assert(borderup_.direction().y() < 0);  // test bordo sopra
-  assert(borderdown_.direction().x() > 0);
-  assert(borderdown_.direction().y() > 0);  // test bordo sotto
+
+  //rette parametriche da usare solo per il calcolo delle normali
+  Line up{borderup_};
+  Line down{borderdown_};
 
   // Costruzione vettore normale - bordo sup
   const Eigen::Rotation2Df rot_sup{
       -pi / 2};  // rotazione di -pi/2 verso l'interno del biliardo
-  normal_up_ = rot_sup * borderup_.direction();
+  normal_up_ = rot_sup * up.direction();
 
   // Costruzione vettore normale - bordo inf
   const Eigen::Rotation2Df rot_inf{
       pi / 2};  // rotazione di pi/2 verso l'interno del biliardo
-  normal_down_ = rot_inf * borderdown_.direction();
+  normal_down_ = rot_inf * down.direction();
 }
 
 intsect path::operator()(particle const& p) const {
@@ -44,7 +44,7 @@ intsect path::operator()(particle const& p) const {
   const Eigen::Vector2f dir{std::cos(p.theta),
                             std::sin(p.theta)};  // direzione particella
 
-  const Eigen::ParametrizedLine<float, 2> trajectory{
+  const Line trajectory{
       p.pos, dir};  // retta della direzione della particella
 
   //calcola bordo colpito e punto di intersezione
@@ -70,17 +70,17 @@ intsect path::operator()(particle const& p) const {
           return {exit_intsec,hitBorder::Front};
         }else if(exit_intsec.y()>=r2_+1e-3){
           return {trajectory.intersectionPoint(
-            HLine{borderup_}),hitBorder::Top};  // intersezione con sup
+            borderup_),hitBorder::Top};  // intersezione con sup
         }else if(exit_intsec.y()<=-r2_-1e-3){
           return {trajectory.intersectionPoint(
-            HLine{borderdown_}),hitBorder::Bottom};  // intersezione con inf
+            borderdown_),hitBorder::Bottom};  // intersezione con inf
         }else{
           throw std::logic_error("Impossibile determinare l'intersezione!");
         }
       }
 
       case vecOrientation::Left:{ //in basso a sx: bordo dietro o basso
-          const Eigen::Vector2f back_intsect{trajectory.intersectionPoint(HLine::Through({0,0},{0,1}))}; //intsect con la verticale
+          const vec back_intsect{trajectory.intersectionPoint(vertical_line_)}; //intsect con la verticale
           //test intersezione verticale
           if(std::abs(std::abs(back_intsect.y())-r1_)<1e-3){ //colpo all'angolo: distanza da r1 entro i limiti di float
               return {back_intsect,hitBorder::Angle};
@@ -88,20 +88,20 @@ intsect path::operator()(particle const& p) const {
               return {back_intsect,hitBorder::Back};
           }else if(back_intsect.y()>=r1_+1e-3){//intersezione con il sup
               return {trajectory.intersectionPoint(
-                  HLine{borderup_}), hitBorder::Top};  // intersezione con sup
+                  borderup_), hitBorder::Top};  // intersezione con sup
           }else if(back_intsect.y()<=-r1_-1e-3){
               return {trajectory.intersectionPoint(
-                  HLine{borderdown_}), hitBorder::Bottom};  // intersezione con sup
+                  borderdown_), hitBorder::Bottom};  // intersezione con sup
           }
       }
 
         case vecOrientation::VerticalUp:{
               return {trajectory.intersectionPoint(
-                  HLine{borderup_}), hitBorder::Top};  // intersezione con sup
+                  borderup_), hitBorder::Top};  // intersezione con sup
         }
         case vecOrientation::VerticalDown:{
               return {trajectory.intersectionPoint(
-                  HLine{borderdown_}),hitBorder::Bottom};  // intersezione con inf
+                  borderdown_),hitBorder::Bottom};  // intersezione con inf
         }
     }
     
@@ -192,13 +192,8 @@ float path::arctan(float y, float x) {
 
 posTypes path::getLocationType(Eigen::Vector2f const& v)
     const {  // determina il luogo del biliardo in cui si trova
-  // assert; verifica che la x di v corrisponda al corrispondente valore Y
-  // calcolato
   if (v.x() > 0 && v.x() < l_) {  // coordinata x entro i limiti del biliardo
     return posTypes::Inside;
-  /*}else if(std::abs(v.x())<1e-2 && (v.y()>r1_ || v.y()<-r1_)){ //errore se hai la y fuori posto
-    std::cout<<"Posizione incriminata: "<<v<<"\n";
-    return posTypes::Error;*/
   } else if (v.x() <= 0) {  // x negative: colpisci il fondo
     return posTypes::BackHit;
   } else if (v.x() >= l_) {  // fuori: fuggito
