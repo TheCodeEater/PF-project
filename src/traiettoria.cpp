@@ -91,22 +91,8 @@ intsect path::operator()(particle const& p) const {
           return {int_sup,hitBorder::Top};  // scelta a caso, inf sarebbe equivalente
         }
       }
-      case vecOrientation::UpRight: {
+      case vecOrientation::Right: {
         //verifica se esce
-        const Eigen::Vector2f exit_intsec=exitIntersection(trajectory); //intersezione con la barra di uscita
-        if(exit_intsec.y()<r2_ && exit_intsec.y()>-r2_){
-          return {exit_intsec,hitBorder::Front};
-        }else if(exit_intsec.y()>=r2_){
-          return {trajectory.intersectionPoint(borderup_),hitBorder::Top};  // intersezione con sup
-        }else if(exit_intsec.y()<=-r2_){
-          return {trajectory.intersectionPoint(borderdown_),hitBorder::Bottom};  // intersezione con inf
-        }else{
-          throw std::logic_error("Impossibile determinare l'intersezione!");
-        }
-      }
-
-      case vecOrientation::DownRight: {
-        //verifica se esce - temporaneo copia incolla, da mettere in una funzione a parte
         const Eigen::Vector2f exit_intsec=exitIntersection(trajectory); //intersezione con la barra di uscita
         if(exit_intsec.y()<r2_ && exit_intsec.y()>-r2_){
           return {exit_intsec,hitBorder::Front};
@@ -261,7 +247,7 @@ vecOrientation path::getHitDirection(
   if(angle<=1e-3){ //angolo nullo: orizzontale destra
     return vecOrientation::HorizontalRight;
   }else if(angle>1e-3 && angle<pi/2-1e-3){ //alto a dx
-    return vecOrientation::UpRight;
+    return vecOrientation::Right;
   }else if(std::abs(angle-pi/2)<=1e-3){
     return vecOrientation::VerticalUp;
   }else if(angle>pi/2+1e-3 && angle<pi-1e-3){
@@ -273,7 +259,7 @@ vecOrientation path::getHitDirection(
   }else if(std::abs(angle-1.5f*pi)<=1e-3){
     return vecOrientation::VerticalDown;
   }else if(angle>1.5f*pi+1e-3 && angle < 2*pi-1e-3){
-    return vecOrientation::DownRight;
+    return vecOrientation::Right;
   }else if(std::abs(angle-2*pi)<=1e-3){
     return vecOrientation::HorizontalRight;
   }else{
