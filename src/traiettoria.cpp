@@ -79,22 +79,22 @@ intsect path::operator()(particle const& p) const {
       case vecOrientation::UpLeft:{ //in basso a sx: bordo dietro o basso
           const Eigen::Vector2f back_intsect{trajectory.intersectionPoint(borderback_)}; //intsect con la verticale
           //test intersezione verticale
-          if(std::abs(std::abs(back_intsect.y())-r1_)<1e-3){ //colpo all'angolo: distanza da r1 entro i limiti di float
+          if(std::abs(std::abs(back_intsect.y())-r1_)<eps){ //colpo all'angolo: distanza da r1 entro i limiti di float
               return {back_intsect,hitBorder::Angle};
-          }else if(std::abs(back_intsect.y())<=r1_-1e-3){//colpo al bordo dietro
+          }else if(std::abs(back_intsect.y())<=r1_-eps){//colpo al bordo dietro
               return {back_intsect,hitBorder::Back};
-          }else if(std::abs(back_intsect.y())>=r1_+1e-3){//intersezione con il sup
+          }else if(std::abs(back_intsect.y())>=r1_+eps){//intersezione con il sup
               return {trajectory.intersectionPoint(borderup_), hitBorder::Top};  // intersezione con sup
           }
       }
       case vecOrientation::DownLeft:{ //in alto a sx: bordo dietro o alto
           const Eigen::Vector2f back_intsect{trajectory.intersectionPoint(borderback_)}; //intsect con la verticale
           //test intersezione verticale
-          if(std::abs(std::abs(back_intsect.y())-r1_)<1e-3){ //colpo all'angolo
+          if(std::abs(std::abs(back_intsect.y())-r1_)<eps){ //colpo all'angolo
               return {back_intsect,hitBorder::Angle};
-          }else if(std::abs(back_intsect.y())<=r1_-1e-3){//colpo al bordo dietro
+          }else if(std::abs(back_intsect.y())<=r1_-eps){//colpo al bordo dietro
               return {back_intsect,hitBorder::Back};
-          }else if(std::abs(back_intsect.y())>=r1_+1e-3){//intersezione con inf
+          }else if(std::abs(back_intsect.y())>=r1_+eps){//intersezione con inf
               return {trajectory.intersectionPoint(borderdown_),hitBorder::Bottom};  // intersezione con inf
           }
       }
@@ -215,23 +215,23 @@ vecOrientation path::getHitDirection(
     float angle) const {  // nota: accetta angoli tra -pi e +pi
   assert(angle >= 0 && angle <= 2 * pi);
   
-  if(angle<=1e-3){ //angolo nullo: orizzontale destra
+  if(angle<=eps){ //angolo nullo: orizzontale destra
     return vecOrientation::Right;
-  }else if(angle>1e-3 && angle<pi/2-1e-3){ //alto a dx
+  }else if(angle>1e-3 && angle<pi/2-eps){ //alto a dx
     return vecOrientation::Right;
-  }else if(std::abs(angle-pi/2)<=1e-3){
+  }else if(std::abs(angle-pi/2)<=eps){
     return vecOrientation::VerticalUp;
-  }else if(angle>pi/2+1e-3 && angle<pi-1e-3){
+  }else if(angle>pi/2+1e-3 && angle<pi-eps){
     return vecOrientation::UpLeft;
-  }else if(std::abs(angle-pi)<=1e-3){
+  }else if(std::abs(angle-pi)<=eps){
     return vecOrientation::HorizontalLeft;
-  }else if(angle>pi+1e-3 && angle < 1.5f*pi-1e-3){
+  }else if(angle>pi+1e-3 && angle < 1.5f*pi-eps){
     return vecOrientation::DownLeft;
-  }else if(std::abs(angle-1.5f*pi)<=1e-3){
+  }else if(std::abs(angle-1.5f*pi)<=eps){
     return vecOrientation::VerticalDown;
-  }else if(angle>1.5f*pi+1e-3 && angle < 2*pi-1e-3){
+  }else if(angle>1.5f*pi+1e-3 && angle < 2*pi-eps){
     return vecOrientation::Right;
-  }else if(std::abs(angle-2*pi)<=1e-3){
+  }else if(std::abs(angle-2*pi)<=eps){
     return vecOrientation::Right;
   }else{
     throw std::logic_error("Impossibile determinare la direzione del vettore!");
