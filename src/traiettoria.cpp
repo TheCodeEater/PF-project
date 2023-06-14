@@ -64,73 +64,17 @@ intsect path::operator()(particle const& p) const {
         return {trajectory.intersectionPoint(
             HLine{HLine::Through({0, 0}, {0, 1})}),hitBorder::Back};
       }
-
-      case vecOrientation::HorizontalRight: {  // puoi sbattere sopra, sotto o uscire
-        // la discriminante e' la coordinata y
-
-        //se la particella dista, dall'asse x, meno di r2 in modulo (con approssimazione fp)
-        //allora 
-
-        if(p.pos.y()>=r2_+1e-3){ //maggiore di r2 con approx
-          return {trajectory.intersectionPoint(HLine(borderup_)),hitBorder::Top};
-        }else if(p.pos.y()<=-r2_-1e-3){ //minore di r2 con approx
-          return {trajectory.intersectionPoint(HLine(borderdown_)),hitBorder::Bottom};
-        }else{
-          return {trajectory.intersectionPoint(exit_line_), hitBorder::Front};
-        }
-       /*const Eigen::Vector2f int_sup = trajectory.intersectionPoint(
-            Eigen::Hyperplane<float, 2>{borderup_});  // intersezione con sup
-
-        const Eigen::Vector2f int_inf = trajectory.intersectionPoint(
-            Eigen::Hyperplane<float, 2>{borderdown_});  // intersezione con inf
-
-        //
-        const posTypes pos_sup = getLocationType(int_sup);
-        const posTypes pos_inf = getLocationType(int_inf);
-
-        // test della correttezza
-        assert(pos_sup != posTypes::Error);
-        assert(pos_inf != posTypes::Error);
-
-        assert(pos_sup != posTypes::BackHit);
-        assert(pos_inf != posTypes::BackHit);
-
-        if (pos_sup ==
-            posTypes::Inside) {  // l'intersezione con il sup appartiene
-          return {int_sup,hitBorder::Top};
-        } else if (pos_inf == posTypes::Inside) {  // con l'inf
-          return {int_inf,hitBorder::Bottom};
-        } else {
-          return {int_sup,hitBorder::Top};  // scelta a caso, inf sarebbe equivalente
-        }
-      }*/
-      case vecOrientation::UpRight: {
+      case vecOrientation::Right: {
         //verifica se esce
         const Eigen::Vector2f exit_intsec=exitIntersection(trajectory); //intersezione con la barra di uscita
-        if(exit_intsec.y()<r2_ && exit_intsec.y()>-r2_){
+        if(exit_intsec.y()<r2_+1e-3 && exit_intsec.y()>-r2_-1e-3){
           return {exit_intsec,hitBorder::Front};
-        }else if(exit_intsec.y()>=r2_){
+        }else if(exit_intsec.y()>=r2_+1e-3){
           return {trajectory.intersectionPoint(
-            Eigen::Hyperplane<float, 2>{borderup_}),hitBorder::Top};  // intersezione con sup
-        }else if(exit_intsec.y()<=-r2_){
+            HLine{borderup_}),hitBorder::Top};  // intersezione con sup
+        }else if(exit_intsec.y()<=-r2_-1e-3){
           return {trajectory.intersectionPoint(
-            Eigen::Hyperplane<float, 2>{borderdown_}),hitBorder::Bottom};  // intersezione con inf
-        }else{
-          throw std::logic_error("Impossibile determinare l'intersezione!");
-        }
-      }
-
-      case vecOrientation::DownRight: {
-        //verifica se esce - temporaneo copia incolla, da mettere in una funzione a parte
-        const Eigen::Vector2f exit_intsec=exitIntersection(trajectory); //intersezione con la barra di uscita
-        if(exit_intsec.y()<r2_ && exit_intsec.y()>-r2_){
-          return {exit_intsec,hitBorder::Front};
-        }else if(exit_intsec.y()>=r2_){
-          return {trajectory.intersectionPoint(
-            Eigen::Hyperplane<float, 2>{borderup_}),hitBorder::Top};  // intersezione con sup
-        }else if(exit_intsec.y()<=-r2_){
-          return {trajectory.intersectionPoint(
-            Eigen::Hyperplane<float, 2>{borderdown_}),hitBorder::Bottom};  // intersezione con inf
+            HLine{borderdown_}),hitBorder::Bottom};  // intersezione con inf
         }else{
           throw std::logic_error("Impossibile determinare l'intersezione!");
         }
@@ -170,7 +114,7 @@ intsect path::operator()(particle const& p) const {
                   Eigen::Hyperplane<float, 2>{borderdown_}),hitBorder::Bottom};  // intersezione con inf
         }
     }
-    }
+    
   }();
 
   assert(getLocationType(intersec.point) != posTypes::Error);

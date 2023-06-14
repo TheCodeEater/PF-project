@@ -22,7 +22,7 @@ using vec=Eigen::Vector2f;
 
 enum class posTypes { Inside, Escaped, BackHit, Error };
 
-enum class vecOrientation { UpRight, UpLeft, DownLeft, DownRight, HorizontalLeft, HorizontalRight, VerticalUp, VerticalDown };
+enum class vecOrientation { Right, UpLeft, DownLeft, HorizontalLeft, VerticalUp, VerticalDown };
 
 enum class hitBorder {Top, Bottom, Back, Front, Angle};
 struct particle {
