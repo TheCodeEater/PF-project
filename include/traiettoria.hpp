@@ -17,6 +17,8 @@ static const inline float pi = 2 * std::atan(INFINITY);
 using Line = Eigen::ParametrizedLine<float, 2>;
 namespace particleSimulator {
 
+float normalize2(float angle);
+
 enum class posTypes { Inside, Escaped, BackHit, Error };
 
 enum class vecOrientation { UpRight, UpLeft, DownLeft, DownRight, HorizontalLeft, HorizontalRight, VerticalUp, VerticalDown };
@@ -70,8 +72,8 @@ class path {  // contiene i bordi del biliardo
 
   static float arctan(float y, float x);
 
-  exit_point getEscapePoint(std::vector<dottedLine> const& trajectiories) const;
-  exit_point getEscapePoint(vec const& p0, vec const& p1) const;
+  //exit_point getEscapePoint(std::vector<dottedLine> const& trajectiories) const;
+  exit_point getEscapePoint(particle const& p) const;
 
   //getter
   float getR1() const;

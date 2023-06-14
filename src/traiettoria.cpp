@@ -337,29 +337,19 @@ std::pair<std::vector<dottedLine>,exit_point> simulation::operator()(
 
   //calcolo posizione finale
   if(simulator_.getLocationType(p.pos)==posTypes::Escaped){
-    return std::make_pair(trajs,simulator_.getEscapePoint(trajs)); //restituisci la coppia di dati
+    return std::make_pair(trajs,simulator_.getEscapePoint(p)); //restituisci la coppia di dati
   }else{
     return std::make_pair(trajs,exit_point{-10,-10}); //restituisci le traiettorie e un indicatore di failure
   }
 }
 
-exit_point path::getEscapePoint(vec const& p0, vec const& p1) const{
+exit_point path::getEscapePoint(particle const& p) const{
       //test che sia effettivamente fuggita
-      assert(getLocationType(p1)==posTypes::Escaped);
+      assert(getLocationType(p.pos)==posTypes::Escaped);
 
-      const Eigen::ParametrizedLine<float,2> line{Eigen::ParametrizedLine<float,2>::Through(p0,p1)};
-
-      //calcolo Y: interseca con asse di uscita
-      const Eigen::Vector2f escape_intersection{exitIntersection(line)}; //ottieni punto di fuga
-      //test intersezo
-      assert(escape_intersection.y()<=getR2()+1e-3);
-      assert(escape_intersection.y()>=-getR2()-1e-3);
-
-      const float escape_phi{std::atanf(line.direction().y()/line.direction().x())}; //angolo di uscita tra -pi/2 e pi/2
-
-      return {escape_intersection.y(),escape_phi}; //restituisci il punto di fuga
+      return {p.pos.y(),normalize2(p.theta)};
 }
-
+/*
   exit_point path::getEscapePoint(std::vector<dottedLine> const& trajectiories) const{
       //to do: aggiungere dei getter a path cosi da poter fare i test con gli assert
       //la funzione assume che la particella sia fuggita
@@ -370,6 +360,16 @@ exit_point path::getEscapePoint(vec const& p0, vec const& p1) const{
 
       return getEscapePoint(p0,p1);
 
+  }*/
+
+  float normalize2(float angle){
+    assert(angle>=0 && angle<=2*pi+1e-4);
+
+    if(angle>=1.5f*pi-1e-4){ //angolo magggiore di 3/2 pi
+      return -(2*pi-angle);
+    }else{
+      return angle;
+    }
   }
 
 }  // namespace particleSimulator
