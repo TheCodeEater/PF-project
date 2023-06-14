@@ -60,10 +60,6 @@ intsect path::operator()(particle const& p) const {
     vecOrientation orientation{getHitDirection(p.theta)}; //orientazione del vettore
 
     switch (orientation) {
-      case vecOrientation::HorizontalLeft: {  // sbatti sempre sul bordo posteriore
-        return {trajectory.intersectionPoint(
-            HLine{HLine::Through({0, 0}, {0, 1})}),hitBorder::Back};
-      }
       //se si dire verso destra puo'
       // uscire
       //sbattere sopra o sotto (dipende sia dall'angolo che dal punto in cui si trova la particella)
@@ -225,7 +221,7 @@ vecOrientation path::getHitDirection( //determina l'orientazione del vettore
   }else if(angle>pi/2+1e-3 && angle<pi-1e-3){
     return vecOrientation::Left;
   }else if(std::abs(angle-pi)<=1e-3){
-    return vecOrientation::HorizontalLeft;
+    return vecOrientation::Left;
   }else if(angle>pi+1e-3 && angle < 1.5f*pi-1e-3){
     return vecOrientation::Left;
   }else if(std::abs(angle-1.5f*pi)<=1e-3){
