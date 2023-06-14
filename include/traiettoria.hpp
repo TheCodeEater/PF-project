@@ -14,8 +14,11 @@
 
 static const inline float pi = 2 * std::atan(INFINITY);
 
-using Line = Eigen::ParametrizedLine<float, 2>;
 namespace particleSimulator {
+
+using vec=Eigen::Vector2f;
+ using Line = Eigen::ParametrizedLine<float, 2>;
+ using HLine = Eigen::Hyperplane<float,2>;
 
 enum class posTypes { Inside, Escaped, BackHit, Error };
 
@@ -56,7 +59,6 @@ class path {  // contiene i bordi del biliardo
   Eigen::Vector2f horizontal_{};
 
  public:
- using vec=Eigen::Vector2f;
   // path(Line const&, Line const&);
   path(float r1, float r2, float r3);
   intsect operator()(particle const&)

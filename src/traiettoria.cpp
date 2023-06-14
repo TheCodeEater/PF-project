@@ -27,9 +27,9 @@ path::path(float r1, float r2, float l)
       -pi / 2};  // rotazione di -pi/2 verso l'interno del biliardo
   normal_up_ = rot_sup * borderup_.direction();
 
-  // Vettore normale bordo giu
+  // Costruzione vettore normale - bordo inf
   const Eigen::Rotation2Df rot_inf{
-      pi / 2};  // rotazione di -pi/2 verso l'interno del biliardo
+      pi / 2};  // rotazione di pi/2 verso l'interno del biliardo
   normal_down_ = rot_inf * borderdown_.direction();
 }
 
@@ -37,38 +37,48 @@ intsect path::operator()(particle const& p) const {
   // CONDIZIONI INIZIALI
   assert(getLocationType(p.pos) == posTypes::Inside ||
          getLocationType(p.pos) ==
-             posTypes::BackHit);  // devi essere dentro il biliardo
-  assert(p.theta >= 0);           // angolo tra 0 e 2pi
+             posTypes::BackHit);  // devi essere dentro il biliardo oppure sul bordo
+  assert(p.theta >= 0);           // angolo tra 0 e 2pi (convenzione degli angoli)
   assert(p.theta <= 2 * pi);
 
   const Eigen::Vector2f dir{std::cos(p.theta),
                             std::sin(p.theta)};  // direzione particella
-  // piccolo test
-  assert(std::abs(dir.norm() - 1) <
-         1e-3);  // test della norma del vettore uguale a 1
+
   const Eigen::ParametrizedLine<float, 2> trajectory{
       p.pos, dir};  // retta della direzione della particella
 
-  // determina quale bordo puoi colpire
+  //calcola bordo colpito e punto di intersezione
   // casi
-  // bordo su, bordo giu
-  // vettore orizzontale verso x negative, o verso x positive
-  // calcola il bordo da colpire
-
+  // orizzontale sx: sempre il bordo posteriore
+  // orizzontale dx: valutare in base alla coordinata y
+  // verticale alto (basso): bordo sup (inf)
+  //alto sx: retro o sup
+  //basso sx: retro o inf
+  //alto dx/basso dx: puo' uscire o colpire uno dei due bordi (inferiore o superiore)
+  
   const intsect intersec = [this, &trajectory, &p] () -> intsect {//tipo esplicito
-    vecOrientation orientation{getHitDirection(p.theta)};
+    vecOrientation orientation{getHitDirection(p.theta)}; //orientazione del vettore
 
     switch (orientation) {
-      case vecOrientation::HorizontalLeft: {  // sbatti sempre sul bordo
+      case vecOrientation::HorizontalLeft: {  // sbatti sempre sul bordo posteriore
         return {trajectory.intersectionPoint(
-            Eigen::Hyperplane<float, 2>{Line::Through({0, 0}, {0, 1})}),hitBorder::Back};
+            HLine{HLine::Through({0, 0}, {0, 1})}),hitBorder::Back};
       }
 
-      case vecOrientation::HorizontalRight: {  // puoi sbattere sopra o sotto
-        // e' importante selezionare il bordo corretto poiche l'intersezione con
-        // entrambi si trova, ma una e' fuori mentre l'altra no idea: le fai
-        // entrambi e restituisci quella che sta dentro, se c'è
-        const Eigen::Vector2f int_sup = trajectory.intersectionPoint(
+      case vecOrientation::HorizontalRight: {  // puoi sbattere sopra, sotto o uscire
+        // la discriminante e' la coordinata y
+
+        //se la particella dista, dall'asse x, meno di r2 in modulo (con approssimazione fp)
+        //allora 
+
+        if(p.pos.y()>=r2_+1e-3){ //maggiore di r2 con approx
+          return {trajectory.intersectionPoint(HLine(borderup_)),hitBorder::Top};
+        }else if(p.pos.y()<=-r2_-1e-3){ //minore di r2 con approx
+          return {trajectory.intersectionPoint(HLine(borderdown_)),hitBorder::Bottom};
+        }else{
+          return {trajectory.intersectionPoint(exit_line_), hitBorder::Front};
+        }
+       /*const Eigen::Vector2f int_sup = trajectory.intersectionPoint(
             Eigen::Hyperplane<float, 2>{borderup_});  // intersezione con sup
 
         const Eigen::Vector2f int_inf = trajectory.intersectionPoint(
@@ -93,7 +103,7 @@ intsect path::operator()(particle const& p) const {
         } else {
           return {int_sup,hitBorder::Top};  // scelta a caso, inf sarebbe equivalente
         }
-      }
+      }*/
       case vecOrientation::UpRight: {
         //verifica se esce
         const Eigen::Vector2f exit_intsec=exitIntersection(trajectory); //intersezione con la barra di uscita
@@ -159,6 +169,7 @@ intsect path::operator()(particle const& p) const {
               return {trajectory.intersectionPoint(
                   Eigen::Hyperplane<float, 2>{borderdown_}),hitBorder::Bottom};  // intersezione con inf
         }
+    }
     }
   }();
 
@@ -262,13 +273,8 @@ posTypes path::getLocationType(Eigen::Vector2f const& v)
     return posTypes::Error;
   }
 }
-/*
-vecOrientation path::getHitDirection(Eigen::Vector2f const& v) const{
-    float angle=arctan(v.y(),v.x());
-    return getHitDirection(angle);
-}*/
 
-vecOrientation path::getHitDirection(
+vecOrientation path::getHitDirection( //determina l'orientazione del vettore
     float angle) const {  // nota: accetta angoli tra -pi e +pi
   assert(angle >= 0 && angle <= 2 * pi);
   
