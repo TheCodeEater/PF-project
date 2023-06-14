@@ -64,7 +64,10 @@ intsect path::operator()(particle const& p) const {
         return {trajectory.intersectionPoint(
             HLine{HLine::Through({0, 0}, {0, 1})}),hitBorder::Back};
       }
-      case vecOrientation::Right: {
+      //se si dire verso destra puo'
+      // uscire
+      //sbattere sopra o sotto (dipende sia dall'angolo che dal punto in cui si trova la particella)
+      case vecOrientation::Right: { 
         //verifica se esce
         const Eigen::Vector2f exit_intsec=exitIntersection(trajectory); //intersezione con la barra di uscita
         if(exit_intsec.y()<r2_+1e-3 && exit_intsec.y()>-r2_-1e-3){
@@ -223,9 +226,9 @@ vecOrientation path::getHitDirection( //determina l'orientazione del vettore
   assert(angle >= 0 && angle <= 2 * pi);
   
   if(angle<=1e-3){ //angolo nullo: orizzontale destra
-    return vecOrientation::HorizontalRight;
+    return vecOrientation::Right;
   }else if(angle>1e-3 && angle<pi/2-1e-3){ //alto a dx
-    return vecOrientation::UpRight;
+    return vecOrientation::Right;
   }else if(std::abs(angle-pi/2)<=1e-3){
     return vecOrientation::VerticalUp;
   }else if(angle>pi/2+1e-3 && angle<pi-1e-3){
@@ -237,9 +240,9 @@ vecOrientation path::getHitDirection( //determina l'orientazione del vettore
   }else if(std::abs(angle-1.5f*pi)<=1e-3){
     return vecOrientation::VerticalDown;
   }else if(angle>1.5f*pi+1e-3 && angle < 2*pi-1e-3){
-    return vecOrientation::DownRight;
+    return vecOrientation::Right;
   }else if(std::abs(angle-2*pi)<=1e-3){
-    return vecOrientation::HorizontalRight;
+    return vecOrientation::Right;
   }else{
     throw std::logic_error("Impossibile determinare la direzione del vettore!");
   }
