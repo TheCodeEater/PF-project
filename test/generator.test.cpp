@@ -11,6 +11,7 @@ TEST_CASE("Test della generazione in range dei numeri"){
     const float r1{400}; //parametro r1
     const float r2{200};
     const float l{700};
+    const unsigned seed{std::random_device{}()};
 
     particleSimulator::path biliardo{r1,r2,l};
 
@@ -19,18 +20,22 @@ TEST_CASE("Test della generazione in range dei numeri"){
 
     particleSimulator::randSimulator rs{{r1,r2,l,0.f,80.f,0.f,pi/8,seed}};
 
-    /*for(int i{};i<1e3;++i){
-        particleSimulator::particle p{rs.getParticle()};
 
-        CHECK(p.pos.y()<=r1);
-        CHECK(p.pos.y()>=-r1);
-    }*/
+    std::vector<particleSimulator::exit_point> exit{};
 
-    //TEST
-    /*for(int i{};i<1106;++i){
-        particleSimulator::particle p{rs.getParticle()};
+    try{
+        exit=rs.run(100000,200);
+        std::ofstream f{"output.txt"};
+        for(auto const& v:exit){
+            f<<v.theta<<"\n";
+        }
+    }catch(std::exception const& e){
+        std::cout<<e.what()<<"\n";
+        std::cout<<"Seed incriminato: "<<seed<<"\n";
+        throw;
     }
 
+<<<<<<< HEAD
     particleSimulator::particle bad_p=rs.getParticle();
 
     std::cout<<bad_p.pos<<"\n"<<bad_p.theta<<"\n";*/
@@ -45,5 +50,7 @@ TEST_CASE("Test della generazione in range dei numeri"){
     for(auto const& v:exit){
         f<<v.theta<<"\n";
     }
+=======
+>>>>>>> 391398d0e3185f86ed3f0e0261765c5c3fa0f0b9
 
 }

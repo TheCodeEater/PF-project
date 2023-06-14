@@ -32,13 +32,13 @@ TEST_CASE("Test del calcolo delle traiettorie") {
   // Calcolo orientazione particella
   SUBCASE("Test calcolo orientazione traiettoria") {
     CHECK(biliardo.getHitDirection(p0.theta) ==
-          particleSimulator::vecOrientation::UpRight);
+          particleSimulator::vecOrientation::Right);
     CHECK(biliardo.getHitDirection(p1.theta) ==
-          particleSimulator::vecOrientation::DownLeft);
+          particleSimulator::vecOrientation::Left);
     CHECK(biliardo.getHitDirection(p2.theta) ==
-          particleSimulator::vecOrientation::HorizontalRight);
+          particleSimulator::vecOrientation::Right);
     CHECK(biliardo.getHitDirection(p3.theta) ==
-          particleSimulator::vecOrientation::HorizontalLeft);
+          particleSimulator::vecOrientation::Left);
   }
 
   // calcolo intersezioni
@@ -70,7 +70,7 @@ TEST_CASE("Test del calcolo delle traiettorie") {
     CHECK(refl_0 == doctest::Approx(5.39786));
 
     CHECK(biliardo.getHitDirection(p0.theta) ==
-          particleSimulator::vecOrientation::DownRight);
+          particleSimulator::vecOrientation::Right);
 
     biliardo.reflect(p0);
   }

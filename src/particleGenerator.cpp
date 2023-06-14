@@ -63,7 +63,7 @@ std::vector<exit_point> randSimulator::run(int n,int max_iterations){
 
         if (simulator_.getLocationType(p.pos) ==
             posTypes::Escaped) {  // se la particella esce, termina il ciclo
-            exit_p.push_back(simulator_.getEscapePoint(old_p.pos,p.pos)); 
+            exit_p.push_back({p.pos.y(),p.theta}); 
             break;
         }
         }
@@ -71,11 +71,11 @@ std::vector<exit_point> randSimulator::run(int n,int max_iterations){
 
     //normalizza l'angolo tra pi/2 e -pi/2 per analisi dati ottimale
     std::for_each(exit_p.begin(),exit_p.end(),[](exit_point& p){
-        float& phi=p.theta; 
+        double& phi=p.theta; 
         //tra 3/2 pi e 2pi
         if(phi>=1.5f*pi && phi<=2*pi+1e-3){
             phi=-(2*pi-phi);
-        }else if(phi>=pi/2 && phi<=1.5f*phi){
+        }else if(phi>=pi/2 && phi<=1.5f*phi+1e-3){
             throw std::runtime_error("Angolo di uscita errato, non esci all'incontrario");
         }
     });
