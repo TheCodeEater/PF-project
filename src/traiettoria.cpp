@@ -251,9 +251,6 @@ posTypes path::getLocationType(Eigen::Vector2f const& v)
   // calcolato
   if (v.x() > 0 && v.x() < l_) {  // coordinata x entro i limiti del biliardo
     return posTypes::Inside;
-  }else if(std::abs(v.x())<1e-2 && (v.y()>r1_ || v.y()<-r1_)){ //errore se hai la y fuori posto
-    std::cout<<"Posizione incriminata: "<<v<<"\n";
-    return posTypes::Error;
   } else if (v.x() <= 0) {  // x negative: colpisci il fondo
     return posTypes::BackHit;
   } else if (v.x() >= l_) {  // fuori: fuggito
