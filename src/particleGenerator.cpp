@@ -10,15 +10,15 @@ randSimulator::randSimulator(randOptions options): //constructor
 
 
 particle randSimulator::getParticle() {//niente const, i generatori cambiano lo stato interno
-    //genera angolo - NOTA: angolo tra -pi/2 pi/2
+    //genera angolo - NOTA: angolo tra -bm::pi<float>()/2 bm::pi<float>()/2
     float theta=angle_dist_(engine_); 
     //test sull'angolo
-    if(theta>=pi/3+1e-3){ //angolo in overflow
-        theta=pi/3-1e-1;
-    }else if(theta<=-pi/3-1e-3){
-        theta=-pi/3+1e-1;
+    if(theta>=bm::pi<float>()/3+1e-3){ //angolo in overflow
+        theta=bm::pi<float>()/3-1e-1;
+    }else if(theta<=-bm::pi<float>()/3-1e-3){
+        theta=-bm::pi<float>()/3+1e-1;
     }
-    assert(std::abs(theta) < pi/2 + 1e-3); //test sull'angolo di generazione
+    assert(std::abs(theta) < bm::pi<float>()/2 + 1e-3); //test sull'angolo di generazione
 
     float y=pos_dist_(engine_);
 
@@ -28,7 +28,7 @@ particle randSimulator::getParticle() {//niente const, i generatori cambiano lo 
         y=simulator_.getR1()+1e-2;
     }
 
-    const particle p{{0,y},(theta<0)? 2*pi+theta : theta}; //se l'angolo e' negativo, adatta la convenzione sugli angoli
+    const particle p{{0,y},(theta<0)? 2*bm::pi<float>()+theta : theta}; //se l'angolo e' negativo, adatta la convenzione sugli angoli
 
     return p;
 }
@@ -69,13 +69,13 @@ std::vector<exit_point> randSimulator::run(int n,int max_iterations){
         }
     });
 
-    //normalizza l'angolo tra pi/2 e -pi/2 per analisi dati ottimale
+    //normalizza l'angolo tra bm::pi<float>()/2 e -bm::pi<float>()/2 per analisi dati ottimale
     std::for_each(exit_p.begin(),exit_p.end(),[](exit_point& p){
         float& phi=p.theta; 
-        //tra 3/2 pi e 2pi
-        if(phi>=1.5f*pi && phi<=2*pi+1e-3){
-            phi=-(2*pi-phi);
-        }else if(phi>=pi/2 && phi<=1.5f*phi){
+        //tra 3/2 bm::pi<float>() e 2bm::pi<float>()
+        if(phi>=1.5f*bm::pi<float>() && phi<=2*bm::pi<float>()+1e-3){
+            phi=-(2*bm::pi<float>()-phi);
+        }else if(phi>=bm::pi<float>()/2 && phi<=1.5f*phi){
             throw std::runtime_error("Angolo di uscita errato, non esci all'incontrario");
         }
     });

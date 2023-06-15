@@ -13,7 +13,7 @@ TEST_CASE("Test arcotangente") {
 }
 
 TEST_CASE("Test del calcolo delle traiettorie") {
-  // dati del biliardo di esempio
+  // dati del biliardo di esembm::pi<float>()o
   const int r1 = 10;
   const int r2 = 5;
   const int l = 100;

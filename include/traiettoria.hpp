@@ -8,15 +8,16 @@
 
 #include <SFML/Graphics.hpp>
 #include <cmath>
+#include <boost/math/constants/constants.hpp>
 
 #include "../Eigen/Dense"
 #include "../include/graphics.hpp"
 
-static const inline float pi = 2 * std::atan(INFINITY);
+namespace particleSimulator {
 
 using Line = Eigen::ParametrizedLine<float, 2>;
 using HLine = Eigen::Hyperplane<float,2>;
-namespace particleSimulator {
+namespace bm= boost::math::constants;
 
 enum class posTypes { Inside, Escaped, BackHit, Error };
 
