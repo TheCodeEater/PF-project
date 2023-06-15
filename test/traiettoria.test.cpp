@@ -24,10 +24,10 @@ TEST_CASE("Test del calcolo delle traiettorie") {
   // particelle
   particleSimulator::particle p0{{0, 0}, std::atan(1)};
   particleSimulator::particle p1{{0, 0},
-                                 particleSimulator::path::arctan(-1, -1)};
+                                 particleSimulator::arctan(-1, -1)};
   particleSimulator::particle p2{{0, 0}, std::atan(0)};
   particleSimulator::particle p3{{0, 5},
-                                 particleSimulator::path::arctan(0, -1)};
+                                 particleSimulator::arctan(0, -1)};
 
   // Calcolo orientazione particella
   SUBCASE("Test calcolo orientazione traiettoria") {

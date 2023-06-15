@@ -180,7 +180,7 @@ float path::reflect(particle& p) const {
   }
 }
 
-float path::arctan(float y, float x) {
+float arctan(float y, float x) {
   const float theta = std::atan2f(y, x);
   // correggi l'angolo risultante in modo tale che sia compreso tra zero e 2bm::pi<float>(),
   // non tra -bm::pi<float>() e bm::pi<float>()

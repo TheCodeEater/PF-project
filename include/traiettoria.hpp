@@ -19,6 +19,8 @@ using Line = Eigen::ParametrizedLine<float, 2>;
 using HLine = Eigen::Hyperplane<float,2>;
 namespace bm= boost::math::constants;
 
+float arctan(float y, float x);
+
 enum class posTypes { Inside, Escaped, BackHit, Error };
 
 enum class vecOrientation {  UpLeft, DownLeft, Right, HorizontalLeft, VerticalUp, VerticalDown };
@@ -71,7 +73,6 @@ class path {  // contiene i bordi del biliardo
 
   Eigen::Vector2f exitIntersection(Line const&) const;
 
-  static float arctan(float y, float x);
   static constexpr float eps{1e-3};
 
   exit_point getEscapePoint(std::vector<dottedLine> const& trajectiories) const;
