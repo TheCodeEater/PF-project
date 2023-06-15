@@ -15,8 +15,8 @@ namespace particleSimulator {
 
   // simulation options
 struct options {
-  double w_width{};
-  double w_height{};
+  float w_width{};
+  float w_height{};
   std::string w_name{};
   // experiment setup
   double r1{};

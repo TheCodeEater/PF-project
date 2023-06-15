@@ -14,8 +14,8 @@ config::config(){
   pt::read_ini(cfg_path,tree);
 
   //load settings - specifica i valori di default
-  wOptn_.w_width=tree.get<int>("width",2200);
-  wOptn_.w_height=tree.get<int>("height",1230);
+  wOptn_.w_width=tree.get<float>("width",2200);
+  wOptn_.w_height=tree.get<float>("height",1230);
   wOptn_.w_name=tree.get<std::string>("windowTitle","Simulatore di particelle");
   //parametri biliardo
   {
