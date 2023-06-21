@@ -234,7 +234,7 @@ vecOrientation path::getHitDirection(
   }else if(std::abs(angle-2*bm::pi<float>())<=eps){
     return vecOrientation::Right;
   }else{
-    throw std::logic_error("Impossibile determinare la direzione del vettore!");
+    throw std::logic_error("Impossibile determinare la direzione del vettore! Angolo: "+std::to_string(angle));
   }
 }
 
