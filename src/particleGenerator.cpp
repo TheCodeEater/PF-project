@@ -13,10 +13,10 @@ particle randSimulator::getParticle() {//niente const, i generatori cambiano lo 
     //genera angolo - NOTA: angolo tra -bm::pi<float>()/2 bm::pi<float>()/2
     float theta=angle_dist_(engine_); 
     //test sull'angolo
-    if(theta>=bm::pi<float>()/3+1e-3){ //angolo in overflow
-        theta=bm::pi<float>()/3-1e-1;
-    }else if(theta<=-bm::pi<float>()/3-1e-3){
-        theta=-bm::pi<float>()/3+1e-1;
+    if(theta>=bm::pi<float>()/2-1e-3){ //angolo in overflow, poco prima di pi/2
+        theta=bm::pi<float>()/2-angle_offset;//pi/2-offset
+    }else if(theta<=-bm::pi<float>()/2+1e-3){ //poco prima di -pi/2
+        theta=-bm::pi<float>()/2+angle_offset; //-pi/2+offset
     }
     assert(std::abs(theta) < bm::pi<float>()/2 + 1e-3); //test sull'angolo di generazione
 
