@@ -64,8 +64,7 @@ Application::Application(options const& opt)
 
         return l_inf;
       }()},
-      simulation_{optn_.r1, optn_.r2, optn_.l,
-                  optn_.N}, 
+      simulation_{optn_.r1, optn_.r2, optn_.l, optn_.N},
       particle_{{0, optn_.y0}, optn_.theta0}
 // to do: initialize particle and assert its starting conditions
 {
@@ -73,11 +72,13 @@ Application::Application(options const& opt)
   assert(std::abs(particle_.pos.x()) < 1e-3);
   assert(particle_.pos.y() <= optn_.r1 + 1e-3);
   assert(particle_.pos.y() >= -optn_.r1 - 1e-3);
-  //test sull'angolo: per l'input, tra -bm::pi<float>()/2 e bm::pi<float>()/2
-  assert(std::abs(particle_.theta) < bm::pi<float>()/2 + 1e-3);
+  // test sull'angolo: per l'input, tra -bm::pi<float>()/2 e bm::pi<float>()/2
+  assert(std::abs(particle_.theta) < bm::pi<float>() / 2 + 1e-3);
 
-  //normalizzazione tra 0 e 2bm::pi<float>()
-  particle_.theta= (particle_.theta < 0) ? particle_.theta+2*bm::pi<float>() : particle_.theta;
+  // normalizzazione tra 0 e 2bm::pi<float>()
+  particle_.theta = (particle_.theta < 0)
+                        ? particle_.theta + 2 * bm::pi<float>()
+                        : particle_.theta;
 
   w_.setView(camera_);  // set the current view
 }

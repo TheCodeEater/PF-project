@@ -7,8 +7,8 @@
 #include <vector>
 
 #include "graphics.hpp"
-#include "traiettoria.hpp"
 #include "io.hpp"
+#include "traiettoria.hpp"
 
 namespace particleSimulator {
 
@@ -28,9 +28,9 @@ class Application {
   const sf::VertexArray line_inf_{};
 
   // logic objects
-  const simulation simulation_;             // simulation object
-  particle particle_{};                     // studied particle
-  std::pair<std::vector<dottedLine>,exit_point> result_{};
+  const simulation simulation_;  // simulation object
+  particle particle_{};          // studied particle
+  std::pair<std::vector<dottedLine>, exit_point> result_{};
 
  public:
   explicit Application(options const&);

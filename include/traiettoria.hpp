@@ -7,8 +7,8 @@
 #endif
 
 #include <SFML/Graphics.hpp>
-#include <cmath>
 #include <boost/math/constants/constants.hpp>
+#include <cmath>
 
 #include "../Eigen/Dense"
 #include "../include/graphics.hpp"
@@ -16,27 +16,34 @@
 namespace particleSimulator {
 
 using Line = Eigen::ParametrizedLine<float, 2>;
-using HLine = Eigen::Hyperplane<float,2>;
-namespace bm= boost::math::constants;
+using HLine = Eigen::Hyperplane<float, 2>;
+namespace bm = boost::math::constants;
 
 float arctan(float y, float x);
 
 enum class posTypes { Inside, Escaped, BackHit, Error };
 
-enum class vecOrientation {  UpLeft, DownLeft, Right, HorizontalLeft, VerticalUp, VerticalDown };
+enum class vecOrientation {
+  UpLeft,
+  DownLeft,
+  Right,
+  HorizontalLeft,
+  VerticalUp,
+  VerticalDown
+};
 
-enum class hitBorder {Top, Bottom, Back, Front, Angle};
+enum class hitBorder { Top, Bottom, Back, Front, Angle };
 struct particle {
   Eigen::Vector2f pos{};  // pos sta per position
   double theta{};         // pos e theta da input (distribuzione)
 };
 
-struct exit_point{
+struct exit_point {
   float y{};
   float theta{};
 };
 
-struct intsect{
+struct intsect {
   Eigen::Vector2f point{};
   hitBorder border{};
 };
@@ -51,7 +58,7 @@ class path {  // contiene i bordi del biliardo
   HLine borderdown_{};
   HLine borderback_{};
 
-  //linea di uscita
+  // linea di uscita
   HLine exit_line_{};
 
   // direzioni normali ai bordi. I vettori puntano verso l'interno della scatola
@@ -61,7 +68,7 @@ class path {  // contiene i bordi del biliardo
   Eigen::Vector2f horizontal_{};
 
  public:
- using vec=Eigen::Vector2f;
+  using vec = Eigen::Vector2f;
   // path(Line const&, Line const&);
   path(float r1, float r2, float r3);
   intsect operator()(particle const&)
@@ -79,7 +86,7 @@ class path {  // contiene i bordi del biliardo
   exit_point getEscapePoint(std::vector<dottedLine> const& trajectiories) const;
   exit_point getEscapePoint(vec const& p0, vec const& p1) const;
 
-  //getter
+  // getter
   float getR1() const;
   float getR2() const;
   float getL() const;
@@ -92,11 +99,10 @@ class simulation {  // classe che gestisce la simulazione
  public:
   simulation(float r1, float r2, float l, int max_cycles);  // construcotr
 
-  std::pair<std::vector<dottedLine>,exit_point> operator()(
+  std::pair<std::vector<dottedLine>, exit_point> operator()(
       particle& p) const;  // operatore di simulazione
 
   std::vector<particle> getSequence(particle& p, int max_iterations) const;
-  
 };
 
 }  // namespace particleSimulator

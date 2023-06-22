@@ -3,32 +3,33 @@
 
 #include <random>
 
-#include "traiettoria.hpp"
 #include "io.hpp"
+#include "traiettoria.hpp"
 namespace particleSimulator {
 
-class randSimulator{ //classe per la simulazione con i numeri casuali
+class randSimulator {  // classe per la simulazione con i numeri casuali
 
-    path simulator_;
+  path simulator_;
 
-    std::default_random_engine engine_; //generatore
+  std::default_random_engine engine_;  // generatore
 
-    std::normal_distribution<float> pos_dist_; //pdf
-    std::normal_distribution<float> angle_dist_;
+  std::normal_distribution<float> pos_dist_;  // pdf
+  std::normal_distribution<float> angle_dist_;
 
-    static constexpr float angle_offset{0.01f};
+  static constexpr float angle_offset{0.01f};
 
-    public:
-        randSimulator(randOptions options); //costruttore
-        
-        particle getParticle(); //genera le particelle
+ public:
+  randSimulator(randOptions options);  // costruttore
 
-        std::vector<exit_point> run(int n, int max_iterations); //esegui la simulazione
+  particle getParticle();  // genera le particelle
 
-        std::normal_distribution<float> const& getPosGenerator() const;
-        std::normal_distribution<float> const& getAngleGenerator() const;
+  std::vector<exit_point> run(int n,
+                              int max_iterations);  // esegui la simulazione
+
+  std::normal_distribution<float> const& getPosGenerator() const;
+  std::normal_distribution<float> const& getAngleGenerator() const;
 };
 
-}
+}  // namespace particleSimulator
 
 #endif
