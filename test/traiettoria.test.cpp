@@ -130,4 +130,24 @@ TEST_CASE("Test dei casi critici"){ //casi che hanno o che potenzialmente genera
     CHECK(biliardo.getHitDirection(p7.theta)==ps::vecOrientation::Right);
 
   }
+
+  SUBCASE("Test della riflessione di un caso particolare"){
+    ps::particle p{{0,-91.5416}, 5.82604}; //particella 
+
+    //direzione iniziale
+    CHECK(biliardo.getHitDirection(p.theta));
+
+    //sequenza delle posizioni occupate
+    auto v=s.getSequence(p,200);
+
+    for(auto const& value:v){ //controllo della positivita' delle posizioni
+      CHECK(value.pos.x()>=-ps::path::eps); //controllo posizività posizioni
+    }
+
+    //controllo posizioni
+    //ultima: punto di uscita
+    CHECK(v.at(2).pos.x()==doctest::Approx(l));
+    //penultima: poco prima del punto di uscita
+    CHECK(v.at(1).pos.x()<doctest::Approx(l));
+  }
 }
