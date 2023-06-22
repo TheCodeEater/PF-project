@@ -44,6 +44,9 @@ int main() {
             args >> N;
           }
 
+          //arrotonda
+          theta0=std::trunc(theta0*1000)/1000;
+
           ps::Application sim{cfg.getApplicationOptions(y0, theta0, N)};
 
           ps::exit_point p_exit = sim.loop();  // particella all'uscita
