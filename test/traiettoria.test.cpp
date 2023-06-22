@@ -125,7 +125,7 @@ TEST_CASE("Test dei casi critici"){ //casi che hanno o che potenzialmente genera
     CHECK(biliardo.getHitDirection(p2.theta)==ps::vecOrientation::Right);
     CHECK(biliardo.getHitDirection(p3.theta)==ps::vecOrientation::Right);
     CHECK(biliardo.getHitDirection(p4.theta)==ps::vecOrientation::DownLeft);
-    CHECK(biliardo.getHitDirection(p4.theta)==ps::vecOrientation::DownLeft);
+    CHECK(biliardo.getHitDirection(p5.theta)==ps::vecOrientation::DownLeft);
     CHECK(biliardo.getHitDirection(p6.theta)==ps::vecOrientation::Right);
     CHECK(biliardo.getHitDirection(p7.theta)==ps::vecOrientation::Right);
 
