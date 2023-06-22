@@ -5,6 +5,7 @@ build-debug/
 build-debug/
 Eigen/
 Boost/
+data/
 
 #ignore files
 .DS_Store
