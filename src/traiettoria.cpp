@@ -228,7 +228,7 @@ vecOrientation path::getHitDirection(Eigen::Vector2f const& v) const{
     return getHitDirection(angle);
 }*/
 
-vecOrientation path::getHitDirection(float angle)
+vecOrientation path::getHitDirection(float const& angle)
     const {  // nota: accetta angoli tra -bm::pi<float>() e +bm::pi<float>()
   assert(angle >= 0 && angle <= 2 * bm::pi<float>());
 

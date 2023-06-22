@@ -15,7 +15,7 @@ TEST_CASE("Test del calcolo delle traiettorie") {
   const int r2 = 5;
   const int l = 100;
 
-  particleSimulator::path biliardo{r1, r2,
+  const particleSimulator::path biliardo{r1, r2,
                                    l};  // oggetto di calcolo della traiettoria
 
   // particelle
@@ -77,13 +77,13 @@ TEST_CASE("Test dei casi critici") {  // casi che hanno o che potenzialmente
   const float r2{200};
   const float l{700};
 
-  ps::path biliardo{r1, r2, l};
-  ps::simulation s{r1, r2, l, 200};
+  const ps::path biliardo{r1, r2, l};
+  const ps::simulation s{r1, r2, l, 200};
 
   SUBCASE("test di correttezza della coordinata x") {
     particleSimulator::particle p{{0, 97.13790130615}, 5.6391};
 
-    auto v = s.getSequence(p, 200);
+    const std::vector<ps::particle> v = s.getSequence(p, 200);
 
     for (auto const& value : v) {
       CHECK(value.pos.x() >= -ps::path::eps);
@@ -138,7 +138,7 @@ TEST_CASE("Test dei casi critici") {  // casi che hanno o che potenzialmente
     CHECK(biliardo.getHitDirection(p.theta));
 
     // sequenza delle posizioni occupate
-    auto v = s.getSequence(p, 200);
+    const std::vector<ps::particle> v = s.getSequence(p, 200);
 
     for (auto const& value : v) {  // controllo della positivita' delle
                                    // posizioni

@@ -76,7 +76,7 @@ class path {  // contiene i bordi del biliardo
   float reflect(particle&) const;
   posTypes getLocationType(Eigen::Vector2f const&) const;
   // vecOrientation getHitDirection(Eigen::Vector2f const&) const;
-  vecOrientation getHitDirection(float angle) const;
+  vecOrientation getHitDirection(float const& angle) const;
 
   Eigen::Vector2f exitIntersection(Line const&) const;
 
