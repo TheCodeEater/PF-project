@@ -22,7 +22,7 @@ string(APPEND CMAKE_EXE_LINKER_FLAGS_DEBUG " -fsanitize=address,undefined -fno-o
 set(CODE )
 
 #set files to be compiled
-add_executable(particelle.bin src/main.cpp src/application.cpp src/graphics.cpp src/io.cpp src/traiettoria.cpp src/particleGenerator.cpp)
+add_executable(particelle.bin src/main.cpp src/application.cpp src/graphics.cpp src/io.cpp src/traiettoria.cpp src/particleGenerator.cpp src/menu.cpp)
 
 #set dependencies
 find_package(SFML 2.5 COMPONENTS graphics REQUIRED)

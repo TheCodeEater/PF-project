@@ -5,26 +5,19 @@
 #include "../include/application.hpp"
 #include "../include/io.hpp"
 #include "../include/particleGenerator.hpp"
+#include "../include/menu.hpp"
 
 // alias for namespace
 namespace ps = particleSimulator;
-
-void printInit() {
-  std::cout << "    Programma di simulazione biliardo triangolare    \n";
-}
-
-void printPrompt() {
-  std::cout << "> ";  // shell tipo root
-}
 
 int main() {
 
   try {
     const ps::config cfg{};
     // menu
-    printInit();
+    ps::printInit();
     while (1) {
-      printPrompt();
+      ps::printPrompt();
       char in{};
       std::string options{};
       // leggi il comando
