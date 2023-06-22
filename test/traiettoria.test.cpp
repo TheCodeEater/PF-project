@@ -7,10 +7,7 @@
 #include "doctest.h"
 
 using pT = particleSimulator::posTypes;
-
-TEST_CASE("Test arcotangente") {
-  // alcuni test per la mia arctan
-}
+namespace ps=particleSimulator;
 
 TEST_CASE("Test del calcolo delle traiettorie") {
   // dati del biliardo di esembm::pi<float>()o
@@ -76,18 +73,38 @@ TEST_CASE("Test del calcolo delle traiettorie") {
   }
 }
 
-TEST_CASE("test delle sequenze"){
+TEST_CASE("Test dei casi critici"){ //casi che hanno o che potenzialmente generano bachi
+  const float eps{5e-5};
   const float r1{400};
   const float r2{200};
   const float l{700};
 
-  particleSimulator::simulation s{r1,r2,l,200};
+  ps::path biliardo{r1,r2,l};
+  ps::simulation s{r1,r2,l,200};
 
-  particleSimulator::particle p{{0,97.13790130615},5.6391};
+  SUBCASE("test di correttezza della coordinata x"){
+    particleSimulator::particle p{{0,97.13790130615},5.6391};
 
-  auto v=s.getSequence(p,200);
+    auto v=s.getSequence(p,200);
 
-  for(auto const& value:v){
-    CHECK(value.pos.x()>=-1e-4);
+    for(auto const& value:v){
+      CHECK(value.pos.x()>=-1e-4);
+    }
+  }
+
+  SUBCASE("Test dei colpi ai bordi di uscita"){
+    ps::particle p0{{0,0},0.2793559}; //sfiora l'ultimo punto del bordo
+    ps::particle p1{{0,0},0.2785637}; //colpisce il bordo sup poco prima della fine
+    ps::particle p2{{0,0},0.2793559}; //come p2 ma un po' più indietro
+
+    s(p0);
+    s(p1);
+    s(p2); //esegui le simulazioni
+
+    //controllo stato finale
+    CHECK(biliardo.getHitDirection(p0.theta)==ps::vecOrientation::Right);
+    CHECK(biliardo.getHitDirection(p1.theta)==ps::vecOrientation::Right);
+    CHECK(biliardo.getHitDirection(p2.theta)==ps::vecOrientation::Right);
+
   }
 }

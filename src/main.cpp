@@ -45,7 +45,7 @@ int main() {
           }
 
           //arrotonda
-          theta0=std::trunc(theta0*1000)/1000;
+          theta0=std::trunc(theta0*1e6)/1e6;
 
           ps::Application sim{cfg.getApplicationOptions(y0, theta0, N)};
 
