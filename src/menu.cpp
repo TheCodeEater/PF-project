@@ -4,10 +4,10 @@ namespace particleSimulator{
 
 void printInit() {
 //cosmetica: bordo sopra
- auto str=" -------------------------------------------------------\n"
+ auto str{" -------------------------------------------------------\n"
           " |  Programma di simulazione del biliardo triangolare  |\n"
           " |                                                     |\n"
-          " -------------------------------------------------------\n"; 
+          " -------------------------------------------------------\n"}; 
 
  std::cout<<str;
 }
