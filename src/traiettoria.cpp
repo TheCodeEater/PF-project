@@ -46,7 +46,7 @@ intsect path::operator()(particle const& p) const {
   // bm::pi<float>()ccolo test
   assert(std::abs(dir.norm() - 1) <
          1e-3);  // test della norma del vettore uguale a 1
-  const Eigen::ParametrizedLine<float, 2> trajectory{
+  const Line trajectory{
       p.pos, dir};  // retta della direzione della particella
 
   // determina quale bordo puoi colbm::pi<float>()re
@@ -65,11 +65,11 @@ intsect path::operator()(particle const& p) const {
       case vecOrientation::Right: {
         //verifica se esce
         const Eigen::Vector2f exit_intsec=exitIntersection(trajectory); //intersezione con la barra di uscita
-        if(exit_intsec.y()<r2_ && exit_intsec.y()>-r2_){
+        if(exit_intsec.y()<r2_+eps && exit_intsec.y()>-r2_-eps){
           return {exit_intsec,hitBorder::Front};
-        }else if(exit_intsec.y()>=r2_){
+        }else if(exit_intsec.y()>=r2_+eps){
           return {trajectory.intersectionPoint(borderup_),hitBorder::Top};  // intersezione con sup
-        }else if(exit_intsec.y()<=-r2_){
+        }else if(exit_intsec.y()<=-r2_-eps){
           return {trajectory.intersectionPoint(borderdown_),hitBorder::Bottom};  // intersezione con inf
         }else{
           throw std::logic_error("Impossibile determinare l'intersezione!");
