@@ -73,7 +73,7 @@ class path {  // contiene i bordi del biliardo
 
   Eigen::Vector2f exitIntersection(Line const&) const;
 
-  static constexpr float eps{1e-6};
+  static constexpr float eps{1e-4};
 
   exit_point getEscapePoint(std::vector<dottedLine> const& trajectiories) const;
   exit_point getEscapePoint(vec const& p0, vec const& p1) const;
@@ -93,6 +93,8 @@ class simulation {  // classe che gestisce la simulazione
 
   std::pair<std::vector<dottedLine>,exit_point> operator()(
       particle& p) const;  // operatore di simulazione
+
+  std::vector<particle> getSequence(particle& p, int max_iterations) const;
   
 };
 

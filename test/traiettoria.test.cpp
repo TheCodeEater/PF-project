@@ -75,3 +75,19 @@ TEST_CASE("Test del calcolo delle traiettorie") {
     biliardo.reflect(p0);
   }
 }
+
+TEST_CASE("test delle sequenze"){
+  const float r1{400};
+  const float r2{200};
+  const float l{700};
+
+  particleSimulator::simulation s{r1,r2,l,200};
+
+  particleSimulator::particle p{{0,97.1379},5.6391755};
+
+  auto v=s.getSequence(p,200);
+
+  for(auto const& value:v){
+    CHECK(value.pos.x()>=-1e-4);
+  }
+}

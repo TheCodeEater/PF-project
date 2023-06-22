@@ -289,6 +289,26 @@ std::pair<std::vector<dottedLine>,exit_point> simulation::operator()(
   }
 }
 
+ std::vector<particle> simulation::getSequence(particle& p, int max_iterations) const{
+        std::vector<particle> pos{};
+
+        for (int i{0}; i < max_iterations;
+        ++i) {  // up to the maximum number of iterations
+        // position vectors
+        const particle old_p{p};
+
+        simulator_.reflect(p);  // run the particle reflection
+
+        pos.push_back(p);
+
+        if (simulator_.getLocationType(p.pos) ==
+            posTypes::Escaped) {  // se la particella esce, termina il ciclo
+            break;
+        }
+        }
+        return pos;
+  }
+
 exit_point path::getEscapePoint(vec const& p0, vec const& p1) const{
       //test che sia effettivamente fuggita
       assert(getLocationType(p1)==posTypes::Escaped);
