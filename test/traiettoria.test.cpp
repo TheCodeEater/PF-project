@@ -83,7 +83,7 @@ TEST_CASE("test delle sequenze"){
 
   particleSimulator::simulation s{r1,r2,l,200};
 
-  particleSimulator::particle p{{0,97.1379},5.6391755};
+  particleSimulator::particle p{{0,97.13790130615},5.6391};
 
   auto v=s.getSequence(p,200);
 
