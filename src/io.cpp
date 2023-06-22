@@ -70,7 +70,10 @@ void config::exportData(std::vector<exit_point> const& v,std::string const& file
   if(!output.is_open()){
     throw std::runtime_error("Impossibile creare file di output!");
   }
+  //scrivi i parametri della simulazione
+  output<<wOptn_.r2<<"\n";
 
+  //scrivi i dati
   std::for_each(v.cbegin(),v.cend(),[&output](exit_point const& p){
       std::ostringstream line{};
       line<<p.y<<" "<<p.theta<<"\n";
