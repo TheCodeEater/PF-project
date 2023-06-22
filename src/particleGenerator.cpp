@@ -30,8 +30,7 @@ particle randSimulator::getParticle() {//niente const, i generatori cambiano lo 
 
     particle p{{0,y},(theta<0)? 2*bm::pi<float>()+theta : theta}; //se l'angolo e' negativo, adatta la convenzione sugli angoli
 
-    //troncamento cifre
-    p.theta=std::trunc(p.theta*10000)/10000;
+    p.theta=std::trunc(p.theta*path::trunc_prec)/path::trunc_prec;
 
     return p;
 }

@@ -74,6 +74,7 @@ class path {  // contiene i bordi del biliardo
   Eigen::Vector2f exitIntersection(Line const&) const;
 
   static constexpr float eps{1e-4};
+  static constexpr int trunc_prec{10000};
 
   exit_point getEscapePoint(std::vector<dottedLine> const& trajectiories) const;
   exit_point getEscapePoint(vec const& p0, vec const& p1) const;
