@@ -13,12 +13,12 @@ particle randSimulator::getParticle() {//niente const, i generatori cambiano lo 
     //genera angolo - NOTA: angolo tra -bm::pi<float>()/2 bm::pi<float>()/2
     float theta=angle_dist_(engine_); 
     //test sull'angolo
-    if(theta>=bm::pi<float>()/2-1e-3){ //angolo in overflow, poco prima di pi/2
+    if(theta>=bm::pi<float>()/2-1e-2){ //angolo in overflow, poco prima di pi/2
         theta=bm::pi<float>()/2-angle_offset;//pi/2-offset
-    }else if(theta<=-bm::pi<float>()/2+1e-3){ //poco prima di -pi/2
+    }else if(theta<=-bm::pi<float>()/2+1e-2){ //poco prima di -pi/2
         theta=-bm::pi<float>()/2+angle_offset; //-pi/2+offset
     }
-    assert(std::abs(theta) < bm::pi<float>()/2 + 1e-3); //test sull'angolo di generazione
+    assert(std::abs(theta) < bm::pi<float>()/2 + 1e-2); //test sull'angolo di generazione
 
     float y=pos_dist_(engine_);
 
@@ -28,7 +28,10 @@ particle randSimulator::getParticle() {//niente const, i generatori cambiano lo 
         y=simulator_.getR1()+1e-2;
     }
 
-    const particle p{{0,y},(theta<0)? 2*bm::pi<float>()+theta : theta}; //se l'angolo e' negativo, adatta la convenzione sugli angoli
+    particle p{{0,y},(theta<0)? 2*bm::pi<float>()+theta : theta}; //se l'angolo e' negativo, adatta la convenzione sugli angoli
+
+    //troncamento cifre
+    p.theta=std::trunc(p.theta*10000)/10000;
 
     return p;
 }
