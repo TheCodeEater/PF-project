@@ -74,7 +74,6 @@ TEST_CASE("Test del calcolo delle traiettorie") {
 }
 
 TEST_CASE("Test dei casi critici"){ //casi che hanno o che potenzialmente generano bachi
-  const float eps{5e-5};
   const float r1{400};
   const float r2{200};
   const float l{700};
@@ -88,7 +87,7 @@ TEST_CASE("Test dei casi critici"){ //casi che hanno o che potenzialmente genera
     auto v=s.getSequence(p,200);
 
     for(auto const& value:v){
-      CHECK(value.pos.x()>=-1e-4);
+      CHECK(value.pos.x()>=-ps::path::eps);
     }
   }
 
@@ -96,15 +95,39 @@ TEST_CASE("Test dei casi critici"){ //casi che hanno o che potenzialmente genera
     ps::particle p0{{0,0},0.2793559}; //sfiora l'ultimo punto del bordo
     ps::particle p1{{0,0},0.2785637}; //colpisce il bordo sup poco prima della fine
     ps::particle p2{{0,0},0.2793559}; //come p2 ma un po' più indietro
+    ps::particle p3{{300,-314.2857142857},1.9684243}; //colpo all'angolo sup
+    ps::particle p4{{300,-314.2857142857},1.9683743}; //colpo vicino all'angolo sup
+    ps::particle p5{{300,-314.2857142857},1.9684238}; //colpo all'angolo sup
+    ps::particle p6{{300,-314.2857142857},1.9684293}; //colpo all'angolo sup
+    ps::particle p7{{300,-314.2857142857},1.9684793}; //colpo all'angolo sup
 
-    s(p0);
-    s(p1);
-    s(p2); //esegui le simulazioni
+    CHECK(biliardo.getHitDirection(p0.theta)==ps::vecOrientation::Right);
+    CHECK(biliardo.getHitDirection(p1.theta)==ps::vecOrientation::Right);
+    CHECK(biliardo.getHitDirection(p2.theta)==ps::vecOrientation::Right);
+    CHECK(biliardo.getHitDirection(p3.theta)==ps::vecOrientation::UpLeft);
+    CHECK(biliardo.getHitDirection(p4.theta)==ps::vecOrientation::UpLeft);
+    CHECK(biliardo.getHitDirection(p5.theta)==ps::vecOrientation::UpLeft);
+    CHECK(biliardo.getHitDirection(p6.theta)==ps::vecOrientation::UpLeft);
+    CHECK(biliardo.getHitDirection(p7.theta)==ps::vecOrientation::UpLeft);
+
+    biliardo.reflect(p0);
+    biliardo.reflect(p1);
+    biliardo.reflect(p2); //esegui le simulazioni
+    biliardo.reflect(p3);
+    biliardo.reflect(p4);
+    biliardo.reflect(p5);
+    biliardo.reflect(p6);
+    biliardo.reflect(p7);
 
     //controllo stato finale
     CHECK(biliardo.getHitDirection(p0.theta)==ps::vecOrientation::Right);
     CHECK(biliardo.getHitDirection(p1.theta)==ps::vecOrientation::Right);
     CHECK(biliardo.getHitDirection(p2.theta)==ps::vecOrientation::Right);
+    CHECK(biliardo.getHitDirection(p3.theta)==ps::vecOrientation::Right);
+    CHECK(biliardo.getHitDirection(p4.theta)==ps::vecOrientation::DownLeft);
+    CHECK(biliardo.getHitDirection(p4.theta)==ps::vecOrientation::DownLeft);
+    CHECK(biliardo.getHitDirection(p6.theta)==ps::vecOrientation::Right);
+    CHECK(biliardo.getHitDirection(p7.theta)==ps::vecOrientation::Right);
 
   }
 }
