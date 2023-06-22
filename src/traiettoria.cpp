@@ -298,8 +298,8 @@ exit_point path::getEscapePoint(vec const& p0, vec const& p1) const{
       //calcolo Y: interseca con asse di uscita
       const Eigen::Vector2f escape_intersection{exitIntersection(line)}; //ottieni punto di fuga
       //test intersezo
-      assert(escape_intersection.y()<=getR2()+1e-3);
-      assert(escape_intersection.y()>=-getR2()-1e-3);
+      assert(escape_intersection.y()<=getR2()+path::eps);
+      assert(escape_intersection.y()>=-getR2()-path::eps);
 
       const float escape_phi{std::atanf(line.direction().y()/line.direction().x())}; //angolo di uscita tra -bm::pi<float>()/2 e bm::pi<float>()/2
 
