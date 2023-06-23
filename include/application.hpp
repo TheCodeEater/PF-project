@@ -35,14 +35,6 @@ class Application {
  public:
   explicit Application(options const&);
 
-  // likely to be removed
-  ~Application() = default;  // default destructir
-  // disable copy and move
-  Application(Application const&) = delete;
-  Application(Application&&) = delete;
-  Application& operator=(Application const&) = delete;
-  Application& operator=(Application&&) = delete;
-
   exit_point loop();  // run application loop
 };
 
