@@ -60,9 +60,9 @@ TEST_CASE("Test del calcolo delle traiettorie") {
 
   // calcolo angoli riflessi
   SUBCASE("Test riflessione") {
-    float refl_0 = biliardo.reflect(p0);
+    biliardo.reflect(p0);
 
-    CHECK(refl_0 == doctest::Approx(5.39786));
+    CHECK(p0.theta == doctest::Approx(5.39786));
 
     CHECK(biliardo.getHitDirection(p0.theta) ==
           particleSimulator::vecOrientation::Right);

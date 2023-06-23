@@ -129,13 +129,12 @@ intsect path::operator()(particle const& p) const {
   return intersec;
 }
 
-float path::reflect(particle& p) const {
+void path::reflect(particle& p) const {
   const intsect intsect = operator()(p);  // calcola il punto di collisione
   // determina se è il bordo su o il bordo giù, usando le coordinate del punto
   // di intersezione
   if (intsect.border == hitBorder::Front) {  // particella uscita
     p.pos = intsect.point;                   // punto finale
-    return p.theta;
   } else {
     Eigen::Vector2f const& normal_vect = [this, &intsect, &p]() -> vec {
       switch (intsect.border) {  // esamina il bordo
@@ -192,8 +191,6 @@ float path::reflect(particle& p) const {
 
     p.pos = intsect.point;
     p.theta = new_angle;
-
-    return new_angle;
   }
 }
 
