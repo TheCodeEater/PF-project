@@ -11,8 +11,7 @@ path::path(float r1, float r2, float l)
       borderup_{HLine::Through({0, r1_}, {l_, r2_})},
       borderdown_{HLine::Through({0, -r1_}, {l_, -r2_})},
       borderback_{HLine::Through({0, 0}, {0, 1})},
-      exit_line_{HLine::Through({l_, r2}, {l, -r2})},
-      horizontal_{1, 0} {
+      borderfront_{HLine::Through({l_, r2}, {l, -r2})}{
   // TEST: correttezza parametri
   assert(r1_ > 0);
   assert(r2_ > 0);
@@ -218,7 +217,7 @@ vecOrientation path::getHitDirection(float const& angle)
 
 Eigen::Vector2f path::exitIntersection(Line const& l)
     const {  // intersezione della retta data con quella di uscita
-  return l.intersectionPoint(exit_line_);
+  return l.intersectionPoint(borderfront_);
 }
 
 float path::getR1() const { return r1_; }

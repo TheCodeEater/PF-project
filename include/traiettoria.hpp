@@ -57,13 +57,12 @@ class path {  // contiene i bordi del biliardo
   HLine borderback_{};
 
   // linea di uscita
-  HLine exit_line_{};
+  HLine borderfront_{};
 
   // direzioni normali ai bordi. I vettori puntano verso l'interno della scatola
   // del biliardo
   Eigen::Vector2f normal_up_{};
   Eigen::Vector2f normal_down_{};
-  Eigen::Vector2f horizontal_{};
 
   //rotazione
   void rotate(particle&, Eigen::Vector2f const&, intsect const&) const;
