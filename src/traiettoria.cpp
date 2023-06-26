@@ -17,6 +17,8 @@ path::path(float r1, float r2, float l)
   assert(r2_ > 0);
   assert(l_ > 0);
 
+  assert(r1_>r2_);
+
   Line up{borderup_};
   Line down{borderdown_};
 
