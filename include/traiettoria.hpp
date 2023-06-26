@@ -30,7 +30,7 @@ enum class vecOrientation {
   VerticalDown
 };
 
-enum class hitBorder { Top, Bottom, Back, Front, Angle };
+enum class hitBorder { Top, Bottom, Back, Front };
 struct particle {
   Eigen::Vector2f pos{};  // pos sta per position
   float theta{};         // pos e theta da input (distribuzione)
@@ -65,6 +65,9 @@ class path {  // contiene i bordi del biliardo
   Eigen::Vector2f normal_down_{};
   Eigen::Vector2f horizontal_{};
 
+  //rotazione
+  void rotate(particle&, Eigen::Vector2f const&, intsect const&) const;
+
  public:
   using vec = Eigen::Vector2f;
   // path(Line const&, Line const&);
@@ -80,9 +83,6 @@ class path {  // contiene i bordi del biliardo
 
   static constexpr float eps{1e-4};
   static constexpr int trunc_prec{10000};
-
-  //exit_point getEscapePoint(std::vector<dottedLine> const& trajectiories) const;
-  //exit_point getEscapePoint(vec const& p0, vec const& p1) const;
 
   // getter
   float getR1() const;

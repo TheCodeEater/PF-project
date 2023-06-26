@@ -108,28 +108,28 @@ void path::reflect(particle& p) const {
   const intsect intsect = operator()(p);  // calcola il punto di collisione
   // determina se è il bordo su o il bordo giù, usando le coordinate del punto
   // di intersezione
-  if (intsect.border == hitBorder::Front || intsect.border == hitBorder::Back) {  // particella uscita
-    p.pos = intsect.point;                   // punto finale
-  } else {
-    Eigen::Vector2f const& normal_vect = [this, &intsect, &p]() -> vec {
-      switch (intsect.border) {  // esamina il bordo
-        case hitBorder::Top: {
-          return normal_up_;
-        }
-        case hitBorder::Bottom: {
-          return normal_down_;
-        }
-        case hitBorder::Angle: {
-          // fai la parallela, orientata nella medesima direzione del vettore
-          // riflesso (angolo di incidenza 0)
-          return {-std::cos(p.theta), -std::sin(p.theta)};
-        }
-        case hitBorder::Front: {
-          throw std::logic_error("Non possibile, dovevi averlo gia gestito!");
-        }
-      }
-    }();
-    const Line normal{intsect.point, normal_vect};  // trova la normale
+  switch(intsect.border){
+    case hitBorder::Front :
+      p.pos=intsect.point;
+      break;
+
+    case hitBorder::Back:
+      p.pos=intsect.point;
+      break;
+
+    case hitBorder::Top:
+      rotate(p,normal_up_,intsect);
+      break;
+
+    case hitBorder::Bottom:
+      rotate(p,normal_down_,intsect);
+      break;
+      
+  }              // punto finale
+}
+
+void path::rotate(particle& p, Eigen::Vector2f const& normal_vect, intsect const& intersection) const{
+const Line normal{intersection.point, normal_vect};  // trova la normale
     // calcola l'angolo di incidenza
     // angolo della normale
     const float normal_angle = arctan(normal_vect.y(), normal_vect.x());
@@ -145,13 +145,7 @@ void path::reflect(particle& p) const {
 
     const float phi_inc = normal_angle - dir_angle;  // angolo di incidenza
 
-    // NOTA: phi non deve rispettare la condizione, il segno determina il verso
-    // della rotazione
-    // const float phi_inc=std::acos(normal.direction().dot(dir));
-    // assert(std::abs(phi_inc)<=bm::pi<float>()/2);
-    // assert al momento non ripristinabile, fornisce problemi di geometria per
-    // gli urti con il bordo posteriore risoluzione: prodotto scalare
-    // (vettoriale) e con e sin
+    // NOTA: phi non deve rispettare la condizione, il segno determina il verso della rotazione
 
     const Eigen::Rotation2D rotation{
         2 * phi_inc};  // rotazione di 2*angolo incidenza
@@ -160,15 +154,14 @@ void path::reflect(particle& p) const {
 
     const float new_angle = arctan(new_dir.y(), new_dir.x());
 
-    p.pos = intsect.point;
+    p.pos = intersection.point;
     p.theta = new_angle;
-  }
 }
 
 float arctan(float y, float x) {
   const float theta = std::atan2f(y, x);
   // correggi l'angolo risultante in modo tale che sia compreso tra zero e
-  // 2bm::pi<float>(), non tra -bm::pi<float>() e bm::pi<float>()
+  // 2pi, non tra -pi e +pi
   if (theta < 0) {
     return theta + 2 * bm::pi<float>();
   } else {
@@ -299,39 +292,5 @@ std::vector<particle> simulation::getSequence(particle& p,
   }
   return pos;
 }
-/*
-exit_point path::getEscapePoint(vec const& p0, vec const& p1) const {
-  // test che sia effettivamente fuggita
-  assert(getLocationType(p1) == posTypes::Escaped);
-
-  const Eigen::ParametrizedLine<float, 2> line{
-      Eigen::ParametrizedLine<float, 2>::Through(p0, p1)};
-
-  // calcolo Y: interseca con asse di uscita
-  const Eigen::Vector2f escape_intersection{
-      exitIntersection(line)};  // ottieni punto di fuga
-  // test intersezo
-  assert(escape_intersection.y() <= getR2() + path::eps);
-  assert(escape_intersection.y() >= -getR2() - path::eps);
-
-  const float escape_phi{std::atanf(
-      line.direction().y() /
-      line.direction().x())};  // angolo di uscita tra -bm::pi<float>()/2 e
-                               // bm::pi<float>()/2
-
-  return {escape_intersection.y(), escape_phi};  // restituisci il punto di fuga
-}
-
-exit_point path::getEscapePoint(
-    std::vector<dottedLine> const& trajectiories) const {
-  // to do: aggiungere dei getter a path cosi da poter fare i test con gli
-  // assert la funzione assume che la particella sia fuggita
-  dottedLine const& last = trajectiories.back();  // ottieni traiettoria di
-  const auto extremes = last.getExtremes();
-  const Eigen::Vector2f p0 = extremes.first;
-  const Eigen::Vector2f p1 = extremes.second;
-
-  return getEscapePoint(p0, p1);
-}*/
 
 }  // namespace particleSimulator
