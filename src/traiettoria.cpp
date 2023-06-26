@@ -177,7 +177,7 @@ posTypes path::getLocationType(Eigen::Vector2f const& v)
   if (v.x() > 0 && v.x() < l_) {  // coordinata x entro i limiti del biliardo
     return posTypes::Inside;
   } else if (v.x() <= 0) {  // x negative: colbm::pi<float>()sci il fondo
-    return posTypes::Escaped;
+    return posTypes::BackHit;
   } else if (v.x() >= l_) {  // fuori: fuggito
     return posTypes::Escaped;
   } else {  // altrimenti, problema
@@ -287,7 +287,8 @@ std::vector<particle> simulation::getSequence(particle& p,
     pos.push_back(p);
 
     if (simulator_.getLocationType(p.pos) ==
-        posTypes::Escaped) {  // se la particella esce, termina il ciclo
+        posTypes::Escaped || simulator_.getLocationType(p.pos) ==
+        posTypes::BackHit) {  // se la particella esce, termina il ciclo
       break;
     }
   }

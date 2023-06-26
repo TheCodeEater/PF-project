@@ -60,7 +60,7 @@ std::vector<exit_point> randSimulator::run(int n, int max_iterations) {
           simulator_.reflect(p);  // run the particle reflection
 
           if (simulator_.getLocationType(p.pos) ==
-              posTypes::Escaped) {  // se la particella esce, termina il ciclo
+              posTypes::Escaped || simulator_.getLocationType(p.pos)==posTypes::BackHit) {  // se la particella esce, termina il ciclo
             exit_p.push_back(exit_point{p.pos.y(),p.theta});
             break;
           }
