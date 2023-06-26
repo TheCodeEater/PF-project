@@ -7,7 +7,7 @@ void printInit() {
   auto str{
       " -------------------------------------------------------\n"
       " |  Programma di simulazione del biliardo triangolare  |\n"
-      " |                                                     |\n"
+      " |  Digitare h per una lista di comandi                |\n"
       " -------------------------------------------------------\n"};
 
   std::cout << str;

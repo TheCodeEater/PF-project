@@ -24,18 +24,16 @@ float arctan(float y, float x);
 enum class posTypes { Inside, Escaped, BackHit, Error };
 
 enum class vecOrientation {
-  UpLeft,
-  DownLeft,
+  Left,
   Right,
-  HorizontalLeft,
   VerticalUp,
   VerticalDown
 };
 
-enum class hitBorder { Top, Bottom, Back, Front, Angle };
+enum class hitBorder { Top, Bottom, Back, Front };
 struct particle {
   Eigen::Vector2f pos{};  // pos sta per position
-  double theta{};         // pos e theta da input (distribuzione)
+  float theta{};         // pos e theta da input (distribuzione)
 };
 
 struct exit_point {
@@ -59,13 +57,15 @@ class path {  // contiene i bordi del biliardo
   HLine borderback_{};
 
   // linea di uscita
-  HLine exit_line_{};
+  HLine borderfront_{};
 
   // direzioni normali ai bordi. I vettori puntano verso l'interno della scatola
   // del biliardo
   Eigen::Vector2f normal_up_{};
   Eigen::Vector2f normal_down_{};
-  Eigen::Vector2f horizontal_{};
+
+  //rotazione
+  void rotate(particle&, Eigen::Vector2f const&, intsect const&) const;
 
  public:
   using vec = Eigen::Vector2f;
@@ -82,9 +82,6 @@ class path {  // contiene i bordi del biliardo
 
   static constexpr float eps{1e-4};
   static constexpr int trunc_prec{10000};
-
-  exit_point getEscapePoint(std::vector<dottedLine> const& trajectiories) const;
-  exit_point getEscapePoint(vec const& p0, vec const& p1) const;
 
   // getter
   float getR1() const;

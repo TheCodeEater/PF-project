@@ -12,33 +12,22 @@ randSimulator::randSimulator(randOptions options)
 particle randSimulator::getParticle() {  // niente const, i generatori cambiano
                                          // lo stato interno
   // genera angolo - NOTA: angolo tra -bm::pi<float>()/2 bm::pi<float>()/2
-  float theta = angle_dist_(engine_);
+  const float theta = angle_dist_(engine_);
+  const float y = pos_dist_(engine_);
   // test sull'angolo
-  if (theta >=
-      bm::pi<float>() / 2 - 1e-2) {  // angolo in overflow, poco prima di pi/2
-    theta = bm::pi<float>() / 2 - angle_offset;       // pi/2-offset
-  } else if (theta <= -bm::pi<float>() / 2 + 1e-2) {  // poco prima di -pi/2
-    theta = -bm::pi<float>() / 2 + angle_offset;      //-pi/2+offset
-  }
-  assert(std::abs(theta) <
-         bm::pi<float>() / 2 + 1e-2);  // test sull'angolo di generazione
-
-  float y = pos_dist_(engine_);
-
-  if (y >= simulator_.getR1()) {  // adatta in range la y nel caso
-    y = simulator_.getR1() - 1e-2;
-  } else if (y <= -simulator_.getR1()) {
-    y = simulator_.getR1() + 1e-2;
-  }
-
-  particle p{{0, y},
+  
+  if(std::abs(theta)>=bm::pi<float>()-angle_offset || std::abs(y)>simulator_.getR1()-angle_offset){ //se eccedi
+      return getParticle();
+  }else{
+      particle p{{0, y},
              (theta < 0) ? 2 * bm::pi<float>() + theta
                          : theta};  // se l'angolo e' negativo, adatta la
                                     // convenzione sugli angoli
 
-  p.theta = std::trunc(p.theta * path::trunc_prec) / path::trunc_prec;
+    p.theta = std::trunc(p.theta * path::trunc_prec) / path::trunc_prec;
 
-  return p;
+    return p;
+  }
 }
 
 std::normal_distribution<float> const& randSimulator::getPosGenerator() const {
@@ -51,9 +40,6 @@ std::normal_distribution<float> const& randSimulator::getAngleGenerator()
 
 std::vector<exit_point> randSimulator::run(int n, int max_iterations) {
   std::vector<particle> particles{};
-
-  // std::function<particle(void)>
-  // f{std::bind(&randSimulator::getParticle,this)};
 
   std::generate_n(std::back_inserter(particles), n, [this]() {
     return getParticle();
@@ -74,25 +60,12 @@ std::vector<exit_point> randSimulator::run(int n, int max_iterations) {
           simulator_.reflect(p);  // run the particle reflection
 
           if (simulator_.getLocationType(p.pos) ==
-              posTypes::Escaped) {  // se la particella esce, termina il ciclo
-            exit_p.push_back(simulator_.getEscapePoint(old_p.pos, p.pos));
+              posTypes::Escaped || simulator_.getLocationType(p.pos)==posTypes::BackHit) {  // se la particella esce, termina il ciclo
+            exit_p.push_back(exit_point{p.pos.y(),p.theta});
             break;
           }
         }
       });
-
-  // normalizza l'angolo tra bm::pi<float>()/2 e -bm::pi<float>()/2 per analisi
-  // dati ottimale
-  std::for_each(exit_p.begin(), exit_p.end(), [](exit_point& p) {
-    float& phi = p.theta;
-    // tra 3/2 bm::pi<float>() e 2bm::pi<float>()
-    if (phi >= 1.5f * bm::pi<float>() && phi <= 2 * bm::pi<float>() + 1e-3) {
-      phi = -(2 * bm::pi<float>() - phi);
-    } else if (phi >= bm::pi<float>() / 2 && phi <= 1.5f * phi) {
-      throw std::runtime_error(
-          "Angolo di uscita errato, non esci all'incontrario");
-    }
-  });
 
   return exit_p;
 }
