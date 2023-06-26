@@ -11,6 +11,7 @@ constexpr std::string_view makeMenuBorder();
 
 void printInit();
 void printPrompt();
+void printHelp();
 
 }  // namespace particleSimulator
 

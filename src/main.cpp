@@ -76,6 +76,11 @@ int main() {
           return EXIT_SUCCESS;
         }
 
+        case 'h': {
+          ps::printHelp();
+          break;
+        }
+
         default:
           std::cout << "Comando sconosciuto\n";
       }
