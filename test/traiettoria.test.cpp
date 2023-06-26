@@ -19,9 +19,9 @@ TEST_CASE("Test del calcolo delle traiettorie") {
                                    l};  // oggetto di calcolo della traiettoria
 
   // particelle
-  particleSimulator::particle p0{{0, 0}, std::atan(1)};
+  particleSimulator::particle p0{{0, 0}, std::atanf(1)};
   particleSimulator::particle p1{{0, 0}, particleSimulator::arctan(-1, -1)};
-  particleSimulator::particle p2{{0, 0}, std::atan(0)};
+  particleSimulator::particle p2{{0, 0}, std::atanf(0)};
   particleSimulator::particle p3{{0, 5}, particleSimulator::arctan(0, -1)};
 
   // Calcolo orientazione particella
@@ -29,11 +29,11 @@ TEST_CASE("Test del calcolo delle traiettorie") {
     CHECK(biliardo.getHitDirection(p0.theta) ==
           particleSimulator::vecOrientation::Right);
     CHECK(biliardo.getHitDirection(p1.theta) ==
-          particleSimulator::vecOrientation::DownLeft);
+          particleSimulator::vecOrientation::Left);
     CHECK(biliardo.getHitDirection(p2.theta) ==
           particleSimulator::vecOrientation::Right);
     CHECK(biliardo.getHitDirection(p3.theta) ==
-          particleSimulator::vecOrientation::HorizontalLeft);
+          particleSimulator::vecOrientation::Left);
   }
 
   // calcolo intersezioni
@@ -105,11 +105,11 @@ TEST_CASE("Test dei casi critici") {  // casi che hanno o che potenzialmente
     CHECK(biliardo.getHitDirection(p0.theta) == ps::vecOrientation::Right);
     CHECK(biliardo.getHitDirection(p1.theta) == ps::vecOrientation::Right);
     CHECK(biliardo.getHitDirection(p2.theta) == ps::vecOrientation::Right);
-    CHECK(biliardo.getHitDirection(p3.theta) == ps::vecOrientation::UpLeft);
-    CHECK(biliardo.getHitDirection(p4.theta) == ps::vecOrientation::UpLeft);
-    CHECK(biliardo.getHitDirection(p5.theta) == ps::vecOrientation::UpLeft);
-    CHECK(biliardo.getHitDirection(p6.theta) == ps::vecOrientation::UpLeft);
-    CHECK(biliardo.getHitDirection(p7.theta) == ps::vecOrientation::UpLeft);
+    CHECK(biliardo.getHitDirection(p3.theta) == ps::vecOrientation::Left);
+    CHECK(biliardo.getHitDirection(p4.theta) == ps::vecOrientation::Left);
+    CHECK(biliardo.getHitDirection(p5.theta) == ps::vecOrientation::Left);
+    CHECK(biliardo.getHitDirection(p6.theta) == ps::vecOrientation::Left);
+    CHECK(biliardo.getHitDirection(p7.theta) == ps::vecOrientation::Left);
 
     biliardo.reflect(p0);
     biliardo.reflect(p1);
@@ -124,11 +124,11 @@ TEST_CASE("Test dei casi critici") {  // casi che hanno o che potenzialmente
     CHECK(biliardo.getHitDirection(p0.theta) == ps::vecOrientation::Right);
     CHECK(biliardo.getHitDirection(p1.theta) == ps::vecOrientation::Right);
     CHECK(biliardo.getHitDirection(p2.theta) == ps::vecOrientation::Right);
-    CHECK(biliardo.getHitDirection(p3.theta) == ps::vecOrientation::Right);
-    CHECK(biliardo.getHitDirection(p4.theta) == ps::vecOrientation::DownLeft);
-    CHECK(biliardo.getHitDirection(p5.theta) == ps::vecOrientation::DownLeft);
-    CHECK(biliardo.getHitDirection(p6.theta) == ps::vecOrientation::Right);
-    CHECK(biliardo.getHitDirection(p7.theta) == ps::vecOrientation::Right);
+    CHECK(biliardo.getHitDirection(p3.theta) == ps::vecOrientation::Left);
+    CHECK(biliardo.getHitDirection(p4.theta) == ps::vecOrientation::Left);
+    CHECK(biliardo.getHitDirection(p5.theta) == ps::vecOrientation::Left);
+    CHECK(biliardo.getHitDirection(p6.theta) == ps::vecOrientation::Left);
+    CHECK(biliardo.getHitDirection(p7.theta) == ps::vecOrientation::Left);
   }
 
   SUBCASE("Test della riflessione di un caso particolare") {

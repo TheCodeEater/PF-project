@@ -69,11 +69,11 @@ Application::Application(options const& opt)
 // to do: initialize particle and assert its starting conditions
 {
   // test sulla particella
-  assert(std::abs(particle_.pos.x()) < 1e-3);
-  assert(particle_.pos.y() <= optn_.r1 + 1e-3);
-  assert(particle_.pos.y() >= -optn_.r1 - 1e-3);
+  assert(std::abs(particle_.pos.x()) < path::eps);
+  assert(particle_.pos.y() <= optn_.r1 + path::eps);
+  assert(particle_.pos.y() >= -optn_.r1 - path::eps);
   // test sull'angolo: per l'input, tra -bm::pi<float>()/2 e bm::pi<float>()/2
-  assert(std::abs(particle_.theta) < bm::pi<float>() / 2 + 1e-3);
+  assert(std::abs(particle_.theta) < bm::pi<float>() / 2 + path::eps);
 
   // normalizzazione tra 0 e 2bm::pi<float>()
   particle_.theta = (particle_.theta < 0)
