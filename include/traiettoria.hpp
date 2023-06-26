@@ -24,10 +24,8 @@ float arctan(float y, float x);
 enum class posTypes { Inside, Escaped, BackHit, Error };
 
 enum class vecOrientation {
-  UpLeft,
-  DownLeft,
+  Left,
   Right,
-  HorizontalLeft,
   VerticalUp,
   VerticalDown
 };
