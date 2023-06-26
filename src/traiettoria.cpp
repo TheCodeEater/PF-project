@@ -37,7 +37,7 @@ path::path(float r1, float r2, float l)
 
 intsect path::operator()(particle const& p) const {
   // CONDIZIONI INIZIALI
-  //assert(getLocationType(p.pos) == posTypes::Inside || getLocationType(p.pos)==posTypes::BackHit);  // devi essere dentro il biliardo
+  assert(getLocationType(p.pos) == posTypes::Inside || std::abs(p.pos.x())<eps);  // devi essere dentro il biliardo
   assert(p.theta >= 0);           // angolo tra 0 e 2bm::pi<float>()
   assert(p.theta <= 2 * bm::pi<float>());
 
