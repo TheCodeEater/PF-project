@@ -66,7 +66,7 @@ void config::exportData(std::vector<exit_point> const& v,
     throw std::runtime_error("Impossibile creare file di output!");
   }
   // scrivi i parametri della simulazione
-  output << wOptn_.r2 << "\n";
+  output << wOptn_.r1 << "\n";
 
   // scrivi i dati
   std::for_each(v.cbegin(), v.cend(), [&output](exit_point const& p) {

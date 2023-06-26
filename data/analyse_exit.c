@@ -18,11 +18,11 @@ void analyse_exit(std::string const& filename){
         throw std::runtime_error("File non trovato!");
     }
 
-    Float_t r2{}; //lettura parametro r2 per impostare il range dell'istogramma delle altezze di uscita
-    f>>r2;
+    Float_t r1{}; //lettura parametro r2 per impostare il range dell'istogramma delle altezze di uscita
+    f>>r1;
 
     TH1F* theta_g=new TH1F{"exit_angles","Angoli di uscita; Angolo (rad); Occorrenze",100,0,2*TMath::Pi()+0.01};
-    TH1F* y_g=new TH1F{"exit_heights","Altezza di uscita; Altezza (px); Occorrenze",500,-410,410};
+    TH1F* y_g=new TH1F{"exit_heights","Altezza di uscita; Altezza (px); Occorrenze",500,-r1-10,r1+10};
 
     while(f.good()){ //leggi i dati finche' possibile
         Float_t value_angle{};
