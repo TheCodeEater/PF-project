@@ -21,8 +21,8 @@ void analyse_exit(std::string const& filename){
     Float_t r2{}; //lettura parametro r2 per impostare il range dell'istogramma delle altezze di uscita
     f>>r2;
 
-    TH1F* theta_g=new TH1F{"exit_angles","Angoli di uscita; Angolo (rad); Occorrenze",100,-TMath::Pi()/2-0.01,TMath::Pi()/2+0.01};
-    TH1F* y_g=new TH1F{"exit_heights","Altezza di uscita; Altezza (px); Occorrenze",100,-r2-10,r2+10};
+    TH1F* theta_g=new TH1F{"exit_angles","Angoli di uscita; Angolo (rad); Occorrenze",100,0,2*TMath::Pi()+0.01};
+    TH1F* y_g=new TH1F{"exit_heights","Altezza di uscita; Altezza (px); Occorrenze",500,-410,410};
 
     while(f.good()){ //leggi i dati finche' possibile
         Float_t value_angle{};
@@ -37,12 +37,6 @@ void analyse_exit(std::string const& filename){
     //stile 
     theta_g->SetFillColor(kBlue);
     //imposta label con gli angoli in radianti
-    theta_g->GetXaxis()->ChangeLabel(1,-1,-1,-1,-1,-1,"-#pi/2");
-    theta_g->GetXaxis()->ChangeLabel(-1,-1,-1,-1,-1,-1,"#pi/2");
-    theta_g->GetXaxis()->ChangeLabel(2,-1,-1,-1,-1,-1,"-#pi/3");
-    theta_g->GetXaxis()->ChangeLabel(-2,-1,-1,-1,-1,-1,"#pi/3");
-    theta_g->GetXaxis()->ChangeLabel(3,-1,-1,-1,-1,-1,"-#pi/6");
-    theta_g->GetXaxis()->ChangeLabel(-3,-1,-1,-1,-1,-1,"#pi/6");
     //disegna
     theta_g->Draw("HIST");
 
