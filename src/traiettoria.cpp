@@ -59,8 +59,7 @@ intsect path::operator()(particle const& p) const {
     switch (orientation) {
       case vecOrientation::Right: { //direzione destra
         // verifica se esce
-        const Eigen::Vector2f exit_intsec = exitIntersection(
-            trajectory);  // intersezione con la barra di uscita
+        const Eigen::Vector2f exit_intsec {trajectory.intersectionPoint(borderfront_)};  // intersezione con la barra di uscita
         if (exit_intsec.y() < r2_ + eps && exit_intsec.y() > -r2_ - eps) {
           return {exit_intsec, hitBorder::Front};
         } else if (exit_intsec.y() >= r2_ + eps) {
@@ -216,15 +215,25 @@ vecOrientation path::getHitDirection(float const& angle)
         std::to_string(angle));
   }
 }
-
+/*
 Eigen::Vector2f path::exitIntersection(Line const& l)
     const {  // intersezione della retta data con quella di uscita
   return l.intersectionPoint(borderfront_);
-}
+}*/
 
 float path::getR1() const { return r1_; }
 float path::getR2() const { return r2_; }
 float path::getL() const { return l_; }
+
+bool path::testOutConditions(particle const& p) const{
+  if(std::abs(p.pos.x())<=eps){ //se esci da dietro, testa con r1
+    return p.pos.y()<=r1_+eps && p.pos.y() >=-r1_-eps;
+  }else if(std::abs(p.pos.x()-l_)<=eps){ //da davanti con r2
+    return p.pos.y()<=r2_+eps && p.pos.y() >=-r2_-eps;
+  }else{ //errore ben peggiore
+    return false;
+  }
+}
 
 simulation::simulation(float r1, float r2, float l, int max_cycles)
     :  // costruttore
@@ -262,6 +271,7 @@ std::pair<std::vector<dottedLine>, exit_point> simulation::operator()(
   if (simulator_.getLocationType(p.pos) ==
         posTypes::Escaped || simulator_.getLocationType(p.pos) ==
         posTypes::BackHit) {
+          assert(simulator_.testOutConditions(p));
     return std::make_pair(
         trajs, exit_point{p.pos.y(),p.theta});  // restituisci la copbm::pi<float>()a di dati
   } else {
@@ -289,6 +299,7 @@ std::vector<particle> simulation::getSequence(particle& p,
     if (simulator_.getLocationType(p.pos) ==
         posTypes::Escaped || simulator_.getLocationType(p.pos) ==
         posTypes::BackHit) {  // se la particella esce, termina il ciclo
+        assert(simulator_.testOutConditions(p));
       break;
     }
   }

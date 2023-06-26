@@ -87,6 +87,9 @@ class path {  // contiene i bordi del biliardo
   float getR1() const;
   float getR2() const;
   float getL() const;
+
+  //test
+  bool testOutConditions(particle const&) const;
 };
 
 class simulation {  // classe che gestisce la simulazione
