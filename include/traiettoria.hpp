@@ -33,7 +33,7 @@ enum class vecOrientation {
 enum class hitBorder { Top, Bottom, Back, Front, Angle };
 struct particle {
   Eigen::Vector2f pos{};  // pos sta per position
-  double theta{};         // pos e theta da input (distribuzione)
+  float theta{};         // pos e theta da input (distribuzione)
 };
 
 struct exit_point {
@@ -81,8 +81,8 @@ class path {  // contiene i bordi del biliardo
   static constexpr float eps{1e-4};
   static constexpr int trunc_prec{10000};
 
-  exit_point getEscapePoint(std::vector<dottedLine> const& trajectiories) const;
-  exit_point getEscapePoint(vec const& p0, vec const& p1) const;
+  //exit_point getEscapePoint(std::vector<dottedLine> const& trajectiories) const;
+  //exit_point getEscapePoint(vec const& p0, vec const& p1) const;
 
   // getter
   float getR1() const;

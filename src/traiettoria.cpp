@@ -269,8 +269,7 @@ std::pair<std::vector<dottedLine>, exit_point> simulation::operator()(
         posTypes::Escaped || simulator_.getLocationType(p.pos) ==
         posTypes::BackHit) {
     return std::make_pair(
-        trajs, simulator_.getEscapePoint(
-                   trajs));  // restituisci la copbm::pi<float>()a di dati
+        trajs, exit_point{p.pos.y(),p.theta});  // restituisci la copbm::pi<float>()a di dati
   } else {
     return std::make_pair(
         trajs,
@@ -300,7 +299,7 @@ std::vector<particle> simulation::getSequence(particle& p,
   }
   return pos;
 }
-
+/*
 exit_point path::getEscapePoint(vec const& p0, vec const& p1) const {
   // test che sia effettivamente fuggita
   assert(getLocationType(p1) == posTypes::Escaped);
@@ -333,6 +332,6 @@ exit_point path::getEscapePoint(
   const Eigen::Vector2f p1 = extremes.second;
 
   return getEscapePoint(p0, p1);
-}
+}*/
 
 }  // namespace particleSimulator
