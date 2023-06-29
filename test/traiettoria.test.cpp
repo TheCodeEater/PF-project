@@ -69,14 +69,16 @@ TEST_CASE("Test del calcolo delle traiettorie") {
   SUBCASE("Test riflessione") {
     biliardo.reflect(p0);
 
-    CHECK(p0.theta == doctest::Approx(5.39786));
+    CHECK(p0.theta == doctest::Approx(5.39786)); //angolo della nuova traiettoria
 
     CHECK(biliardo.getHitDirection(p0.theta) ==
-          particleSimulator::vecOrientation::Right);
+          particleSimulator::vecOrientation::Right); //nuova orientazione
 
-    //test punto di riflessione
-
+    //test punto di urto 2
     biliardo.reflect(p0);
+
+    CHECK(p0.pos.x()==doctest::Approx(24.488321));
+    CHECK(p0.pos.y()==doctest::Approx(-8.7755799));
   }
 }
 
