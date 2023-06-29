@@ -15,14 +15,15 @@ particle randSimulator::getParticle() {  // niente const, i generatori cambiano
   const float theta = angle_dist_(engine_);
   const float y = pos_dist_(engine_);
   // test sull'angolo
-  
-  if(std::abs(theta)>=bm::pi<float>()-angle_offset || std::abs(y)>simulator_.getR1()-angle_offset){ //se eccedi
-      return getParticle();
-  }else{
-      particle p{{0, y},
-             (theta < 0) ? 2 * bm::pi<float>() + theta
-                         : theta};  // se l'angolo e' negativo, adatta la
-                                    // convenzione sugli angoli
+
+  if (std::abs(theta) >= bm::pi<float>() - angle_offset ||
+      std::abs(y) > simulator_.getR1() - angle_offset) {  // se eccedi
+    return getParticle();
+  } else {
+    particle p{{0, y},
+               (theta < 0) ? 2 * bm::pi<float>() + theta
+                           : theta};  // se l'angolo e' negativo, adatta la
+                                      // convenzione sugli angoli
 
     p.theta = std::trunc(p.theta * path::trunc_prec) / path::trunc_prec;
 
@@ -59,10 +60,12 @@ std::vector<exit_point> randSimulator::run(int n, int max_iterations) {
 
           simulator_.reflect(p);  // run the particle reflection
 
-          if (simulator_.getLocationType(p.pos) ==
-              posTypes::Escaped || simulator_.getLocationType(p.pos)==posTypes::BackHit) {  // se la particella esce, termina il ciclo
+          if (simulator_.getLocationType(p.pos) == posTypes::Escaped ||
+              simulator_.getLocationType(p.pos) ==
+                  posTypes::BackHit) {  // se la particella esce, termina il
+                                        // ciclo
             assert(simulator_.testOutConditions(p));
-            exit_p.push_back(exit_point{p.pos.y(),p.theta});
+            exit_p.push_back(exit_point{p.pos.y(), p.theta});
             break;
           }
         }

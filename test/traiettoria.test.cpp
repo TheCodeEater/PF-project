@@ -15,8 +15,8 @@ TEST_CASE("Test del calcolo delle traiettorie") {
   const int r2 = 5;
   const int l = 100;
 
-  const particleSimulator::path biliardo{r1, r2,
-                                   l};  // oggetto di calcolo della traiettoria
+  const particleSimulator::path biliardo{
+      r1, r2, l};  // oggetto di calcolo della traiettoria
 
   // particelle
   particleSimulator::particle p0{{0, 0}, std::atanf(1)};
@@ -44,8 +44,7 @@ TEST_CASE("Test del calcolo delle traiettorie") {
 
   SUBCASE("Test collisioni dopo il lancio") {
     CHECK(biliardo.getLocationType(int0) == pT::Inside);
-    CHECK(biliardo.getLocationType(int1) ==
-          pT::BackHit); 
+    CHECK(biliardo.getLocationType(int1) == pT::BackHit);
     CHECK(biliardo.getLocationType(int2) == pT::Escaped);
     CHECK(biliardo.getLocationType(int3) == pT::BackHit);
   }
@@ -83,7 +82,7 @@ TEST_CASE("Test dei casi critici") {  // casi che hanno o che potenzialmente
     particleSimulator::particle p{{0, 97.13790130615}, 5.6391};
 
     const std::vector<ps::particle> v = s.getSequence(p, 200);
-    //inserire test delle posizioni occupate nella sequenza
+    // inserire test delle posizioni occupate nella sequenza
 
     for (auto const& value : v) {
       CHECK(value.pos.x() >= -ps::path::eps);

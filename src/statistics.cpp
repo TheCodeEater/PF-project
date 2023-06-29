@@ -27,11 +27,11 @@ Statistics Sample::statistics() const {
   T sum3_{};
   T sum4_{};
   std::for_each(entries_.begin(), entries_.end(),
-                [&sum_, &sum2_,&sum3_,&sum4_](T val) {  // calcola le somme
+                [&sum_, &sum2_, &sum3_, &sum4_](T val) {  // calcola le somme
                   sum_ += val;
                   sum2_ += val * val;
-                  sum3_ += val*val*val;
-                  sum4_ += val*val*val*val;
+                  sum3_ += val * val * val;
+                  sum4_ += val * val * val * val;
                 });
 
   const T mean{sum_ / N_};
@@ -43,11 +43,15 @@ Statistics Sample::statistics() const {
            (mean2 - mean * mean))};  // x quadro medio meno x medio quadro
   const T mean_err = {sigma / sqrt(N_)};
 
-  const T skewness{(mean3-3*mean*mean2+2*mean*mean*mean)/(sigma*sigma*sigma)}; //
+  const T skewness{(mean3 - 3 * mean * mean2 + 2 * mean * mean * mean) /
+                   (sigma * sigma * sigma)};  //
 
-  const T kurtosis{(mean4-4*mean3*mean+6*mean2*mean*mean-3*mean*mean*mean*mean)/(sigma*sigma*sigma*sigma)-3};
+  const T kurtosis{(mean4 - 4 * mean3 * mean + 6 * mean2 * mean * mean -
+                    3 * mean * mean * mean * mean) /
+                       (sigma * sigma * sigma * sigma) -
+                   3};
 
-  return {mean, sigma, mean_err, kurtosis,skewness};
+  return {mean, sigma, mean_err, kurtosis, skewness};
 }
 
 Sample& Sample::operator+=(const Sample& rhs) {
@@ -55,9 +59,9 @@ Sample& Sample::operator+=(const Sample& rhs) {
   return *this;
 }
 
-Sample operator+(Sample const& l, Sample const& r){
-    Sample s{l};//copia di sample
-    s+=r;
-    return s;
+Sample operator+(Sample const& l, Sample const& r) {
+  Sample s{l};  // copia di sample
+  s += r;
+  return s;
 }
-}  // namespace pf
+}  // namespace stats

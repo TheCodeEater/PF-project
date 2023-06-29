@@ -10,9 +10,9 @@ struct Statistics;
 
 class Sample {
  public:
- using T=double;
-  //constructors
-  Sample()=default;
+  using T = double;
+  // constructors
+  Sample() = default;
 
   void add(T);
   int size() const;
@@ -24,7 +24,7 @@ class Sample {
 
   Sample& operator+=(const Sample&);
 
-   private:
+ private:
   std::vector<T> entries_{};
 };
 
@@ -36,9 +36,8 @@ struct Statistics {
   Sample::T skewness{};
 };
 
-
 Sample operator+(Sample const& l, Sample const& r);
 
-}  // namespace pf
+}  // namespace stats
 
 #endif

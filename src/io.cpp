@@ -60,7 +60,7 @@ int config::getParticleNumber() const { return N_particles_; }
 
 void config::exportData(std::vector<exit_point> const& v,
                         std::string const& filename) const {
-  std::ofstream output{"data/"+filename};
+  std::ofstream output{"data/" + filename};
 
   if (!output.is_open()) {
     throw std::runtime_error("Impossibile creare file di output!");
@@ -76,49 +76,46 @@ void config::exportData(std::vector<exit_point> const& v,
   });
 }
 
-void config::exportStatistics(std::vector<exit_point> const& v, std::string const& filename) const{
-  std::ofstream output{"data/"+filename}; //apri file di output
+void config::exportStatistics(std::vector<exit_point> const& v,
+                              std::string const& filename) const {
+  std::ofstream output{"data/" + filename};  // apri file di output
 
-  if (!output.is_open()) { //test della corretta apertura
+  if (!output.is_open()) {  // test della corretta apertura
     throw std::runtime_error("Impossibile creare file di output! (statistics)");
   }
 
-  //calcoli statistici
+  // calcoli statistici
   {
-  stats::Sample s{}; //crea sample
-  std::for_each(v.cbegin(),v.cend(),[&s](exit_point const& p){
-    s.add(p.y);
-  });
+    stats::Sample s{};  // crea sample
+    std::for_each(v.cbegin(), v.cend(),
+                  [&s](exit_point const& p) { s.add(p.y); });
 
-  stats::Statistics stats=s.statistics(); //calcoli statistici
-  //stampa i dati
+    stats::Statistics stats = s.statistics();  // calcoli statistici
+    // stampa i dati
     output << "Distribuzione YF\n";
     output << "Mean: " << stats.mean << "\n"
            << "Sigma: " << stats.sigma << "\n"
            << "Mean_err: " << stats.mean_err << "\n"
            << "Skewness: " << stats.skewness << "\n"
            << "Kurtosis: " << stats.kurtosis << "\n";
-
   }
 
-  output<<"\n-------------\n";
+  output << "\n-------------\n";
 
-    {
-  stats::Sample s{}; //crea sample
+  {
+    stats::Sample s{};  // crea sample
 
-  std::for_each(v.cbegin(),v.cend(),[&s](exit_point const& p){
-    s.add(p.theta);
-  });
+    std::for_each(v.cbegin(), v.cend(),
+                  [&s](exit_point const& p) { s.add(p.theta); });
 
-  stats::Statistics stats=s.statistics(); //calcoli statistici
-  //stampa i dati
+    stats::Statistics stats = s.statistics();  // calcoli statistici
+    // stampa i dati
     output << "Distribuzione ThetaF\n";
     output << "Mean: " << stats.mean << "\n"
            << "Sigma: " << stats.sigma << "\n"
            << "Mean_err: " << stats.mean_err << "\n"
            << "Skewness: " << stats.skewness << "\n"
            << "Kurtosis: " << stats.kurtosis << "\n";
-
   }
 }
 

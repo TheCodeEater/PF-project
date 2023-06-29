@@ -23,17 +23,12 @@ float arctan(float y, float x);
 
 enum class posTypes { Inside, Escaped, BackHit, Error };
 
-enum class vecOrientation {
-  Left,
-  Right,
-  VerticalUp,
-  VerticalDown
-};
+enum class vecOrientation { Left, Right, VerticalUp, VerticalDown };
 
 enum class hitBorder { Top, Bottom, Back, Front };
 struct particle {
   Eigen::Vector2f pos{};  // pos sta per position
-  float theta{};         // pos e theta da input (distribuzione)
+  float theta{};          // pos e theta da input (distribuzione)
 };
 
 struct exit_point {
@@ -64,7 +59,7 @@ class path {  // contiene i bordi del biliardo
   Eigen::Vector2f normal_up_{};
   Eigen::Vector2f normal_down_{};
 
-  //rotazione
+  // rotazione
   void rotate(particle&, Eigen::Vector2f const&, intsect const&) const;
 
  public:
@@ -88,7 +83,7 @@ class path {  // contiene i bordi del biliardo
   float getR2() const;
   float getL() const;
 
-  //test
+  // test
   bool testOutConditions(particle const&) const;
 };
 

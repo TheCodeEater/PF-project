@@ -4,7 +4,6 @@
 
 #include "doctest.h"
 
-
 TEST_CASE("Testing the class handling a floating point data sample") {
   stats::Sample sample;
 
@@ -29,7 +28,7 @@ TEST_CASE("Testing the class handling a floating point data sample") {
     CHECK(result.sigma == doctest::Approx(0.70710678));
     CHECK(result.mean_err == doctest::Approx(0.5));
   }
-    SUBCASE("Testing sum operator") {
+  SUBCASE("Testing sum operator") {
     sample.add(1);
     stats::Sample sample_two;
     sample_two.add(2);
@@ -42,24 +41,23 @@ TEST_CASE("Testing the class handling a floating point data sample") {
   }
 };
 
-TEST_CASE("Big data test"){
+TEST_CASE("Big data test") {
   std::ifstream in{"test/data.txt"};
 
-  assert(in.is_open()); //test che sia aperto
+  assert(in.is_open());  // test che sia aperto
 
   stats::Sample s{};
-  while(in.good()){
+  while (in.good()) {
     float value{};
-    in>>value;
+    in >> value;
 
     s.add(value);
   }
 
-  stats::Statistics stats=s.statistics();
+  stats::Statistics stats = s.statistics();
 
-  CHECK(stats.mean==doctest::Approx(3.00005));
-  CHECK(stats.sigma==doctest::Approx(2.00171));
-  CHECK(stats.kurtosis==doctest::Approx(0.00584769));
-  CHECK(stats.skewness==doctest::Approx(-0.00401721));
-
+  CHECK(stats.mean == doctest::Approx(3.00005));
+  CHECK(stats.sigma == doctest::Approx(2.00171));
+  CHECK(stats.kurtosis == doctest::Approx(0.00584769));
+  CHECK(stats.skewness == doctest::Approx(-0.00401721));
 };

@@ -11,34 +11,33 @@ path::path(float r1, float r2, float l)
       borderup_{HLine::Through({0, r1_}, {l_, r2_})},
       borderdown_{HLine::Through({0, -r1_}, {l_, -r2_})},
       borderback_{HLine::Through({0, 0}, {0, 1})},
-      borderfront_{HLine::Through({l_, r2}, {l, -r2})}{
+      borderfront_{HLine::Through({l_, r2}, {l, -r2})} {
   // TEST: correttezza parametri
   assert(r1_ > 0);
   assert(r2_ > 0);
   assert(l_ > 0);
 
-  assert(r1_>r2_);
+  assert(r1_ > r2_);
 
   Line up{borderup_};
   Line down{borderdown_};
 
   // Costruzione vettore normale - bordo sup
   const Eigen::Rotation2Df rot_sup{
-      -bm::pi<float>() /
-      2};  // rotazione di pi/2 verso l'interno del biliardo
+      -bm::pi<float>() / 2};  // rotazione di pi/2 verso l'interno del biliardo
   normal_up_ = rot_sup * up.direction();
 
   // Vettore normale bordo giu
   const Eigen::Rotation2Df rot_inf{
-      bm::pi<float>() /
-      2};  // rotazione di -pi/2 verso l'interno del biliardo
+      bm::pi<float>() / 2};  // rotazione di -pi/2 verso l'interno del biliardo
   normal_down_ = rot_inf * down.direction();
 }
 
 intsect path::operator()(particle const& p) const {
   // CONDIZIONI INIZIALI
-  assert(getLocationType(p.pos) == posTypes::Inside || std::abs(p.pos.x())<eps);  // devi essere dentro il biliardo
-  assert(p.theta >= 0);           // angolo tra 0 e 2bm::pi<float>()
+  assert(getLocationType(p.pos) == posTypes::Inside ||
+         std::abs(p.pos.x()) < eps);  // devi essere dentro il biliardo
+  assert(p.theta >= 0);               // angolo tra 0 e 2bm::pi<float>()
   assert(p.theta <= 2 * bm::pi<float>());
 
   const Eigen::Vector2f dir{std::cos(p.theta),
@@ -57,9 +56,10 @@ intsect path::operator()(particle const& p) const {
     vecOrientation orientation{getHitDirection(p.theta)};
 
     switch (orientation) {
-      case vecOrientation::Right: { //direzione destra
+      case vecOrientation::Right: {  // direzione destra
         // verifica se esce
-        const Eigen::Vector2f exit_intsec {trajectory.intersectionPoint(borderfront_)};  // intersezione con la barra di uscita
+        const Eigen::Vector2f exit_intsec{trajectory.intersectionPoint(
+            borderfront_)};  // intersezione con la barra di uscita
         if (exit_intsec.y() < r2_ + eps && exit_intsec.y() > -r2_ - eps) {
           return {exit_intsec, hitBorder::Front};
         } else if (exit_intsec.y() >= r2_ + eps) {
@@ -77,13 +77,13 @@ intsect path::operator()(particle const& p) const {
         const Eigen::Vector2f back_intsect{trajectory.intersectionPoint(
             borderback_)};  // intsect con la verticale
         // test intersezione verticale
-        if(std::abs(back_intsect.y())<=r1_+eps){
-          return {back_intsect,hitBorder::Back};
-        }else if(back_intsect.y()>r1_+eps){
-          return {trajectory.intersectionPoint(borderup_),hitBorder::Top};
-        }else if(back_intsect.y()<-r1_-eps){
-          return {trajectory.intersectionPoint(borderdown_),hitBorder::Bottom};
-        }else{
+        if (std::abs(back_intsect.y()) <= r1_ + eps) {
+          return {back_intsect, hitBorder::Back};
+        } else if (back_intsect.y() > r1_ + eps) {
+          return {trajectory.intersectionPoint(borderup_), hitBorder::Top};
+        } else if (back_intsect.y() < -r1_ - eps) {
+          return {trajectory.intersectionPoint(borderdown_), hitBorder::Bottom};
+        } else {
           throw std::logic_error("Impossibile determinare l'urto");
         }
       }
@@ -108,54 +108,56 @@ void path::reflect(particle& p) const {
   const intsect intsect = operator()(p);  // calcola il punto di collisione
   // determina se è il bordo su o il bordo giù, usando le coordinate del punto
   // di intersezione
-  switch(intsect.border){
-    case hitBorder::Front :
-      p.pos=intsect.point;
+  switch (intsect.border) {
+    case hitBorder::Front:
+      p.pos = intsect.point;
       break;
 
     case hitBorder::Back:
-      p.pos=intsect.point;
+      p.pos = intsect.point;
       break;
 
     case hitBorder::Top:
-      rotate(p,normal_up_,intsect);
+      rotate(p, normal_up_, intsect);
       break;
 
     case hitBorder::Bottom:
-      rotate(p,normal_down_,intsect);
+      rotate(p, normal_down_, intsect);
       break;
-      
-  }              // punto finale
+
+  }  // punto finale
 }
 
-void path::rotate(particle& p, Eigen::Vector2f const& normal_vect, intsect const& intersection) const{
-const Line normal{intersection.point, normal_vect};  // trova la normale
-    // calcola l'angolo di incidenza
-    // angolo della normale
-    const float normal_angle = arctan(normal_vect.y(), normal_vect.x());
-    // vettore traiettoria ribaltato
-    const Eigen::Vector2f dir{-std::cos(p.theta), -std::sin(p.theta)};
+void path::rotate(particle& p, Eigen::Vector2f const& normal_vect,
+                  intsect const& intersection) const {
+  const Line normal{intersection.point, normal_vect};  // trova la normale
+  // calcola l'angolo di incidenza
+  // angolo della normale
+  const float normal_angle = arctan(normal_vect.y(), normal_vect.x());
+  // vettore traiettoria ribaltato
+  const Eigen::Vector2f dir{-std::cos(p.theta), -std::sin(p.theta)};
 
-    const float dir_angle =
-        arctan(dir.y(), dir.x());  // calcola angolo del vettore
+  const float dir_angle =
+      arctan(dir.y(), dir.x());  // calcola angolo del vettore
 
-    assert(dir_angle <=
-           2 * bm::pi<float>());  // condizioni sulla convenzione degli angoli
-    assert(dir_angle >= 0);
+  assert(dir_angle <=
+         2 * bm::pi<float>());  // condizioni sulla convenzione degli angoli
+  assert(dir_angle >= 0);
 
-    const float phi_inc = normal_angle - dir_angle;  // angolo di incidenza
+  const float phi_inc = normal_angle - dir_angle;  // angolo di incidenza
 
-    // NOTA: phi non deve rispettare la condizione, il segno determina il verso della rotazione
+  // NOTA: phi non deve rispettare la condizione, il segno determina il verso
+  // della rotazione
 
-    const Eigen::Rotation2D rotation{
-        2 * phi_inc};  // rotazione di 2*angolo incidenza
+  const Eigen::Rotation2D rotation{2 *
+                                   phi_inc};  // rotazione di 2*angolo incidenza
 
-    const Eigen::Vector2f new_dir = rotation * dir;  // esegui la rotazione
+  const Eigen::Vector2f new_dir = rotation * dir;  // esegui la rotazione
 
-    const float new_angle = arctan(new_dir.y(), new_dir.x());
+  const float new_angle = arctan(new_dir.y(), new_dir.x());
 
-    p.pos = intersection.point;
-    p.theta = new_angle;
+  p.pos = intersection.point;
+  p.theta = new_angle;
 }
 
 float arctan(float y, float x) {
@@ -225,12 +227,12 @@ float path::getR1() const { return r1_; }
 float path::getR2() const { return r2_; }
 float path::getL() const { return l_; }
 
-bool path::testOutConditions(particle const& p) const{
-  if(std::abs(p.pos.x())<=eps){ //se esci da dietro, testa con r1
-    return p.pos.y()<=r1_+eps && p.pos.y() >=-r1_-eps;
-  }else if(std::abs(p.pos.x()-l_)<=eps){ //da davanti con r2
-    return p.pos.y()<=r2_+eps && p.pos.y() >=-r2_-eps;
-  }else{ //errore ben peggiore
+bool path::testOutConditions(particle const& p) const {
+  if (std::abs(p.pos.x()) <= eps) {  // se esci da dietro, testa con r1
+    return p.pos.y() <= r1_ + eps && p.pos.y() >= -r1_ - eps;
+  } else if (std::abs(p.pos.x() - l_) <= eps) {  // da davanti con r2
+    return p.pos.y() <= r2_ + eps && p.pos.y() >= -r2_ - eps;
+  } else {  // errore ben peggiore
     return false;
   }
 }
@@ -260,20 +262,21 @@ std::pair<std::vector<dottedLine>, exit_point> simulation::operator()(
                                        curr_pos};  // create line trajectory
     trajs.push_back(line);                         // save into vector
 
-    if (simulator_.getLocationType(p.pos) ==
-        posTypes::Escaped || simulator_.getLocationType(p.pos) ==
-        posTypes::BackHit) {  // se la particella esce, termina il ciclo
+    if (simulator_.getLocationType(p.pos) == posTypes::Escaped ||
+        simulator_.getLocationType(p.pos) ==
+            posTypes::BackHit) {  // se la particella esce, termina il ciclo
       break;
     }
   }
 
   // calcolo posizione finale
-  if (simulator_.getLocationType(p.pos) ==
-        posTypes::Escaped || simulator_.getLocationType(p.pos) ==
-        posTypes::BackHit) {
-          assert(simulator_.testOutConditions(p));
+  if (simulator_.getLocationType(p.pos) == posTypes::Escaped ||
+      simulator_.getLocationType(p.pos) == posTypes::BackHit) {
+    assert(simulator_.testOutConditions(p));
     return std::make_pair(
-        trajs, exit_point{p.pos.y(),p.theta});  // restituisci la copbm::pi<float>()a di dati
+        trajs,
+        exit_point{p.pos.y(),
+                   p.theta});  // restituisci la copbm::pi<float>()a di dati
   } else {
     return std::make_pair(
         trajs,
@@ -296,10 +299,10 @@ std::vector<particle> simulation::getSequence(particle& p,
 
     pos.push_back(p);
 
-    if (simulator_.getLocationType(p.pos) ==
-        posTypes::Escaped || simulator_.getLocationType(p.pos) ==
-        posTypes::BackHit) {  // se la particella esce, termina il ciclo
-        assert(simulator_.testOutConditions(p));
+    if (simulator_.getLocationType(p.pos) == posTypes::Escaped ||
+        simulator_.getLocationType(p.pos) ==
+            posTypes::BackHit) {  // se la particella esce, termina il ciclo
+      assert(simulator_.testOutConditions(p));
       break;
     }
   }

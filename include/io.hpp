@@ -56,7 +56,8 @@ class config {  // classe per caricare le impostazioni
   int getParticleNumber() const;
   void exportData(std::vector<exit_point> const& v,
                   std::string const& filename) const;
-  void exportStatistics(std::vector<exit_point> const& v, std::string const& filename) const;
+  void exportStatistics(std::vector<exit_point> const& v,
+                        std::string const& filename) const;
 };
 }  // namespace particleSimulator
 

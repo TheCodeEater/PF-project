@@ -70,7 +70,7 @@ int main() {
           ps::randSimulator rand{cfg.getRandomOptions()};
           auto data = rand.run(cfg.getParticleNumber(), N_iter);
           cfg.exportData(data, "output.txt");
-          cfg.exportStatistics(data,"statistics.txt");
+          cfg.exportStatistics(data, "statistics.txt");
           break;
         }
         case 'q': {
