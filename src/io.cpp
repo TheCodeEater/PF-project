@@ -1,6 +1,6 @@
 #include "../include/io.hpp"
 
-#include <iostream>
+#include "../include/statistics.hpp"
 
 namespace particleSimulator {
 
@@ -74,6 +74,50 @@ void config::exportData(std::vector<exit_point> const& v,
     line << p.y << " " << p.theta << "\n";
     output << line.str();  // scrivi la stringa
   });
+}
+
+void config::exportStatistics(std::vector<exit_point> const& v, std::string const& filename) const{
+  std::ofstream output{"data/"+filename}; //apri file di output
+
+  if (!output.is_open()) { //test della corretta apertura
+    throw std::runtime_error("Impossibile creare file di output! (statistics)");
+  }
+
+  //calcoli statistici
+  {
+  stats::Sample s{}; //crea sample
+  std::for_each(v.cbegin(),v.cend(),[&s](exit_point const& p){
+    s.add(p.y);
+  });
+
+  stats::Statistics stats=s.statistics(); //calcoli statistici
+  //stampa i dati
+    output << "Distribuzione YF\n";
+    output << "Mean: " << stats.mean << "\n"
+           << "Sigma: " << stats.sigma << "\n"
+           << "Mean_err: " << stats.mean_err << "\n"
+           << "Skewness: " << stats.skewness << "\n"
+           << "Kurtosis: " << stats.kurtosis << "\n";
+
+  }
+
+    {
+  stats::Sample s{}; //crea sample
+
+  std::for_each(v.cbegin(),v.cend(),[&s](exit_point const& p){
+    s.add(p.theta);
+  });
+
+  stats::Statistics stats=s.statistics(); //calcoli statistici
+  //stampa i dati
+    output << "Distribuzione ThetaF\n";
+    output << "Mean: " << stats.mean << "\n"
+           << "Sigma: " << stats.sigma << "\n"
+           << "Mean_err: " << stats.mean_err << "\n"
+           << "Skewness: " << stats.skewness << "\n"
+           << "Kurtosis: " << stats.kurtosis << "\n";
+
+  }
 }
 
 }  // namespace particleSimulator
