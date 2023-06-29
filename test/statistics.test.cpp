@@ -43,7 +43,7 @@ TEST_CASE("Testing the class handling a floating point data sample") {
 };
 
 TEST_CASE("Big data test"){
-  std::ifstream in{"data.txt"};
+  std::ifstream in{"test/data.txt"};
 
   assert(in.is_open()); //test che sia aperto
 
