@@ -91,17 +91,6 @@ TEST_CASE("Test dei casi critici") {  // casi che hanno o che potenzialmente
   const ps::path biliardo{r1, r2, l};
   const ps::simulation s{r1, r2, l, 200};
 
-  SUBCASE("test di correttezza della coordinata x") {
-    particleSimulator::particle p{{0, 97.13790130615}, 5.6391};
-
-    const std::vector<ps::particle> v = s.getSequence(p, 200);
-    // inserire test delle posizioni occupate nella sequenza
-    const std::array<Eigen::Vector2f,2> sequence{{{0,0}}}; //aggiungere sequenza
-    for (auto const& value : v) {
-      CHECK(value.pos.x() >= -ps::path::eps);
-    }
-  }
-
   SUBCASE("Test dei colpi ai bordi di uscita") {
     ps::particle p0{{0, 0}, 0.2793559};  // sfiora l'ultimo punto del bordo
     ps::particle p1{{0, 0},
@@ -162,5 +151,16 @@ TEST_CASE("Test dei casi critici") {  // casi che hanno o che potenzialmente
     CHECK(v.at(2).pos.x() == doctest::Approx(l));
     // penultima: poco prima del punto di uscita
     CHECK(v.at(1).pos.x() < doctest::Approx(l));
+  }
+
+  SUBCASE("Test della riflessione di un caso particolare v2") {
+    particleSimulator::particle p{{0, 97.13790130615}, 5.6391};
+
+    const std::vector<ps::particle> v = s.getSequence(p, 200);
+    // inserire test delle posizioni occupate nella sequenza
+    const std::array<Eigen::Vector2f,2> sequence{{{0,0}}}; //aggiungere sequenza
+    for (auto const& value : v) {
+      CHECK(value.pos.x() >= -ps::path::eps);
+    }
   }
 }
