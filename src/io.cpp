@@ -101,6 +101,8 @@ void config::exportStatistics(std::vector<exit_point> const& v, std::string cons
 
   }
 
+  output<<"\n-------------\n";
+
     {
   stats::Sample s{}; //crea sample
 
