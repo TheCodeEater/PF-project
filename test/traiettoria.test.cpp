@@ -54,6 +54,11 @@ TEST_CASE("Test del calcolo delle traiettorie") {
     // particella 0
     CHECK(int0.x() == doctest::Approx(9.5238095));
     CHECK(int0.y() == doctest::Approx(9.5238095));
+    //particella 1
+
+    //particella 2
+
+   //particella 3
   }
 
   // calcolo angoli riflessi
@@ -64,6 +69,8 @@ TEST_CASE("Test del calcolo delle traiettorie") {
 
     CHECK(biliardo.getHitDirection(p0.theta) ==
           particleSimulator::vecOrientation::Right);
+
+    //test punto di riflessione
 
     biliardo.reflect(p0);
   }
@@ -83,7 +90,7 @@ TEST_CASE("Test dei casi critici") {  // casi che hanno o che potenzialmente
 
     const std::vector<ps::particle> v = s.getSequence(p, 200);
     // inserire test delle posizioni occupate nella sequenza
-
+    const std::array<Eigen::Vector2f,2> sequence{{{0,0}}}; //aggiungere sequenza
     for (auto const& value : v) {
       CHECK(value.pos.x() >= -ps::path::eps);
     }
