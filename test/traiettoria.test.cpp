@@ -155,11 +155,13 @@ TEST_CASE("Test dei casi critici") {  // casi che hanno o che potenzialmente
 
   SUBCASE("Test della riflessione di un caso particolare v2") {
     particleSimulator::particle p{{0, 97.13790130615}, 5.6391};
+    std::cout<<"TEST 2\n";
 
     const std::vector<ps::particle> v = s.getSequence(p, 200);
     // inserire test delle posizioni occupate nella sequenza
-    const std::array<Eigen::Vector2f,2> sequence{{{0,0}}}; //aggiungere sequenza
+    const std::array<Eigen::Vector2f,4> sequence{{{479.57,-262.98},{0,0},{0,0},{0,396.056}}}; //aggiungere sequenza
     for (auto const& value : v) {
+      std::cout<<value.pos.x()<<"\n";
       CHECK(value.pos.x() >= -ps::path::eps);
     }
   }
