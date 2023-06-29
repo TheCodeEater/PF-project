@@ -22,7 +22,7 @@ string(APPEND CMAKE_EXE_LINKER_FLAGS_DEBUG " -fsanitize=address,undefined -fno-o
 set(CODE )
 
 #set files to be compiled
-add_executable(particelle.bin src/main.cpp src/application.cpp src/graphics.cpp src/io.cpp src/traiettoria.cpp src/particleGenerator.cpp src/menu.cpp)
+add_executable(particelle.bin src/main.cpp src/application.cpp src/graphics.cpp src/io.cpp src/traiettoria.cpp src/particleGenerator.cpp src/menu.cpp src/statistics.cpp)
 
 #set dependencies
 find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
@@ -36,13 +36,15 @@ target_link_libraries(particelle.bin PRIVATE sfml-graphics)
 if (BUILD_TESTING)
 
   # aggiungi l'eseguibile gane,t
-  add_executable(particelle_test_simulazione.t test/traiettoria.test.cpp src/application.cpp src/graphics.cpp src/io.cpp src/traiettoria.cpp src/particlegenerator.cpp)
-  add_executable(particelle_test_gen.t test/generator.test.cpp src/application.cpp src/graphics.cpp src/io.cpp src/traiettoria.cpp src/particleGenerator.cpp)
+  add_executable(particelle_test_simulazione.t test/traiettoria.test.cpp src/application.cpp src/graphics.cpp src/io.cpp src/traiettoria.cpp src/particlegenerator.cpp src/statistics.cpp)
+  add_executable(particelle_test_gen.t test/generator.test.cpp src/application.cpp src/graphics.cpp src/io.cpp src/traiettoria.cpp src/particleGenerator.cpp src/statistics.cpp)
+  add_executable(particelle_test_stats.t test/statistics.test.cpp src/application.cpp src/graphics.cpp src/io.cpp src/traiettoria.cpp src/particleGenerator.cpp src/statistics.cpp)
   target_link_libraries(particelle_test_simulazione.t PRIVATE sfml-graphics)
   target_link_libraries(particelle_test_gen.t PRIVATE sfml-graphics)
+  target_link_libraries(particelle_test_stats.t PRIVATE sfml-graphics)
   # aggiungi l'eseguibile statistics.t alla lista dei test
-  add_test(NAME particelle_test_simulazione.t COMMAND particelle_test.t)
-  #add_test(NAME particelle_test_gen.t COMMAND particelle_test_gen.t)
+  add_test(NAME Simulazione COMMAND particelle_test.t)
+  add_test(NAME Statistica COMMAND particelle_test_stats.t)
 
 endif()
 

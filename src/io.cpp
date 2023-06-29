@@ -60,7 +60,7 @@ int config::getParticleNumber() const { return N_particles_; }
 
 void config::exportData(std::vector<exit_point> const& v,
                         std::string const& filename) const {
-  std::ofstream output{filename};
+  std::ofstream output{"data/"+filename};
 
   if (!output.is_open()) {
     throw std::runtime_error("Impossibile creare file di output!");
