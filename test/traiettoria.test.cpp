@@ -20,16 +20,16 @@ TEST_CASE("Test del calcolo delle traiettorie") {
 
   // particelle
   particleSimulator::particle p0{{0, 0}, std::atanf(1)};
-  particleSimulator::particle p1{{0, 0}, particleSimulator::arctan(-1, -1)};
+  particleSimulator::particle p1{{0, -8}, particleSimulator::arctan(4, 3)}; 
   particleSimulator::particle p2{{0, 0}, std::atanf(0)};
-  particleSimulator::particle p3{{0, 5}, particleSimulator::arctan(0, -1)};
+  particleSimulator::particle p3{{22, 8.92}, particleSimulator::arctan(-1, -5)};
 
   // Calcolo orientazione particella
   SUBCASE("Test calcolo orientazione traiettoria") {
     CHECK(biliardo.getHitDirection(p0.theta) ==
           particleSimulator::vecOrientation::Right);
     CHECK(biliardo.getHitDirection(p1.theta) ==
-          particleSimulator::vecOrientation::Left);
+          particleSimulator::vecOrientation::Right);
     CHECK(biliardo.getHitDirection(p2.theta) ==
           particleSimulator::vecOrientation::Right);
     CHECK(biliardo.getHitDirection(p3.theta) ==
@@ -44,7 +44,7 @@ TEST_CASE("Test del calcolo delle traiettorie") {
 
   SUBCASE("Test collisioni dopo il lancio") {
     CHECK(biliardo.getLocationType(int0) == pT::Inside);
-    CHECK(biliardo.getLocationType(int1) == pT::BackHit);
+    CHECK(biliardo.getLocationType(int1) == pT::Inside);
     CHECK(biliardo.getLocationType(int2) == pT::Escaped);
     CHECK(biliardo.getLocationType(int3) == pT::BackHit);
   }
@@ -55,10 +55,14 @@ TEST_CASE("Test del calcolo delle traiettorie") {
     CHECK(int0.x() == doctest::Approx(9.5238095));
     CHECK(int0.y() == doctest::Approx(9.5238095));
     //particella 1
-
+    CHECK(int1.x()==doctest::Approx(13.0119));
+    CHECK(int1.y()==doctest::Approx(9.3493));
     //particella 2
-
+    CHECK(int2.x()==doctest::Approx(100));
+    CHECK(int2.y()==doctest::Approx(0));
    //particella 3
+   CHECK(int3.x()==doctest::Approx(0));
+   CHECK(int3.y()==doctest::Approx(4.520034));
   }
 
   // calcolo angoli riflessi
