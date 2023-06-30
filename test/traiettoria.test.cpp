@@ -141,15 +141,15 @@ TEST_CASE("Test dei casi critici") {  // casi che hanno o che potenzialmente
     // sequenza delle posizioni occupate
     const std::vector<ps::particle> v = s.getSequence(p, 200);
 
-    for (auto const& value : v) {  //controllo posizioni occupate
-      //std::cout<<value.pos<<"\n";
-    }
+    //sequenza che dovrebbe essere
+    const std::array<Eigen::Vector2f,3> sequence{{{396.67302,-286.66512},{699.82471,200.05},{700,-191.11072}}};
 
-    // controllo posizioni
-    // ultima: punto di uscita
-    CHECK(v.at(2).pos.x() == doctest::Approx(l));
-    // penultima: poco prima del punto di uscita
-    CHECK(v.at(1).pos.x() < doctest::Approx(l));
+    auto it=sequence.cbegin();
+    for (auto const& value : v) {  //controllo posizioni occupate
+      CHECK(value.pos.x() == doctest::Approx(it->x()));
+      CHECK(value.pos.y() == doctest::Approx(it->y())); 
+      ++it;
+    }
   }
 
   SUBCASE("Test della riflessione di un caso particolare v2") {
