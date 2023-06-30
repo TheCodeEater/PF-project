@@ -175,11 +175,11 @@ posTypes path::getLocationType(Eigen::Vector2f const& v)
     const {  // determina il luogo del biliardo in cui si trova
   // assert; verifica che la x di v corrisponda al corrispondente valore Y
   // calcolato
-  if (v.x() > 0 && v.x() < l_) {  // coordinata x entro i limiti del biliardo
+  if (v.x() > eps && v.x() <= l_-eps) {  // coordinata x entro i limiti del biliardo
     return posTypes::Inside;
-  } else if (v.x() <= 0) {  // x negative: colbm::pi<float>()sci il fondo
+  } else if (v.x() <= eps) {  // x negative: colbm::pi<float>()sci il fondo
     return posTypes::BackHit;
-  } else if (v.x() >= l_) {  // fuori: fuggito
+  } else if (v.x() > l_-eps) {  // fuori: fuggito
     return posTypes::Escaped;
   } else {  // altrimenti, problema
     return posTypes::Error;

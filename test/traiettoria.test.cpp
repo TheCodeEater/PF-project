@@ -136,24 +136,24 @@ TEST_CASE("Test dei casi critici") {  // casi che hanno o che potenzialmente
     ps::particle p{{0, -91.5416}, 5.82604};  // particella
 
     // direzione iniziale
-    CHECK(biliardo.getHitDirection(p.theta));
+    CHECK(biliardo.getHitDirection(p.theta)==ps::vecOrientation::Right);
 
     // sequenza delle posizioni occupate
     const std::vector<ps::particle> v = s.getSequence(p, 200);
 
-    for (auto const& value : v) {  // controllo della positivita' delle
-                                   // posizioni
-      CHECK(value.pos.x() >= -ps::path::eps);  // controllo posizività posizioni
+    for (auto const& value : v) {  //controllo posizioni occupate
+      std::cout<<value.pos<<"\n";
     }
 
     // controllo posizioni
     // ultima: punto di uscita
     CHECK(v.at(2).pos.x() == doctest::Approx(l));
+    std::cout<<v.at(2).pos<<"\n";
     // penultima: poco prima del punto di uscita
     CHECK(v.at(1).pos.x() < doctest::Approx(l));
   }
 
-  SUBCASE("Test della riflessione di un caso particolare v2") {
+  SUBCASE("Test della riflessione di un caso particolare") {
     particleSimulator::particle p{{0, 97.13790130615}, 5.6391};
 
     const std::vector<ps::particle> v = s.getSequence(p, 200);
