@@ -228,9 +228,9 @@ float path::getR2() const { return r2_; }
 float path::getL() const { return l_; }
 
 bool path::testOutConditions(particle const& p) const {
-  if (std::abs(p.pos.x()) <= eps) {  // se esci da dietro, testa con r1
+  if (getLocationType(p.pos)==posTypes::BackHit) {  // se esci da dietro, testa con r1
     return p.pos.y() <= r1_ + eps && p.pos.y() >= -r1_ - eps;
-  } else if (std::abs(p.pos.x() - l_) <= eps) {  // da davanti con r2
+  } else if (getLocationType(p.pos)==posTypes::Escaped) {  // da davanti con r2
     return p.pos.y() <= r2_ + eps && p.pos.y() >= -r2_ - eps;
   } else {  // errore ben peggiore
     return false;
@@ -289,6 +289,9 @@ std::pair<std::vector<dottedLine>, exit_point> simulation::operator()(
 std::vector<particle> simulation::getSequence(particle& p,
                                               int max_iterations) const {
   std::vector<particle> pos{};
+
+  p.theta = std::trunc(p.theta * path::trunc_prec) /
+            path::trunc_prec;  // troncamento cifre angolo
 
   for (int i{0}; i < max_iterations;
        ++i) {  // up to the maximum number of iterations

@@ -133,7 +133,7 @@ TEST_CASE("Test dei casi critici") {  // casi che hanno o che potenzialmente
   }
 
   SUBCASE("Test della riflessione di un caso particolare") {
-    ps::particle p{{0, -91.5416}, 5.82604};  // particella
+    ps::particle p{{0, -91.5416}, 5.82604};  // particella (rimuovere il 4 finale)
 
     // direzione iniziale
     CHECK(biliardo.getHitDirection(p.theta)==ps::vecOrientation::Right);
@@ -148,7 +148,6 @@ TEST_CASE("Test dei casi critici") {  // casi che hanno o che potenzialmente
     // controllo posizioni
     // ultima: punto di uscita
     CHECK(v.at(2).pos.x() == doctest::Approx(l));
-    std::cout<<v.at(2).pos<<"\n";
     // penultima: poco prima del punto di uscita
     CHECK(v.at(1).pos.x() < doctest::Approx(l));
   }
