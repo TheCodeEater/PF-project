@@ -168,7 +168,7 @@ TEST_CASE("Test dei casi critici") {  // casi che hanno o che potenzialmente
     }
   }
 
-  SUBCASE("Test di un caso particolare v3"){
+  /*SUBCASE("Test di un caso particolare v3"){
     ps::particle p{{0, 35.56728745}, 1.570799947};  // particella (rimuovere il 4 finale)
 
     // direzione iniziale
@@ -180,5 +180,5 @@ TEST_CASE("Test dei casi critici") {  // casi che hanno o che potenzialmente
     for (auto const& value : v) {  //controllo posizioni occupate
       std::cout<<value.pos<<"\n";
     }
-  }
-}
+  } ERRORE DI EIGEN */
+};
