@@ -245,6 +245,8 @@ simulation::simulation(float r1, float r2, float l, int max_cycles)
 std::pair<std::vector<dottedLine>, exit_point> simulation::operator()(
     particle& p) const  // operatore di simulazione
 {
+  p.theta = std::trunc(p.theta * path::trunc_prec) /
+            path::trunc_prec;  // troncamento cifre angolo
   std::vector<dottedLine> trajs{};
   for (int i{0}; i < max_iterations_;
        ++i) {  // up to the maximum number of iterations
@@ -291,6 +293,7 @@ std::vector<particle> simulation::getSequence(particle& p,
   for (int i{0}; i < max_iterations;
        ++i) {  // up to the maximum number of iterations
     // position vectors
+    const particle old_p{p};
 
     simulator_.reflect(p);  // run the particle reflection
 
