@@ -142,7 +142,7 @@ TEST_CASE("Test dei casi critici") {  // casi che hanno o che potenzialmente
     const std::vector<ps::particle> v = s.getSequence(p, 200);
 
     for (auto const& value : v) {  //controllo posizioni occupate
-      std::cout<<value.pos<<"\n";
+      //std::cout<<value.pos<<"\n";
     }
 
     // controllo posizioni
@@ -152,7 +152,7 @@ TEST_CASE("Test dei casi critici") {  // casi che hanno o che potenzialmente
     CHECK(v.at(1).pos.x() < doctest::Approx(l));
   }
 
-  SUBCASE("Test della riflessione di un caso particolare") {
+  SUBCASE("Test della riflessione di un caso particolare v2") {
     particleSimulator::particle p{{0, 97.13790130615}, 5.6391};
 
     const std::vector<ps::particle> v = s.getSequence(p, 200);
@@ -165,6 +165,20 @@ TEST_CASE("Test dei casi critici") {  // casi che hanno o che potenzialmente
       CHECK(value.pos.x() == doctest::Approx(it->x()));
       CHECK(value.pos.y() == doctest::Approx(it->y()));
       ++it;
+    }
+  }
+
+  SUBCASE("Test di un caso particolare v3"){
+    ps::particle p{{0, 35.56728745}, 1.570799947};  // particella (rimuovere il 4 finale)
+
+    // direzione iniziale
+    CHECK(biliardo.getHitDirection(p.theta)==ps::vecOrientation::VerticalUp);
+
+    // sequenza delle posizioni occupate
+    const std::vector<ps::particle> v = s.getSequence(p, 200);
+
+    for (auto const& value : v) {  //controllo posizioni occupate
+      std::cout<<value.pos<<"\n";
     }
   }
 }

@@ -16,7 +16,7 @@ class randSimulator {  // classe per la simulazione con i numeri casuali
   std::normal_distribution<float> pos_dist_;  // pdf
   std::normal_distribution<float> angle_dist_;
 
-  static constexpr float angle_offset{0.01f};
+  static constexpr float angle_offset{0.02f};
 
  public:
   randSimulator(randOptions options);  // costruttore
