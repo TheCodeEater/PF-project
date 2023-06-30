@@ -56,7 +56,6 @@ std::vector<exit_point> randSimulator::run(int n, int max_iterations) {
         for (int i{0}; i < max_iterations;
              ++i) {  // up to the maximum number of iterations
           // position vectors
-          const particle old_p{p};
 
           simulator_.reflect(p);  // run the particle reflection
 
