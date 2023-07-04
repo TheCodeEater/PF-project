@@ -16,9 +16,17 @@
 namespace particleSimulator {
 
 namespace constants{
-  constexpr float eps();
-  constexpr float trunc_prec();
-  constexpr float angle_tolerance();
+    //costanti per approx FP e troncamento  
+  constexpr float eps(){
+    return 1e-4;
+  }
+  constexpr float trunc_prec(){
+    return 100000;
+  }
+  // offset che determina tolleranza nel determinare se un angolo è troppo vicino a pi/2
+  constexpr float angle_tolerance(){ 
+    return 0.02f;
+  }
 }
 
 //alis per i tipi di eigen e namespace boost

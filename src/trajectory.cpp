@@ -4,20 +4,6 @@
 
 namespace particleSimulator {
 
-namespace constants{
-    //costanti per approx FP e troncamento  
-  constexpr float eps(){
-    return 1e-4;
-  }
-  constexpr float trunc_prec(){
-    return 100000;
-  }
-  // offset che determina tolleranza nel determinare se un angolo è troppo vicino a pi/2
-  constexpr float angle_tolerance(){ 
-    return 0.02f;
-  }
-}
-
 path::path(float r1, float r2, float l)
     : r1_{r1},
       r2_{r2},
