@@ -10,28 +10,31 @@ randSimulator::randSimulator(randOptions options)
       angle_dist_{options.angle_mean, options.angle_sigma} {}
 
 particle randSimulator::getParticle() {  // genera le particelle
-                                         // niente const, le particelle variano lo stato interno
+                                         // niente const, le particelle variano
+                                         // lo stato interno
   // genera angolo - NOTA: angolo tra -pi/2 e pi/2
   const float theta = angle_dist_(engine_);
   const float y = pos_dist_(engine_);
 
   // test sull'angolo
   if (std::abs(theta) >= bm::pi<float>() - angle_offset ||
-      std::abs(y) > simulator_.getR1() - angle_offset) {  // se sei troppo vicino a pi/2 o -pi/2, in base alla tolleranza impostata
-    return getParticle(); //rigenera la particella in modo ricorsivo
+      std::abs(y) > simulator_.getR1() -
+                        angle_offset) {  // se sei troppo vicino a pi/2 o -pi/2,
+                                         // in base alla tolleranza impostata
+    return getParticle();  // rigenera la particella in modo ricorsivo
   } else {
     particle p{{0, y},
                (theta < 0) ? 2 * bm::pi<float>() + theta
                            : theta};  // se l'angolo e' negativo, adatta la
                                       // convenzione sugli angoli
 
-    //tronca le cifre extra: inutili, la rappresentazione non è così fine
-    p.theta = std::trunc(p.theta * path::trunc_prec) / path::trunc_prec; 
+    // tronca le cifre extra: inutili, la rappresentazione non è così fine
+    p.theta = std::trunc(p.theta * path::trunc_prec) / path::trunc_prec;
 
     return p;
   }
 }
-//getter
+// getter
 std::normal_distribution<float> const& randSimulator::getPosGenerator() const {
   return pos_dist_;
 }
@@ -40,7 +43,7 @@ std::normal_distribution<float> const& randSimulator::getAngleGenerator()
   return angle_dist_;
 }
 
-//esegui la simulazione
+// esegui la simulazione
 std::vector<exit_point> randSimulator::run(int n, int max_iterations) {
   std::vector<particle> particles{};
 
