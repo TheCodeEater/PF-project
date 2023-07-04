@@ -3,7 +3,7 @@
 #include <fstream>
 
 #include "../include/particleGenerator.hpp"
-#include "../include/traiettoria.hpp"
+#include "../include/trajectory.hpp"
 #include "doctest.h"
 
 TEST_CASE("Test della generazione in range dei numeri") {

@@ -1,6 +1,6 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
-#include "../include/traiettoria.hpp"
+#include "../include/trajectory.hpp"
 
 #include <iostream>
 

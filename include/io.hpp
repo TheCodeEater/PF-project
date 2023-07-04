@@ -6,7 +6,7 @@
 
 #include "../boost/property_tree/ini_parser.hpp"
 #include "../boost/property_tree/ptree.hpp"
-#include "traiettoria.hpp"
+#include "trajectory.hpp"
 namespace particleSimulator {
 
 // strutture dati opzioni di simulazione

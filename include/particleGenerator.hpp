@@ -4,7 +4,7 @@
 #include <random>
 
 #include "io.hpp"
-#include "traiettoria.hpp"
+#include "trajectory.hpp"
 namespace particleSimulator {
 
 class randSimulator {  // classe per la simulazione con i numeri casuali

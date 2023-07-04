@@ -8,7 +8,7 @@
 
 #include "graphics.hpp"
 #include "io.hpp"
-#include "traiettoria.hpp"
+#include "trajectory.hpp"
 
 namespace particleSimulator {
 

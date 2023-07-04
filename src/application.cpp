@@ -3,7 +3,6 @@
 #include <iostream>
 
 #include "../include/graphics.hpp"
-#include "../include/traiettoria.hpp"
 
 namespace particleSimulator {
 Application::Application(options const& opt)
