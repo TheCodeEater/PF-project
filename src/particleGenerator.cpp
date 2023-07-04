@@ -9,28 +9,29 @@ randSimulator::randSimulator(randOptions options)
       pos_dist_{options.pos_mean, options.pos_sigma},
       angle_dist_{options.angle_mean, options.angle_sigma} {}
 
-particle randSimulator::getParticle() {  // niente const, i generatori cambiano
-                                         // lo stato interno
-  // genera angolo - NOTA: angolo tra -bm::pi<float>()/2 bm::pi<float>()/2
+particle randSimulator::getParticle() {  // genera le particelle
+                                         // niente const, le particelle variano lo stato interno
+  // genera angolo - NOTA: angolo tra -pi/2 e pi/2
   const float theta = angle_dist_(engine_);
   const float y = pos_dist_(engine_);
-  // test sull'angolo
 
+  // test sull'angolo
   if (std::abs(theta) >= bm::pi<float>() - angle_offset ||
-      std::abs(y) > simulator_.getR1() - angle_offset) {  // se eccedi
-    return getParticle();
+      std::abs(y) > simulator_.getR1() - angle_offset) {  // se sei troppo vicino a pi/2 o -pi/2, in base alla tolleranza impostata
+    return getParticle(); //rigenera la particella in modo ricorsivo
   } else {
     particle p{{0, y},
                (theta < 0) ? 2 * bm::pi<float>() + theta
                            : theta};  // se l'angolo e' negativo, adatta la
                                       // convenzione sugli angoli
 
-    p.theta = std::trunc(p.theta * path::trunc_prec) / path::trunc_prec;
+    //tronca le cifre extra: inutili, la rappresentazione non è così fine
+    p.theta = std::trunc(p.theta * path::trunc_prec) / path::trunc_prec; 
 
     return p;
   }
 }
-
+//getter
 std::normal_distribution<float> const& randSimulator::getPosGenerator() const {
   return pos_dist_;
 }
@@ -39,6 +40,7 @@ std::normal_distribution<float> const& randSimulator::getAngleGenerator()
   return angle_dist_;
 }
 
+//esegui la simulazione
 std::vector<exit_point> randSimulator::run(int n, int max_iterations) {
   std::vector<particle> particles{};
 
