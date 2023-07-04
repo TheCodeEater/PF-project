@@ -39,6 +39,9 @@ struct randOptions {  // opzioni per simulazione random
   bool randomSeed{};  // se true, genera un nuovo seme ogni volta
 
   randOptions() = default;  // default constructor
+  randOptions(float r1, float r2, float l, float p_mean, float p_sigma,
+              float a_mean, float a_sigma, unsigned seed,
+              bool genRSeed);  // aggregate constructor
   randOptions(randOptions const& rData,
               unsigned rSeed);  // costruttore con cambio di seme
 };

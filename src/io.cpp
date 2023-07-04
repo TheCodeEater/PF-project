@@ -11,6 +11,19 @@ namespace particleSimulator {
 namespace fs = std::filesystem;
 namespace pt = boost::property_tree;
 
+randOptions::randOptions(float r1, float r2, float l, float p_mean,
+                         float p_sigma, float a_mean, float a_sigma,
+                         unsigned seed, bool genRSeed = false)
+    : r1{r1},
+      r2{r2},
+      l{l},
+      pos_mean{p_mean},
+      pos_sigma{p_sigma},
+      angle_mean{a_mean},
+      angle_sigma{a_sigma},
+      seed{seed},
+      randomSeed{genRSeed} {}
+
 randOptions::randOptions(randOptions const& rData, unsigned rSeed)
     : randOptions{rData} {  // delega copia al copy constructor
   seed = rSeed;             // imposta il seme

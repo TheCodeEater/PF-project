@@ -16,9 +16,9 @@ TEST_CASE("Test della generazione in range dei numeri") {
 
   particleSimulator::path biliardo{r1, r2, l};
 
-  particleSimulator::randSimulator rs{{r1, r2, l, 0.f, 80.f, 0.f,
+  particleSimulator::randSimulator rs{particleSimulator::randOptions{r1, r2, l, 0.f, 80.f, 0.f,
                                        particleSimulator::bm::pi<float>() / 8,
-                                       seed}};
+                                       seed,false}};
 
   std::vector<particleSimulator::exit_point> exit{};
 
