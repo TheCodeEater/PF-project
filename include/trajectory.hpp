@@ -15,6 +15,12 @@
 
 namespace particleSimulator {
 
+namespace constants{
+  constexpr float eps();
+  constexpr float trunc_prec();
+  constexpr float angle_tolerance();
+}
+
 //alis per i tipi di eigen e namespace boost
 using Line = Eigen::ParametrizedLine<float, 2>;
 using HLine = Eigen::Hyperplane<float, 2>;
@@ -77,10 +83,6 @@ class path { //oggetto di calcolo delle traiettorie
   
   posTypes getLocationType(Eigen::Vector2f const&) const; //determina il punto dove ti trovi
   vecOrientation getHitDirection(float const& angle) const; //determina direzione generale del vettore
-
-  //costanti per approx FP e troncamento
-  static constexpr float eps{1e-4};
-  static constexpr int trunc_prec{100000};
 
   // getter
   float getR1() const;

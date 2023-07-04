@@ -17,9 +17,9 @@ particle randSimulator::getParticle() {  // genera le particelle
   const float y = pos_dist_(engine_);
 
   // test sull'angolo
-  if (std::abs(theta) >= bm::pi<float>() - angle_offset ||
+  if (std::abs(theta) >= bm::pi<float>() - constants::angle_tolerance() ||
       std::abs(y) > simulator_.getR1() -
-                        angle_offset) {  // se sei troppo vicino a pi/2 o -pi/2,
+                        constants::angle_tolerance()) {  // se sei troppo vicino a pi/2 o -pi/2,
                                          // in base alla tolleranza impostata
     return getParticle();  // rigenera la particella in modo ricorsivo
   } else {
@@ -29,7 +29,7 @@ particle randSimulator::getParticle() {  // genera le particelle
                                       // convenzione sugli angoli
 
     // tronca le cifre extra: inutili, la rappresentazione non è così fine
-    p.theta = std::trunc(p.theta * path::trunc_prec) / path::trunc_prec;
+    p.theta = std::trunc(p.theta * constants::trunc_prec()) / constants::trunc_prec();
 
     return p;
   }

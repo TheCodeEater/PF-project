@@ -32,8 +32,8 @@ void printHelp() {
 }
 
 void printResult(exit_point const& p_exit){
-          if (std::abs(p_exit.theta + 10) < path::eps &&
-              std::abs(p_exit.y + 10) < path::eps) {
+          if (std::abs(p_exit.theta + 10) < constants::eps() &&
+              std::abs(p_exit.y + 10) < constants::eps()) {
             std::cout << "Particella non uscita. Prova ad aumentare il numero "
                          "di iterazioni\n";
           } else {

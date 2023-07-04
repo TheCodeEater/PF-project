@@ -75,12 +75,12 @@ Application::Application(options const& opt)
       particle_{{0, optn_.y0}, optn_.theta0} {
   // test sulle condizioni iniziali della particella
 
-  assert(std::abs(particle_.pos.x()) < path::eps);  // coordinata X=0
+  assert(std::abs(particle_.pos.x()) < constants::eps());  // coordinata X=0
   // coordinata Y tra -r1 e r1
-  assert(particle_.pos.y() <= optn_.r1 + path::eps);
-  assert(particle_.pos.y() >= -optn_.r1 - path::eps);
+  assert(particle_.pos.y() <= optn_.r1 + constants::eps());
+  assert(particle_.pos.y() >= -optn_.r1 - constants::eps());
   // test sull'angolo: per l'input, tra -pi/2 e pi/2
-  assert(std::abs(particle_.theta) < bm::pi<float>() / 2 + path::eps);
+  assert(std::abs(particle_.theta) < bm::pi<float>() / 2 + constants::eps());
 
   // normalizzazione tra 0 e 2pi
   particle_.theta = (particle_.theta < 0)

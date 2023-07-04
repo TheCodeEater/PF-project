@@ -3,6 +3,21 @@
 #include <cmath>
 
 namespace particleSimulator {
+
+namespace constants{
+    //costanti per approx FP e troncamento  
+  constexpr float eps(){
+    return 1e-4;
+  }
+  constexpr float trunc_prec(){
+    return 100000;
+  }
+  // offset che determina tolleranza nel determinare se un angolo è troppo vicino a pi/2
+  constexpr float angle_tolerance(){ 
+    return 0.02f;
+  }
+}
+
 path::path(float r1, float r2, float l)
     : r1_{r1},
       r2_{r2},
@@ -36,7 +51,7 @@ path::path(float r1, float r2, float l)
 intsect path::operator()(particle const& p) const {
   // CONDIZIONI INIZIALI
   assert(getLocationType(p.pos) == posTypes::Inside ||
-         std::abs(p.pos.x()) < eps);  // devi essere dentro il biliardo oppure sull'asse Y
+         std::abs(p.pos.x()) < constants::eps());  // devi essere dentro il biliardo oppure sull'asse Y
 
   assert(p.theta >= 0);               // angolo tra 0 e 2pi
   assert(p.theta <= 2 * bm::pi<float>());
@@ -57,12 +72,12 @@ intsect path::operator()(particle const& p) const {
         // verifica se esce
         const Eigen::Vector2f exit_intsec{trajectory.intersectionPoint(
             borderfront_)};  // intersezione con la barra di uscita
-        if (exit_intsec.y() < r2_ + eps && exit_intsec.y() > -r2_ - eps) {
+        if (exit_intsec.y() < r2_ + constants::eps() && exit_intsec.y() > -r2_ - constants::eps()) {
           return {exit_intsec, hitBorder::Front};
-        } else if (exit_intsec.y() >= r2_ + eps) {
+        } else if (exit_intsec.y() >= r2_ + constants::eps()) {
           return {trajectory.intersectionPoint(borderup_),
                   hitBorder::Top};  // intersezione con sup
-        } else if (exit_intsec.y() <= -r2_ - eps) {
+        } else if (exit_intsec.y() <= -r2_ - constants::eps()) {
           return {trajectory.intersectionPoint(borderdown_),
                   hitBorder::Bottom};  // intersezione con inf
         } else {
@@ -74,11 +89,11 @@ intsect path::operator()(particle const& p) const {
         const Eigen::Vector2f back_intsect{trajectory.intersectionPoint(
             borderback_)};  // intsect con la verticale
         // test intersezione verticale
-        if (std::abs(back_intsect.y()) <= r1_ + eps) {
+        if (std::abs(back_intsect.y()) <= r1_ + constants::eps()) {
           return {back_intsect, hitBorder::Back};
-        } else if (back_intsect.y() > r1_ + eps) {
+        } else if (back_intsect.y() > r1_ + constants::eps()) {
           return {trajectory.intersectionPoint(borderup_), hitBorder::Top};
-        } else if (back_intsect.y() < -r1_ - eps) {
+        } else if (back_intsect.y() < -r1_ - constants::eps()) {
           return {trajectory.intersectionPoint(borderdown_), hitBorder::Bottom};
         } else {
           throw std::logic_error("Impossibile determinare l'intersezione");
@@ -170,11 +185,11 @@ float arctan(float y, float x) {
 posTypes path::getLocationType(Eigen::Vector2f const& v)
     const {  // determina il luogo del biliardo in cui si trova
 
-  if (v.x() > eps && v.x() <= l_-eps) {  // coordinata x entro i limiti del biliardo
+  if (v.x() > constants::eps() && v.x() <= l_-constants::eps()) {  // coordinata x entro i limiti del biliardo
     return posTypes::Inside;
-  } else if (v.x() <= eps) {  // x negative: colpisci il fondo
+  } else if (v.x() <= constants::eps()) {  // x negative: colpisci il fondo
     return posTypes::BackHit;
-  } else if (v.x() > l_-eps) {  // fuori: fuggito
+  } else if (v.x() > l_-constants::eps()) {  // fuori: fuggito
     return posTypes::Escaped;
   } else {  // altrimenti, problema
     return posTypes::Error;
@@ -186,26 +201,26 @@ vecOrientation path::getHitDirection(float const& angle)
   //condizione sugli angoli
   assert(angle >= 0 && angle <= 2 * bm::pi<float>());
 
-  if (angle <= eps) {  // angolo nullo: orizzontale destra
+  if (angle <= constants::eps()) {  // angolo nullo: orizzontale destra
     return vecOrientation::Right;
-  } else if (angle > eps && angle < bm::pi<float>() / 2 - eps) {  // alto a dx
+  } else if (angle > constants::eps() && angle < bm::pi<float>() / 2 - constants::eps()) {  // alto a dx
     return vecOrientation::Right;
-  } else if (std::abs(angle - bm::pi<float>() / 2) <= eps) {
+  } else if (std::abs(angle - bm::pi<float>() / 2) <= constants::eps()) {
     return vecOrientation::VerticalUp;
-  } else if (angle > bm::pi<float>() / 2 + eps &&
-             angle < bm::pi<float>() - eps) {
+  } else if (angle > bm::pi<float>() / 2 + constants::eps() &&
+             angle < bm::pi<float>() - constants::eps()) {
     return vecOrientation::Left;
-  } else if (std::abs(angle - bm::pi<float>()) <= eps) {
+  } else if (std::abs(angle - bm::pi<float>()) <= constants::eps()) {
     return vecOrientation::Left;
-  } else if (angle > bm::pi<float>() + eps &&
-             angle < 1.5f * bm::pi<float>() - eps) {
+  } else if (angle > bm::pi<float>() + constants::eps() &&
+             angle < 1.5f * bm::pi<float>() - constants::eps()) {
     return vecOrientation::Left;
-  } else if (std::abs(angle - 1.5f * bm::pi<float>()) <= eps) {
+  } else if (std::abs(angle - 1.5f * bm::pi<float>()) <= constants::eps()) {
     return vecOrientation::VerticalDown;
-  } else if (angle > 1.5f * bm::pi<float>() + eps &&
-             angle < 2 * bm::pi<float>() - eps) {
+  } else if (angle > 1.5f * bm::pi<float>() + constants::eps() &&
+             angle < 2 * bm::pi<float>() - constants::eps()) {
     return vecOrientation::Right;
-  } else if (std::abs(angle - 2 * bm::pi<float>()) <= eps) {
+  } else if (std::abs(angle - 2 * bm::pi<float>()) <= constants::eps()) {
     return vecOrientation::Right;
   } else {
     throw std::logic_error(
@@ -222,9 +237,9 @@ float path::getL() const { return l_; }
 bool path::testOutConditions(particle const& p) const {
   //verifica che, in caso in cui la particella sia uscita, la coordinata Y sia corretta
   if (getLocationType(p.pos)==posTypes::BackHit) {  // se esci da dietro, testa con r1
-    return p.pos.y() <= r1_ + eps && p.pos.y() >= -r1_ - eps;
+    return p.pos.y() <= r1_ + constants::eps() && p.pos.y() >= -r1_ - constants::eps();
   } else if (getLocationType(p.pos)==posTypes::Escaped) {  // da davanti con r2
-    return p.pos.y() <= r2_ + eps && p.pos.y() >= -r2_ - eps;
+    return p.pos.y() <= r2_ + constants::eps() && p.pos.y() >= -r2_ - constants::eps();
   } else {  // si ha se la particella non esce oppure getLocationType restituisce errore
     return false;
   }
@@ -238,8 +253,8 @@ simulation::simulation(float r1, float r2, float l, int max_cycles)
 std::pair<std::vector<dottedLine>, exit_point> simulation::operator()(
     particle& p) const  // operatore di simulazione
 {
-  p.theta = std::trunc(p.theta * path::trunc_prec) /
-            path::trunc_prec;  // troncamento cifre angolo
+  p.theta = std::trunc(p.theta * constants::trunc_prec()) /
+            constants::trunc_prec();  // troncamento cifre angolo
   std::vector<dottedLine> trajs{};
   for (int i{0}; i < max_iterations_;
        ++i) {  // up to the maximum number of iterations
@@ -283,8 +298,8 @@ std::vector<particle> simulation::getSequence(particle& p,
                                               int max_iterations) const {
   std::vector<particle> pos{};
 
-  p.theta = std::trunc(p.theta * path::trunc_prec) /
-            path::trunc_prec;  // troncamento cifre angolo
+  p.theta = std::trunc(p.theta * constants::trunc_prec()) /
+            constants::trunc_prec();  // troncamento cifre angolo
 
   for (int i{0}; i < max_iterations;
        ++i) {  // up to the maximum number of iterations

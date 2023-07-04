@@ -16,10 +16,6 @@ class randSimulator {  // classe per la simulazione con i numeri casuali
   std::normal_distribution<float> pos_dist_;  // pdf gaussiane
   std::normal_distribution<float> angle_dist_;
 
-  static constexpr float angle_offset{
-      0.02f};  // offset che determina tolleranza nel determinare se un angolo è
-               // troppo vicino a pi/2
-
  public:
   randSimulator(randOptions options);  // costruttore
 
