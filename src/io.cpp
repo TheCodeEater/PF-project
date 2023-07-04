@@ -11,6 +11,11 @@ namespace particleSimulator {
 namespace fs = std::filesystem;
 namespace pt = boost::property_tree;
 
+randOptions::randOptions(randOptions const& rData, unsigned rSeed)
+    : randOptions{rData} {  // delega copia al copy constructor
+  seed = rSeed;             // imposta il seme
+}
+
 config::config() {
   const fs::path cfg_path{"cfg/particleSimulator.cfg"};  // percorso al file
   pt::ptree tree;  // struttura dati per le impostazioni
@@ -70,7 +75,14 @@ options config::getApplicationOptions(float y0, float theta0, int N)
   return opt;
 }
 
-randOptions const& config::getRandomOptions() const {
+randOptions config::getRandomOptions() const {
+  if (rOptn_.randomSeed) {  // genera seed se abilitato
+    return randOptions{rOptn_,
+                       std::random_device{}()};  // crea struct con random seed
+  } else {
+    return rOptn_;
+  }
+
   return rOptn_;
 }  // ottieni parametri random generator
 

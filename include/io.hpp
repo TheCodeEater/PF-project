@@ -9,22 +9,22 @@
 #include "traiettoria.hpp"
 namespace particleSimulator {
 
-// simulation options
+// strutture dati opzioni di simulazione
 struct options {
   float w_width{};
   float w_height{};
   std::string w_name{};
-  // experiment setup
+  // dati esperimento
   float r1{};
   float r2{};
   float l{};
-  // particle setup
+  // dati particella
   float y0{};
   float theta0{};
   int N{};
 };
 
-struct randOptions {
+struct randOptions {  // opzioni per simulazione random
   float r1{};
   float r2{};
   float l{};
@@ -34,25 +34,34 @@ struct randOptions {
   float angle_mean{};
   float angle_sigma{};
 
-  unsigned seed{};
+  unsigned seed{};  // seme
 
-  bool randomSeed{};
+  bool randomSeed{};  // se true, genera un nuovo seme ogni volta
+
+  randOptions() = default;
+  randOptions(randOptions const& rData, unsigned rSeed);
 };
 
 class config {  // classe per caricare le impostazioni
   // impostazioni
-  options wOptn_{};  //
-  randOptions rOptn_{};
-  int N_iter_{};
-  int N_particles_{};
+  options wOptn_{};      // opzioni simulazione grafica
+  randOptions rOptn_{};  // opzioni simulazione random
+  int N_iter_{};         // numero di iterazioni massimo
+  int N_particles_{};    // numero di particelle
 
  public:
-  config();
+  config();  // costruttore
 
-  options getApplicationOptions(float y0, float theta0, int N) const;
-  randOptions const& getRandomOptions() const;
-  int getIterations() const;
-  int getParticleNumber() const;
+  options getApplicationOptions(float y0, float theta0, int N)
+      const;  // ottieni opzioni applicazione (by value poiché alcuni dati sono
+              // aggiunti sul momento)
+  randOptions getRandomOptions()
+      const;  // ottieni opzione random (by value poiché alcuni dati sono
+              // aggiunti al momento)
+  int getIterations() const;      // restituisci numero di iterazioni massime
+  int getParticleNumber() const;  // numero massimo di particelle
+
+  // export dei dati su file
   void exportData(std::vector<exit_point> const& v,
                   std::string const& filename) const;
   void exportStatistics(std::vector<exit_point> const& v,
