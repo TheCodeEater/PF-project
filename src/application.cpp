@@ -7,27 +7,35 @@
 namespace particleSimulator {
 Application::Application(options const& opt)
     : optn_{opt},
-      w_{sf::VideoMode(optn_.w_width, optn_.w_height), optn_.w_name},
-      camera_{{optn_.w_width / 2.f - 30, 0}, {optn_.w_width, -optn_.w_height}},
-      x_{[this]() {
-        // create X axis
+      w_{sf::VideoMode(optn_.w_width, optn_.w_height),
+         optn_.w_name},  // configura la finestra
+      camera_{{optn_.w_width / 2.f - 30, 0},
+              {optn_.w_width,
+               -optn_.w_height}},  // inquadra il biliardo, invertendo asse Y e
+                                   // collocando (0,0) al centro a sinistra
+      x_{[this]() {  // crea ed esegui lambda: necessario per poter eseguire
+                     // operazioni sull'oggetto, dato che essendo il data member
+                     // const una volta iniailizzato non lo posso modificare
+        // se invece fosse const non il membro dato ma tutto l'oggetto, potrei
+        // svolgere questo pezzo nel codice del costruttore
+        //  crea asse X
         sf::VertexArray x_axis{sf::Lines, 2};
 
-        // set position
+        // Imposta veritici
         x_axis[0].position = {0, 0};
         x_axis[1].position = {optn_.w_width, 0};
 
-        // set color
+        // imposta colori
         x_axis[0].color = sf::Color::Green;
         x_axis[1].color = sf::Color::Green;
 
         return x_axis;
-      }()},  // created and run lambda
+      }()},  // esegui la lambda
       y_{[this]() {
-        // create Y axis
+        // crea asse Y
         sf::VertexArray y_axis{sf::Lines, 2};
 
-        // set position
+        // imposta vertii
         y_axis[1].position = {0, -optn_.w_height / 2.f};
         y_axis[0].position = {0, optn_.w_height / 2.f};
 
@@ -64,56 +72,56 @@ Application::Application(options const& opt)
         return l_inf;
       }()},
       simulation_{optn_.r1, optn_.r2, optn_.l, optn_.N},
-      particle_{{0, optn_.y0}, optn_.theta0}
-// to do: initialize particle and assert its starting conditions
-{
-  // test sulla particella
-  assert(std::abs(particle_.pos.x()) < path::eps);
+      particle_{{0, optn_.y0}, optn_.theta0} {
+  // test sulle condizioni iniziali della particella
+
+  assert(std::abs(particle_.pos.x()) < path::eps);  // coordinata X=0
+  // coordinata Y tra -r1 e r1
   assert(particle_.pos.y() <= optn_.r1 + path::eps);
   assert(particle_.pos.y() >= -optn_.r1 - path::eps);
-  // test sull'angolo: per l'input, tra -bm::pi<float>()/2 e bm::pi<float>()/2
+  // test sull'angolo: per l'input, tra -pi/2 e pi/2
   assert(std::abs(particle_.theta) < bm::pi<float>() / 2 + path::eps);
 
-  // normalizzazione tra 0 e 2bm::pi<float>()
+  // normalizzazione tra 0 e 2pi
   particle_.theta = (particle_.theta < 0)
                         ? particle_.theta + 2 * bm::pi<float>()
                         : particle_.theta;
 
-  w_.setView(camera_);  // set the current view
+  w_.setView(camera_);  // imposta la view creata
 }
 
-exit_point Application::loop() {
-  // run trajectory calculation
+exit_point Application::loop() {  // esegui il game loop
+  // rcalcolo traiettoria
   result_ = simulation_(particle_);
   std::vector<dottedLine> const& trajectories = result_.first;
 
-  // run the program as long as the window is open
+  // gira finché la finestra è aperta
   while (w_.isOpen()) {
-    // check all the window's events that were triggered since the last
-    // iteration of the loop
+    // controlla gli eventi
     sf::Event e;
     while (w_.pollEvent(e)) {
       // event handling
       switch (e.type) {
-        case sf::Event::Closed:
+        case sf::Event::Closed:  // chiudi se si clicca la X rossa
           w_.close();
           break;
 
         default:
-          // ignore
+          // ignora altri eventi
           break;
       }
     }
 
-    // clear window. set black color
+    // pulisci la finestra
     w_.clear(sf::Color::Black);
 
-    // draw everything here...
+    // disegna gli elementi del biliardo
     w_.draw(x_);
     w_.draw(y_);
     w_.draw(line_inf_);
     w_.draw(line_sup_);
-    //
+
+    // disegna le traiettorie
     std::for_each(trajectories.cbegin(), trajectories.cend(),
                   [this](dottedLine const& line) {
                     line.draw(w_);  // draw line on the current window
@@ -122,6 +130,6 @@ exit_point Application::loop() {
     w_.display();
   }
 
-  return result_.second;
+  return result_.second;  // restituisci il punto di uscita
 }
 }  // namespace particleSimulator
