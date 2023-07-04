@@ -4,8 +4,10 @@
 
 #include "doctest.h"
 
+namespace st=particleSimulator::stats;
+
 TEST_CASE("Testing the class handling a floating point data sample") {
-  stats::Sample sample;
+  st::Sample sample;
 
   SUBCASE("Removing an existing point") {
     sample.add(1.5);
@@ -30,7 +32,7 @@ TEST_CASE("Testing the class handling a floating point data sample") {
   }
   SUBCASE("Testing sum operator") {
     sample.add(1);
-    stats::Sample sample_two;
+    st::Sample sample_two;
     sample_two.add(2);
     auto sum = sample + sample_two;
     CHECK(sum.size() == 2);
@@ -46,7 +48,7 @@ TEST_CASE("Big data test") {
 
   assert(in.is_open());  // test che sia aperto
 
-  stats::Sample s{};
+  st::Sample s{};
   while (in.good()) {
     float value{};
     in >> value;
@@ -54,7 +56,7 @@ TEST_CASE("Big data test") {
     s.add(value);
   }
 
-  stats::Statistics stats = s.statistics();
+  st::Statistics stats = s.statistics();
 
   CHECK(stats.mean == doctest::Approx(3.00005));
   CHECK(stats.sigma == doctest::Approx(2.00171));

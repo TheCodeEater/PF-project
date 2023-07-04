@@ -4,6 +4,7 @@
 #include <iostream>
 #include <numeric>
 
+namespace particleSimulator{
 namespace stats {
 void Sample::add(T x) { entries_.push_back(x); }
 int Sample::size() const { return entries_.size(); }
@@ -65,3 +66,5 @@ Sample operator+(Sample const& l, Sample const& r) {
   return s;
 }
 }  // namespace stats
+
+}

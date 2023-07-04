@@ -3,6 +3,7 @@
 
 #include <vector>
 
+namespace particleSimulator{
 namespace stats {
 
 class Sample;
@@ -39,5 +40,7 @@ struct Statistics {
 Sample operator+(Sample const& l, Sample const& r);
 
 }  // namespace stats
+
+}
 
 #endif
