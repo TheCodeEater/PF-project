@@ -11,12 +11,16 @@
 namespace ps = particleSimulator;
 
 int main() {
-  try {
-    const ps::config cfg{};
-    // menu
+  try {  // cattura eventuali eccezioni
+
+    bool doRun{true};        // flag per eseguire il loop
+    const ps::config cfg{};  // oggetto di configurazione
+
+    // stampa menu iniziale
     ps::printInit();
-    while (1) {
-      ps::printPrompt();
+
+    while (doRun) {
+      ps::printPrompt();  // stampa il prompt
       char in{};
       std::string options{};
       // leggi il comando
@@ -43,12 +47,15 @@ int main() {
             args >> N;
           }
 
-          ps::Application sim{cfg.getApplicationOptions(y0, theta0, N)};
+          ps::Application sim{cfg.getApplicationOptions(
+              y0, theta0, N)};  // inizializza la simulazione
 
-          ps::exit_point p_exit = sim.loop();  // particella all'uscita
+          ps::exit_point p_exit =
+              sim.loop();  // esegui la simulazione, disegnando. Alla chiusura
+                           // della finestra, restituisce il punto di uscita
 
-          if (std::abs(p_exit.theta + 10) < 1e-3 &&
-              std::abs(p_exit.y + 10) < 1e-3) {
+          if (std::abs(p_exit.theta + 10) < ps::path::eps &&
+              std::abs(p_exit.y + 10) < ps::path::eps) {
             std::cout << "Particella non uscita. Prova ad aumentare il numero "
                          "di iterazioni\n";
           } else {
@@ -63,22 +70,27 @@ int main() {
                      // numero di iterazioni
           int N_iter{cfg.getIterations()};
 
-          if (!args.eof()) {
+          if (!args.eof()) {  // se vi è un ulteriore argomento, leggilo (se non
+                              // è int, da errore)
             args >> N_iter;
           }
 
-          ps::randSimulator rand{cfg.getRandomOptions()};
-          auto data = rand.run(cfg.getParticleNumber(), N_iter);
+          ps::randSimulator rand{
+              cfg.getRandomOptions()};  // inizializza il simulatore
+          auto data = rand.run(cfg.getParticleNumber(),
+                               N_iter);  // esegui la simulazione
+
+          // esporta i dati
           cfg.exportData(data, "output.txt");
           cfg.exportStatistics(data, "statistics.txt");
           break;
         }
         case 'q': {
-          return EXIT_SUCCESS;
+          doRun = false;  // imposta il flag di terminazione del loop
         }
 
         case 'h': {
-          ps::printHelp();
+          ps::printHelp();  // stampa l'aiuto
           break;
         }
 
@@ -86,7 +98,8 @@ int main() {
           std::cout << "Comando sconosciuto\n";
       }
     }
-  } catch (std::filesystem::filesystem_error const& e) {
+  } catch (
+      std::filesystem::filesystem_error const& e) {  // gestisci le eccezioni
     std::cout << e.what() << "\n";
     return EXIT_FAILURE;
   } catch (std::runtime_error const& e) {
