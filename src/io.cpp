@@ -1,5 +1,9 @@
 #include "../include/io.hpp"
 
+#include <filesystem>
+#include <fstream>
+#include <random>
+
 #include "../include/statistics.hpp"
 
 namespace particleSimulator {
@@ -8,10 +12,10 @@ namespace fs = std::filesystem;
 namespace pt = boost::property_tree;
 
 config::config() {
-  const fs::path cfg_path{"cfg/particleSimulator.cfg"};
-  pt::ptree tree;
+  const fs::path cfg_path{"cfg/particleSimulator.cfg"};  // percorso al file
+  pt::ptree tree;  // struttura dati per le impostazioni
 
-  pt::read_ini(cfg_path, tree);
+  pt::read_ini(cfg_path, tree);  // parse del file
 
   // load settings - specifica i valori di default
   wOptn_.w_width = tree.get<int>("width", 2200);
@@ -36,7 +40,19 @@ config::config() {
 
   N_iter_ = tree.get<int>("Iterations");
   N_particles_ = tree.get<int>("particleNumber");
-  rOptn_.seed = tree.get<unsigned>("seed", std::random_device{}());
+
+  // seed
+  {
+    int seed = tree.get<int>(
+        "seed", -1);  // leggi il seed. Se non lo trovi, restituisci -1
+
+    if (seed == -1) {  // se non vi è seme, abilita seme casuale
+      rOptn_.randomSeed = true;
+    } else {  // altrimenti, salvalo
+      rOptn_.randomSeed = false;
+      rOptn_.seed = seed;
+    }
+  }
 
   rOptn_.pos_mean = tree.get<float>("positionMean");
   rOptn_.pos_sigma = tree.get<float>("positionRMS");
@@ -44,7 +60,9 @@ config::config() {
   rOptn_.angle_sigma = tree.get<float>("angleRMS");
 }
 
-options config::getApplicationOptions(float y0, float theta0, int N) const {
+options config::getApplicationOptions(float y0, float theta0, int N)
+    const {  // costruisci struct impostazioni della simulazione grafica,
+             // aggiungendo i parametri non letti da file
   options opt{wOptn_};
   opt.y0 = y0;
   opt.theta0 = theta0;
@@ -52,14 +70,21 @@ options config::getApplicationOptions(float y0, float theta0, int N) const {
   return opt;
 }
 
-randOptions const& config::getRandomOptions() const { return rOptn_; }
+randOptions const& config::getRandomOptions() const {
+  return rOptn_;
+}  // ottieni parametri random generator
 
-int config::getIterations() const { return N_iter_; }
+int config::getIterations() const {
+  return N_iter_;
+}  // restituisce numero max di iterazioni
 
-int config::getParticleNumber() const { return N_particles_; }
+int config::getParticleNumber() const {
+  return N_particles_;
+}  // restituisce numero di particelle da simulare
 
 void config::exportData(std::vector<exit_point> const& v,
-                        std::string const& filename) const {
+                        std::string const& filename)
+    const {  // scrivi i dati dei punti di uscita su file
   std::ofstream output{"data/" + filename};
 
   if (!output.is_open()) {
@@ -84,11 +109,12 @@ void config::exportStatistics(std::vector<exit_point> const& v,
     throw std::runtime_error("Impossibile creare file di output! (statistics)");
   }
 
-  // calcoli statistici
+  // calcoli statistici - COORDINATA DI USCITA
   {
     stats::Sample s{};  // crea sample
-    std::for_each(v.cbegin(), v.cend(),
-                  [&s](exit_point const& p) { s.add(p.y); });
+    std::for_each(v.cbegin(), v.cend(), [&s](exit_point const& p) {
+      s.add(p.y);
+    });  // aggiungi ogni elemento al sample
 
     stats::Statistics stats = s.statistics();  // calcoli statistici
     // stampa i dati
@@ -102,11 +128,13 @@ void config::exportStatistics(std::vector<exit_point> const& v,
 
   output << "\n-------------\n";
 
+  // calcoli statistici - ANGOLO DI USCITA
   {
     stats::Sample s{};  // crea sample
 
-    std::for_each(v.cbegin(), v.cend(),
-                  [&s](exit_point const& p) { s.add(p.theta); });
+    std::for_each(v.cbegin(), v.cend(), [&s](exit_point const& p) {
+      s.add(p.theta);
+    });  // aggiungi ogni elemento al sample
 
     stats::Statistics stats = s.statistics();  // calcoli statistici
     // stampa i dati

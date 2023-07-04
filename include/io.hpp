@@ -1,14 +1,11 @@
 #ifndef IO_HPP
 #define IO_HPP
 
-#include <boost/property_tree/ini_parser.hpp>
-#include <boost/property_tree/ptree.hpp>
-#include <filesystem>
-#include <fstream>
-#include <random>
-#include <sstream>
 #include <string>
+#include <vector>
 
+#include "../boost/property_tree/ini_parser.hpp"
+#include "../boost/property_tree/ptree.hpp"
 #include "traiettoria.hpp"
 namespace particleSimulator {
 
@@ -38,6 +35,8 @@ struct randOptions {
   float angle_sigma{};
 
   unsigned seed{};
+
+  bool randomSeed{};
 };
 
 class config {  // classe per caricare le impostazioni
