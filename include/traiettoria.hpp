@@ -63,7 +63,7 @@ class path {  // contiene i bordi del biliardo
   void rotate(particle&, Eigen::Vector2f const&, intsect const&) const;
 
  public:
-  using vec = Eigen::Vector2f;
+  //using vec = Eigen::Vector2f;
   // path(Line const&, Line const&);
   path(float r1, float r2, float r3);
   intsect operator()(particle const&)
