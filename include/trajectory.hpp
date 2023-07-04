@@ -7,7 +7,6 @@
 #endif
 
 #include <SFML/Graphics.hpp>
-#include <cmath>
 
 #include "boost/math/constants/constants.hpp"
 
