@@ -4,6 +4,12 @@
 #include <cmath>
 namespace particleSimulator {
 
+//costruttore: delega la costruzione a quello di vertex array
+VArray::VArray(sf::PrimitiveType type, std::size_t vertexCount): sf::VertexArray(type, vertexCount){}
+
+void VArray::push_back(value_type vertex) { append(vertex); } //richiama la funzione append. Necessaria poiché back_inserter richiede push_back, non append
+
+
 dottedLine::dottedLine(vType p0, vType p1, sf::Color c)
     : first_{p0},
       last_{p1},
@@ -23,7 +29,7 @@ dottedLine::dottedLine(vType p0, vType p1, sf::Color c)
   const int N{static_cast<int>(std::round(l / l_1))};
   // genera N punti della linea e inseriscili mediante back inserter
   float t{0.f};
-  std::generate_n(std::back_inserter(*this), N, [this, &t, &step, &c]() {
+  std::generate_n(std::back_inserter(vertices_), N, [this, &t, &step, &c]() {
     // calcola la posizione
     const Eigen::Vector2f pos = first_ + t * direction_;
     sf::Vertex vertex{{pos.x(), pos.y()}};
@@ -36,16 +42,5 @@ dottedLine::dottedLine(vType p0, vType p1, sf::Color c)
 }
 
 void dottedLine::draw(sf::RenderWindow& w_) const { w_.draw(vertices_); }
-
-std::pair<dottedLine::vType, dottedLine::vType> dottedLine::getExtremes()
-    const {
-  return {first_, last_};
-}
-
-sf::VertexArray const& dottedLine::getVertexArray() const { return vertices_; }
-
-void dottedLine::push_back(value_type vertex) { vertices_.append(vertex); }
-
-Eigen::Vector2f dottedLine::getDirection() const { return direction_; }
 
 }  // namespace particleSimulator

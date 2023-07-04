@@ -13,6 +13,18 @@
 
 namespace particleSimulator {
 
+class VArray : public sf::VertexArray{
+
+  public: 
+    VArray()=default;
+    VArray(sf::PrimitiveType type, std::size_t vertexCount=0);
+
+    // type alias per il tipo di elemento contenuto nei vertex array (vertex)
+    typedef sf::Vertex value_type;
+    // inserimento dei vertici
+    void push_back(value_type);
+};
+
 class dottedLine {
   using vType = Eigen::Vector2f;  // tipo di vettore
 
@@ -20,20 +32,10 @@ class dottedLine {
   vType last_{};
   vType direction_{};
 
-  sf::VertexArray vertices_{};
+  VArray vertices_{};
 
  public:
   dottedLine(vType p0, vType p1, sf::Color c = sf::Color::White);
-
-  // type alias per il tipo di elemento contenuto nei vertex array (vertex)
-  typedef sf::Vertex value_type;
-  // inserimento dei vertici
-  void push_back(value_type);
-
-  // getter per i membri
-  sf::VertexArray const& getVertexArray() const;
-  std::pair<vType, vType> getExtremes() const;
-  Eigen::Vector2f getDirection() const;
 
   // disegna
   void draw(sf::RenderWindow&) const;
