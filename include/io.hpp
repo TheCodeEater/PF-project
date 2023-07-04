@@ -38,8 +38,9 @@ struct randOptions {  // opzioni per simulazione random
 
   bool randomSeed{};  // se true, genera un nuovo seme ogni volta
 
-  randOptions() = default;
-  randOptions(randOptions const& rData, unsigned rSeed);
+  randOptions() = default;  // default constructor
+  randOptions(randOptions const& rData,
+              unsigned rSeed);  // costruttore con cambio di seme
 };
 
 class config {  // classe per caricare le impostazioni
