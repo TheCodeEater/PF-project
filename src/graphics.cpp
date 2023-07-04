@@ -2,7 +2,6 @@
 
 #include <algorithm>
 #include <cmath>
-#include <iostream>
 namespace particleSimulator {
 
 dottedLine::dottedLine(vType p0, vType p1, sf::Color c)
@@ -24,8 +23,6 @@ dottedLine::dottedLine(vType p0, vType p1, sf::Color c)
   const int N{static_cast<int>(std::round(l / l_1))};
   // genera N punti della linea e inseriscili mediante back inserter
   float t{0.f};
-  // Eigen::ParametrizedLine<float,2>
-  // line{Eigen::ParametrizedLine<float,2>::Through(first_,last_)};
   std::generate_n(std::back_inserter(*this), N, [this, &t, &step, &c]() {
     // calcola la posizione
     const Eigen::Vector2f pos = first_ + t * direction_;
