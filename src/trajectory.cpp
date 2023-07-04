@@ -19,6 +19,7 @@ path::path(float r1, float r2, float l)
 
   assert(r1_ > r2_);
 
+  //linea parametrica dei bordi: necessaria per ottenere il vettore normale
   Line up{borderup_};
   Line down{borderdown_};
 
@@ -36,8 +37,9 @@ path::path(float r1, float r2, float l)
 intsect path::operator()(particle const& p) const {
   // CONDIZIONI INIZIALI
   assert(getLocationType(p.pos) == posTypes::Inside ||
-         std::abs(p.pos.x()) < eps);  // devi essere dentro il biliardo
-  assert(p.theta >= 0);               // angolo tra 0 e 2bm::pi<float>()
+         std::abs(p.pos.x()) < eps);  // devi essere dentro il biliardo oppure sull'asse Y
+
+  assert(p.theta >= 0);               // angolo tra 0 e 2pi
   assert(p.theta <= 2 * bm::pi<float>());
 
   const Eigen::Vector2f dir{std::cos(p.theta),
@@ -45,15 +47,11 @@ intsect path::operator()(particle const& p) const {
 
   const Line trajectory{p.pos, dir};  // retta della direzione della particella
 
-  // determina quale bordo puoi colbm::pi<float>()re
-  // casi
-  // bordo su, bordo giu
-  // vettore orizzontale verso x negative, o verso x positive
-  // calcola il bordo da colbm::pi<float>()re
+  //determina intersezione traiettoria-bordo colpito
 
   const intsect intersec = [this, &trajectory,
-                            &p]() -> intsect {  // tipo esplicito
-    vecOrientation orientation{getHitDirection(p.theta)};
+                            &p]() -> intsect {  
+    vecOrientation orientation{getHitDirection(p.theta)}; //orientazione del vettore
 
     switch (orientation) {
       case vecOrientation::Right: {  // direzione destra
@@ -84,7 +82,7 @@ intsect path::operator()(particle const& p) const {
         } else if (back_intsect.y() < -r1_ - eps) {
           return {trajectory.intersectionPoint(borderdown_), hitBorder::Bottom};
         } else {
-          throw std::logic_error("Impossibile determinare l'urto");
+          throw std::logic_error("Impossibile determinare l'intersezione");
         }
       }
 
@@ -99,7 +97,7 @@ intsect path::operator()(particle const& p) const {
     }
   }();
 
-  assert(getLocationType(intersec.point) != posTypes::Error);
+  assert(getLocationType(intersec.point) != posTypes::Error); //assicurati che sia possibile determinare il tipo di posizione in cui si trova
 
   return intersec;
 }
@@ -109,14 +107,14 @@ void path::reflect(particle& p) const {
   // determina se è il bordo su o il bordo giù, usando le coordinate del punto
   // di intersezione
   switch (intsect.border) {
-    case hitBorder::Front:
+    case hitBorder::Front: //colpito pseudobordo frontale: memorizza punto di uscita
       p.pos = intsect.point;
       break;
 
-    case hitBorder::Back:
+    case hitBorder::Back: //colpito pseudobordo posteriore: memorizza punto di uscita
       p.pos = intsect.point;
       break;
-
+  //esegui la riflessione se colpisci i bordi veri
     case hitBorder::Top:
       rotate(p, normal_up_, intsect);
       break;
@@ -130,31 +128,30 @@ void path::reflect(particle& p) const {
 
 void path::rotate(particle& p, Eigen::Vector2f const& normal_vect,
                   intsect const& intersection) const {
-  const Line normal{intersection.point, normal_vect};  // trova la normale
-  // calcola l'angolo di incidenza
-  // angolo della normale
-  const float normal_angle = arctan(normal_vect.y(), normal_vect.x());
+  const Line normal{intersection.point, normal_vect};  // trova la retta normale al bordo per il punto di intersezione
   // vettore traiettoria ribaltato
   const Eigen::Vector2f dir{-std::cos(p.theta), -std::sin(p.theta)};
 
   const float dir_angle =
       arctan(dir.y(), dir.x());  // calcola angolo del vettore
 
-  assert(dir_angle <=
-         2 * bm::pi<float>());  // condizioni sulla convenzione degli angoli
+  // condizioni sulla convenzione degli angoli
+  assert(dir_angle <=2 * bm::pi<float>());  
   assert(dir_angle >= 0);
+
+  // angolo della normale
+  const float normal_angle = arctan(normal_vect.y(), normal_vect.x());
 
   const float phi_inc = normal_angle - dir_angle;  // angolo di incidenza
 
-  // NOTA: phi non deve rispettare la condizione, il segno determina il verso
+  // NOTA: phi non deve rispettare la convenzione sugli angoli, il segno determina il verso
   // della rotazione
 
-  const Eigen::Rotation2D rotation{2 *
-                                   phi_inc};  // rotazione di 2*angolo incidenza
+  const Eigen::Rotation2D rotation{2 * phi_inc};  // rotazione di 2*angolo incidenza
 
   const Eigen::Vector2f new_dir = rotation * dir;  // esegui la rotazione
 
-  const float new_angle = arctan(new_dir.y(), new_dir.x());
+  const float new_angle = arctan(new_dir.y(), new_dir.x()); //determina l'angolo della nuova traiettoria
 
   p.pos = intersection.point;
   p.theta = new_angle;
@@ -173,11 +170,10 @@ float arctan(float y, float x) {
 
 posTypes path::getLocationType(Eigen::Vector2f const& v)
     const {  // determina il luogo del biliardo in cui si trova
-  // assert; verifica che la x di v corrisponda al corrispondente valore Y
-  // calcolato
+
   if (v.x() > eps && v.x() <= l_-eps) {  // coordinata x entro i limiti del biliardo
     return posTypes::Inside;
-  } else if (v.x() <= eps) {  // x negative: colbm::pi<float>()sci il fondo
+  } else if (v.x() <= eps) {  // x negative: colpisci il fondo
     return posTypes::BackHit;
   } else if (v.x() > l_-eps) {  // fuori: fuggito
     return posTypes::Escaped;
@@ -187,7 +183,8 @@ posTypes path::getLocationType(Eigen::Vector2f const& v)
 }
 
 vecOrientation path::getHitDirection(float const& angle)
-    const {  // nota: accetta angoli tra -bm::pi<float>() e +bm::pi<float>()
+    const {  
+  //condizione sugli angoli
   assert(angle >= 0 && angle <= 2 * bm::pi<float>());
 
   if (angle <= eps) {  // angolo nullo: orizzontale destra
@@ -217,22 +214,19 @@ vecOrientation path::getHitDirection(float const& angle)
         std::to_string(angle));
   }
 }
-/*
-Eigen::Vector2f path::exitIntersection(Line const& l)
-    const {  // intersezione della retta data con quella di uscita
-  return l.intersectionPoint(borderfront_);
-}*/
 
+//definizione dei getter
 float path::getR1() const { return r1_; }
 float path::getR2() const { return r2_; }
 float path::getL() const { return l_; }
 
 bool path::testOutConditions(particle const& p) const {
+  //verifica che, in caso in cui la particella sia uscita, la coordinata Y sia corretta
   if (getLocationType(p.pos)==posTypes::BackHit) {  // se esci da dietro, testa con r1
     return p.pos.y() <= r1_ + eps && p.pos.y() >= -r1_ - eps;
   } else if (getLocationType(p.pos)==posTypes::Escaped) {  // da davanti con r2
     return p.pos.y() <= r2_ + eps && p.pos.y() >= -r2_ - eps;
-  } else {  // errore ben peggiore
+  } else {  // si ha se la particella non esce oppure getLocationType restituisce errore
     return false;
   }
 }
