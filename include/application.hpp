@@ -2,7 +2,6 @@
 #define APPLICATION_HPP
 
 #include <SFML/Graphics.hpp>
-#include <algorithm>
 #include <string>
 #include <vector>
 

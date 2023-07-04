@@ -1,6 +1,6 @@
 #include "../include/application.hpp"
 
-#include <iostream>
+#include <algorithm>
 
 #include "../include/graphics.hpp"
 
