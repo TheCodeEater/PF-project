@@ -3,33 +3,40 @@
 
 #include <vector>
 
-namespace particleSimulator{
+namespace particleSimulator {
 namespace stats {
 
-class Sample;
-struct Statistics;
+struct Statistics;  // forward declaration per poterla usare della definizione
+                    // di sample
 
 class Sample {
  public:
-  using T = double;
+  using T = double;  // necessario pocihé le funzioni matematiche restituiscono
+                     // in double
   // constructors
-  Sample() = default;
+  Sample() = default;  // default constructor
 
-  void add(T);
-  int size() const;
-  bool remove(T);
+  void add(T);       // aggiungi dati al campione
+  int size() const;  // restituisci la dimensioni
+  bool remove(
+      T);  // rimuovi dato e restituisci se la rimozione è stata effettuata o no
+           // (nel qual caso il punto rimosso non vi era)
 
-  Statistics statistics() const;
+  Statistics statistics() const;  // calcoli statistici
 
-  const auto& entries() const { return entries_; }
+  const auto& entries() const {
+    return entries_;
+  }  // funzione per accedere al vettore in caso di necessità ma senza
+     // modificarlo
 
-  Sample& operator+=(const Sample&);
+  Sample& operator+=(const Sample&);  // unisci due campioni
 
  private:
-  std::vector<T> entries_{};
+  std::vector<T> entries_{};  // vettore di punti sperimentali
 };
 
-struct Statistics {
+struct Statistics {  // struct dei momenti calcolati per la distribuzione del
+                     // campnione
   Sample::T mean{};
   Sample::T sigma{};
   Sample::T mean_err{};
@@ -37,10 +44,10 @@ struct Statistics {
   Sample::T skewness{};
 };
 
-Sample operator+(Sample const& l, Sample const& r);
+Sample operator+(Sample const& l, Sample const& r);  // unisci campioni
 
 }  // namespace stats
 
-}
+}  // namespace particleSimulator
 
 #endif
