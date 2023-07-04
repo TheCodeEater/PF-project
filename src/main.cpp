@@ -79,6 +79,7 @@ int main() {
         }
         case 'q': {
           doRun = false;  // imposta il flag di terminazione del loop
+          break;
         }
 
         case 'h': {
