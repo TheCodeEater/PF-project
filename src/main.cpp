@@ -53,15 +53,7 @@ int main() {
           ps::exit_point p_exit =
               sim.loop();  // esegui la simulazione, disegnando. Alla chiusura
                            // della finestra, restituisce il punto di uscita
-
-          if (std::abs(p_exit.theta + 10) < ps::path::eps &&
-              std::abs(p_exit.y + 10) < ps::path::eps) {
-            std::cout << "Particella non uscita. Prova ad aumentare il numero "
-                         "di iterazioni\n";
-          } else {
-            std::cout << "Particella uscita con: Yf=" << p_exit.y
-                      << " | Phi=" << p_exit.theta << "\n";
-          }
+          printResult(p_exit); //stampa i risultati
 
           break;
         }
