@@ -14,7 +14,7 @@
 namespace particleSimulator {
 
 class dottedLine {
-  using vType = Eigen::Vector2f;  // vetor type
+  using vType = Eigen::Vector2f;  // tipo di vettore
 
   vType first_{};
   vType last_{};
@@ -25,22 +25,18 @@ class dottedLine {
  public:
   dottedLine(vType p0, vType p1, sf::Color c = sf::Color::White);
 
+  // type alias per il tipo di elemento contenuto nei vertex array (vertex)
   typedef sf::Vertex value_type;
+  // inserimento dei vertici
+  void push_back(value_type);
 
-  /*void setPoints(sf::Vector2f, sf::Vector2f);
-  void setPoint1(sf::Vector2f);
-  void setPoint2(sf::Vector2f);*/
-
-  // member access
+  // getter per i membri
   sf::VertexArray const& getVertexArray() const;
   std::pair<vType, vType> getExtremes() const;
   Eigen::Vector2f getDirection() const;
 
-  // drawing
+  // disegna
   void draw(sf::RenderWindow&) const;
-
-  // vertex access
-  void push_back(value_type);
 };
 
 }  // namespace particleSimulator
