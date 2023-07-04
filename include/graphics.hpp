@@ -13,7 +13,7 @@
 
 namespace particleSimulator {
 
-class VArray : public sf::VertexArray{
+class VArray : public sf::VertexArray{ //creo una classe ereditata per poter aggiungere ciò che serve a usare back inserter
 
   public: 
     VArray()=default;
