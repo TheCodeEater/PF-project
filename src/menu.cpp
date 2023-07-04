@@ -1,5 +1,7 @@
 #include "../include/menu.hpp"
 
+#include <iostream>
+
 namespace particleSimulator {
 
 void printInit() {

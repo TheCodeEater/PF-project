@@ -1,17 +1,10 @@
 #ifndef MENU_HPP
 #define MENU_HPP
-
-#include <iomanip>
-#include <iostream>
-#include <string>
-
 namespace particleSimulator {
 
-constexpr std::string_view makeMenuBorder();
-
-void printInit();
-void printPrompt();
-void printHelp();
+void printInit();    // stampa schermata iniziale
+void printPrompt();  // stampa shell di prompt
+void printHelp();    // stampa aiuto
 
 }  // namespace particleSimulator
 
