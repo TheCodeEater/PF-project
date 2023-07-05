@@ -19,6 +19,49 @@ struct Statistics {  // struct dei momenti calcolati per la distribuzione del
 };
 template <typename T>
 class Sample {
+  std::vector<T> entries_{};  // vettore di punti sperimentali
+
+  struct Accumulator;
+  struct InitialMoments{
+    T mean{};
+    T mean2{};
+    T mean3{};
+    T mean4{};
+
+    //costruisci la struct, eseguendo il calcolo di momenti iniziali
+    InitialMoments(Accumulator const& acc, int N): mean{acc.sum/N}, mean2{acc.sum2/N}, mean3{acc.sum3/N}, mean4{acc.sum4/N} 
+    {
+      assert(N>0);
+    }
+  };
+  struct Accumulator{
+    T sum{};
+    T sum2{};
+    T sum3{};
+    T sum4{};
+
+    Accumulator& operator+=(T const& value){//operatore di accumulo
+      //esegui l'accumulo con gli operatori del tipo che usi
+      sum+=value;
+      sum2+=value*value;
+      sum3+=value*value*value;
+      sum4+=value*value*value*value;
+
+      return *this;
+    }
+
+    Accumulator operator+(T const& value){
+      Accumulator acc_sum{*this};
+      acc_sum+=value;
+      return acc_sum;
+    }
+
+    InitialMoments getMoments(int N){
+      assert(N>0);
+      return InitialMoments{*this,N};
+    }
+  };
+
  public:
   // constructors
   Sample() = default;  // default constructor
@@ -47,23 +90,14 @@ class Sample {
           "Cannot calculate parameters from empty sample!");
     }
     // accumulatori di somma.
-    T sum_{};
-    T sum2_{};
-    T sum3_{};
-    T sum4_{};
-    std::for_each(entries_.begin(), entries_.end(),
-                  [&sum_, &sum2_, &sum3_, &sum4_](T val) {  // calcola le somme
-                    sum_ += val;
-                    sum2_ += val * val;
-                    sum3_ += val * val * val;
-                    sum4_ += val * val * val * val;
-                  });
+    const Accumulator sums{std::accumulate(entries_.begin(), entries_.end(), Accumulator{})}; //esegui le somme
 
+    const InitialMoments imoments{sums,N_};
     // calcola momenti iniziali (initial moments)
-    const T mean{sum_ / N_};
-    const T mean2{sum2_ / N_};
-    const T mean3{sum3_ / N_};
-    const T mean4{sum4_ / N_};
+    T const&  mean{imoments.mean};
+    T const& mean2{imoments.mean2};
+    T const& mean3{imoments.mean3};
+    T const&  mean4{imoments.mean4};
 
     // momenti centrali
     const T sigma{
@@ -93,9 +127,6 @@ class Sample {
                                            // rhs alla fine del vettore di lhs
     return *this;
   }
-
- private:
-  std::vector<T> entries_{};  // vettore di punti sperimentali
 };
 
 template <typename T>
