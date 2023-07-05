@@ -5,6 +5,7 @@
 #include <cmath>
 #include <numeric>
 #include <vector>
+#include <type_traits>
 
 #include "math.hpp"
 #include "trajectory.hpp"
@@ -12,9 +13,16 @@
 namespace particleSimulator {
 namespace stats {
 
+ //valuta se il tipo passato come pramatro è usabile o meno con statistics
+template<typename T>
+constexpr bool is_statistic_allowed(){
+  return std::is_arithmetic_v<T> || std::is_same_v<T,exit_point>;
+}
+
 template <typename T>
 // struct dei momenti calcolati per la distribuzione del campione
 struct Statistics {
+  static_assert(is_statistic_allowed<T>());
   T mean{};
   T sigma{};
   T mean_err{};
@@ -37,6 +45,7 @@ struct Statistics {
 };
 template <typename T>
 class Sample {
+  static_assert(is_statistic_allowed<T>());
   std::vector<T> entries_{};  // vettore di punti sperimentali
 
   struct Accumulator;
@@ -136,7 +145,9 @@ class Sample {
 template <typename T>
 Sample<T> operator+(
     Sample<T> const& l,
-    Sample<T> const& r) {  // analogo ma con operatore + invece di +=
+    Sample<T> const& r) {  
+      static_assert(is_statistic_allowed<T>());
+      // analogo ma con operatore + invece di +=
   Sample s{l};             // copia di sample
   s += r;
   return s;
