@@ -29,7 +29,7 @@ class Sample {
 
   // rimuovi dato e restituisci se la rimozione è stata effettuata o no
   // (nel qual caso il punto rimosso non vi era)
-  bool Sample::remove(T val) {
+  bool remove(T val) {
     auto it = std::find(entries_.begin(), entries_.end(),
                         val);    // cerca valore da rimuovere
     if (it != entries_.end()) {  // se lo trovi, cancellalo
@@ -40,7 +40,7 @@ class Sample {
     }
   }
 
-  Statistics Sample::statistics() const {
+  Statistics<T> statistics() const {
     int N_ = entries_.size();
     if (N_ == 0) {
       throw std::runtime_error(  // check delle condizioni iniziali
@@ -87,7 +87,7 @@ class Sample {
   }  // funzione per accedere al vettore in caso di necessità ma senza
      // modificarlo
 
-  Sample& Sample::operator+=(const Sample& rhs) {
+  Sample& operator+=(const Sample& rhs) {
     entries_.insert(entries_.end(), rhs.entries().begin(),
                     rhs.entries().end());  // inserisci la sequenza di dati di
                                            // rhs alla fine del vettore di lhs

@@ -6,8 +6,10 @@
 
 namespace st = particleSimulator::stats;  // alias namespace
 
+using Sample1D=st::Sample<double>;
+
 TEST_CASE("Testing the class handling a floating point data sample") {
-  st::Sample sample;
+  Sample1D sample{};
 
   SUBCASE("Removing an existing point") {  // test rimozione di punto esistente
     sample.add(1.5);
@@ -34,7 +36,7 @@ TEST_CASE("Testing the class handling a floating point data sample") {
   }
   SUBCASE("Testing sum operator") {  // test operatore di somma
     sample.add(1);
-    st::Sample sample_two;
+    Sample1D sample_two;
     sample_two.add(2);
     auto sum = sample + sample_two;
     CHECK(sum.size() == 2);
@@ -50,7 +52,7 @@ TEST_CASE("Big data test") {          // test con grandi dati
 
   assert(in.is_open());  // test che sia aperto
 
-  st::Sample s{};
+  Sample1D s{};
   while (in.good()) {  // lettura valori finché non si arriva a EOF
     float value{};
     in >> value;
