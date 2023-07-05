@@ -6,8 +6,8 @@
 #include <numeric>
 #include <vector>
 
-#include "trajectory.hpp"
 #include "math.hpp"
+#include "trajectory.hpp"
 
 namespace particleSimulator {
 namespace stats {
