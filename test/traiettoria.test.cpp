@@ -1,10 +1,10 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
-#include "../include/trajectory.hpp"
-
-#include <iostream>
-
 #include "doctest.h"
+
+#include "../include/trajectory.hpp"
+#include "../include/math.hpp"
+#include "../include/dataStructures.hpp"
 
 using pT = particleSimulator::posTypes;
 namespace ps = particleSimulator;

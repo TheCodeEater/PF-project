@@ -29,22 +29,22 @@ exit_point& exit_point::operator/=(exit_point const& rhs){
 }
 
 //operatori arimetici @
-exit_point& operator+(exit_point const& lhs,exit_point const& rhs){
+exit_point operator+(exit_point const& lhs,exit_point const& rhs){
     exit_point result{lhs};
     result+=rhs;
     return result;
 }
-exit_point& operator-(exit_point const& lhs,exit_point const& rhs){
+exit_point operator-(exit_point const& lhs,exit_point const& rhs){
     exit_point result{lhs};
     result-=rhs;
     return result;
 }
-exit_point& operator*(exit_point const& lhs,exit_point const& rhs){
+exit_point operator*(exit_point const& lhs,exit_point const& rhs){
     exit_point result{lhs};
     result*=rhs;
     return result;
 }
-exit_point& operator/(exit_point const& lhs,exit_point const& rhs){
+exit_point operator/(exit_point const& lhs,exit_point const& rhs){
     exit_point result{lhs};
     result/=rhs;
     return result;

@@ -60,10 +60,10 @@ struct exit_point { //punto di uscita, con angolo di traiettoria di uscita
 };
 
 //operatori di exit_point operator@ (senza =)
-exit_point& operator+(exit_point const& lhs,exit_point const& rhs);
-exit_point& operator-(exit_point const& lhs,exit_point const& rhs);
-exit_point& operator*(exit_point const& lhs,exit_point const& rhs);
-exit_point& operator/(exit_point const& lhs,exit_point const& rhs);
+exit_point operator+(exit_point const& lhs,exit_point const& rhs);
+exit_point operator-(exit_point const& lhs,exit_point const& rhs);
+exit_point operator*(exit_point const& lhs,exit_point const& rhs);
+exit_point operator/(exit_point const& lhs,exit_point const& rhs);
 
 //operatori di exit_point aritmetici operator@ con altri numeri
   template<typename T>

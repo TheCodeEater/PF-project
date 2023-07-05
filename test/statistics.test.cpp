@@ -3,7 +3,7 @@
 #include "doctest.h" //doctest
 
 #include "../include/statistics.hpp"
-#include "../include/type_alias.hpp"
+#include "../include/typeAlias.hpp"
 
 namespace st = particleSimulator::stats;  // alias namespace
 
