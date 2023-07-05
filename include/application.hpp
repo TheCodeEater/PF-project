@@ -29,8 +29,6 @@ class Application {
   // logic objects
   const simulation simulation_;  // oggetto di simulazione
   particle particle_{};          // particella studiata
-  std::pair<std::vector<dottedLine>, exit_point>
-      result_{};  // segmenti traiettoria e punto di uscita
 
  public:
   explicit Application(options const&);

@@ -65,6 +65,11 @@ struct intsect { //intersezione
   hitBorder border{};
 };
 
+struct results{
+  std::vector<dottedLine> trajs{};
+  exit_point ep{};
+};
+
 class path { //oggetto di calcolo delle traiettorie
   // parametri biliardo
   float r1_{};
@@ -115,7 +120,7 @@ class simulation {  // classe che gestisce la simulazione
  public:
   simulation(float r1, float r2, float l, int max_cycles);  // constructor
 
-  std::pair<std::vector<dottedLine>, exit_point> operator()(
+  results operator()(
       particle& p) const;  // operatore di simulazione
 
   std::vector<particle> getSequence(particle& p, int max_iterations) const; //simulazione salvando la sequenza delle posizioni occupate

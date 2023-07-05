@@ -266,7 +266,7 @@ simulation::simulation(float r1, float r2, float l, int max_cycles)
       simulator_{r1, r2, l},
       max_iterations_{max_cycles} {}
 
-std::pair<std::vector<dottedLine>, exit_point> simulation::operator()(
+results simulation::operator()(
     particle& p) const  // operatore di simulazione
 {
   p.theta = std::trunc(p.theta * constants::trunc_prec()) /
@@ -297,16 +297,9 @@ std::pair<std::vector<dottedLine>, exit_point> simulation::operator()(
   if (simulator_.getLocationType(p.pos) == posTypes::Escaped ||
       simulator_.getLocationType(p.pos) == posTypes::BackHit) {
     assert(simulator_.testOutConditions(p));
-    return std::make_pair(
-        trajs,
-        exit_point{p.pos.y(),
-                   p.theta});  // restituisci la copbm::pi<float>()a di dati
+    return {trajs,exit_point{p.pos.y(),p.theta}};  // restituisci la copbm::pi<float>()a di dati
   } else {
-    return std::make_pair(
-        trajs,
-        exit_point{
-            -10,
-            -10});  // restituisci le traiettorie e un indicatore di failure
+    return {trajs,exit_point{-10,-10}};
   }
 }
 

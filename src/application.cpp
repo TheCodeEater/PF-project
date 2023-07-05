@@ -91,9 +91,8 @@ Application::Application(options const& opt)
 }
 
 exit_point Application::loop() {  // esegui il game loop
-  // rcalcolo traiettoria
-  result_ = simulation_(particle_);
-  std::vector<dottedLine> const& trajectories = result_.first;
+  // calcolo traiettoria
+  const results res{simulation_(particle_)};
 
   // gira finché la finestra è aperta
   while (w_.isOpen()) {
@@ -122,7 +121,7 @@ exit_point Application::loop() {  // esegui il game loop
     w_.draw(line_sup_);
 
     // disegna le traiettorie
-    std::for_each(trajectories.cbegin(), trajectories.cend(),
+    std::for_each(res.trajs.cbegin(), res.trajs.cend(),
                   [this](dottedLine const& line) {
                     line.draw(w_);  // draw line on the current window
                   });
@@ -130,6 +129,6 @@ exit_point Application::loop() {  // esegui il game loop
     w_.display();
   }
 
-  return result_.second;  // restituisci il punto di uscita
+  return res.ep;  // restituisci il punto di uscita
 }
 }  // namespace particleSimulator
