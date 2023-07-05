@@ -1,15 +1,14 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
-#include "../include/statistics.hpp"
+#include "doctest.h" //doctest
 
-#include "doctest.h"
+#include "../include/statistics.hpp"
+#include "../include/type_alias.hpp"
 
 namespace st = particleSimulator::stats;  // alias namespace
 
-using Sample1D=st::Sample<double>;
-
 TEST_CASE("Testing the class handling a floating point data sample") {
-  Sample1D sample{};
+  st::Sample1D sample{};
 
   SUBCASE("Removing an existing point") {  // test rimozione di punto esistente
     sample.add(1.5);
@@ -36,7 +35,7 @@ TEST_CASE("Testing the class handling a floating point data sample") {
   }
   SUBCASE("Testing sum operator") {  // test operatore di somma
     sample.add(1);
-    Sample1D sample_two;
+    st::Sample1D sample_two;
     sample_two.add(2);
     auto sum = sample + sample_two;
     CHECK(sum.size() == 2);
@@ -52,7 +51,7 @@ TEST_CASE("Big data test") {          // test con grandi dati
 
   assert(in.is_open());  // test che sia aperto
 
-  Sample1D s{};
+  st::Sample1D s{};
   while (in.good()) {  // lettura valori finché non si arriva a EOF
     float value{};
     in >> value;

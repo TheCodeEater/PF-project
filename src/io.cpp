@@ -5,6 +5,7 @@
 #include <random>
 
 #include "../include/statistics.hpp"
+#include "../include/type_alias.hpp"
 
 namespace particleSimulator {
 
@@ -136,7 +137,7 @@ void config::exportStatistics(std::vector<exit_point> const& v,
 
   // calcoli statistici - COORDINATA DI USCITA
   {
-    stats::Sample s{};  // crea sample
+    stats::Sample1D s{};  // crea sample
     std::for_each(v.cbegin(), v.cend(), [&s](exit_point const& p) {
       s.add(p.y);
     });  // aggiungi ogni elemento al sample
@@ -155,7 +156,7 @@ void config::exportStatistics(std::vector<exit_point> const& v,
 
   // calcoli statistici - ANGOLO DI USCITA
   {
-    stats::Sample s{};  // crea sample
+    stats::Sample1D s{};  // crea sample
 
     std::for_each(v.cbegin(), v.cend(), [&s](exit_point const& p) {
       s.add(p.theta);
