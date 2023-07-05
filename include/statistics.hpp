@@ -9,13 +9,22 @@ namespace particleSimulator {
 namespace stats {
 
 template <typename T>
-struct Statistics {  // struct dei momenti calcolati per la distribuzione del
-                     // campnione
+// struct dei momenti calcolati per la distribuzione del campione
+struct Statistics {  
   T mean{};
   T sigma{};
   T mean_err{};
-  T kurtosis{};
   T skewness{};
+  T kurtosis{};
+
+  //costruisci la struct a partire dai momenti iniziali
+  Statistics(T mean, T mean2, T mean3, T mean4, int N_):
+    mean{mean},
+    sigma{sqrt(N_ / (N_ - 1) * (mean2 - mean * mean))},  // x quadro medio meno x medio quadro
+    mean_err{sigma / sqrt(N_)},
+    skewness{(mean3 - 3 * mean * mean2 + 2 * mean * mean * mean) /(sigma * sigma * sigma)},  //
+    kurtosis{(mean4 - 4 * mean3 * mean + 6 * mean2 * mean * mean -3 * mean * mean * mean * mean) / (sigma * sigma * sigma * sigma) -3}
+    {}
 };
 template <typename T>
 class Sample {
@@ -93,27 +102,8 @@ class Sample {
     const Accumulator sums{std::accumulate(entries_.begin(), entries_.end(), Accumulator{})}; //esegui le somme
 
     const InitialMoments imoments{sums,N_};
-    // calcola momenti iniziali (initial moments)
-    T const&  mean{imoments.mean};
-    T const& mean2{imoments.mean2};
-    T const& mean3{imoments.mean3};
-    T const&  mean4{imoments.mean4};
 
-    // momenti centrali
-    const T sigma{
-        sqrt(N_ / (N_ - 1) *
-             (mean2 - mean * mean))};  // x quadro medio meno x medio quadro
-    const T mean_err = {sigma / sqrt(N_)};
-
-    const T skewness{(mean3 - 3 * mean * mean2 + 2 * mean * mean * mean) /
-                     (sigma * sigma * sigma)};  //
-
-    const T kurtosis{(mean4 - 4 * mean3 * mean + 6 * mean2 * mean * mean -
-                      3 * mean * mean * mean * mean) /
-                         (sigma * sigma * sigma * sigma) -
-                     3};
-
-    return {mean, sigma, mean_err, kurtosis, skewness};
+    return Statistics{imoments.mean,imoments.mean2,imoments.mean3,imoments.mean4,N_};
   }
 
   const auto& entries() const {
