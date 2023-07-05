@@ -5,7 +5,7 @@
 #include <random>
 
 #include "../include/statistics.hpp"
-#include "../include/type_alias.hpp"
+#include "../include/typeAlias.hpp"
 
 namespace particleSimulator {
 

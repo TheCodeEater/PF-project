@@ -3,6 +3,7 @@
 #include <algorithm>
 
 #include "../include/graphics.hpp"
+#include "../include/math.hpp"
 
 namespace particleSimulator {
 Application::Application(options const& opt)
