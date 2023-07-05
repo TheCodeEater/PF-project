@@ -4,19 +4,13 @@
 #include <algorithm>
 #include <cmath>
 #include <numeric>
-#include <type_traits>
 #include <vector>
 
 #include "trajectory.hpp"
+#include "math.hpp"
 
 namespace particleSimulator {
 namespace stats {
-
-template <typename T>
-T getSQRT(T const& value) {
-  static_assert(std::is_arithmetic_v<T> || std::is_same_v<T, exit_point>);
-  return std::sqrt(value);
-}
 
 template <typename T>
 // struct dei momenti calcolati per la distribuzione del campione

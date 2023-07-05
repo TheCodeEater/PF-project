@@ -111,9 +111,6 @@ exit_point operator/(T const& lhs, exit_point const& rhs) {
   return rhs / lhs;
 }
 
-// funzione SQRT per exit point
-exit_point getSQRT(exit_point const& value);
-
 struct intsect {  // intersezione
   Eigen::Vector2f point{};
   hitBorder border{};
