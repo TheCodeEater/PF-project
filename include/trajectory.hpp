@@ -7,7 +7,6 @@
 #endif
 
 #include <SFML/Graphics.hpp>
-
 #include "boost/math/constants/constants.hpp"
 
 #include "../Eigen/Dense"
@@ -47,11 +46,19 @@ struct particle {
   Eigen::Vector2f pos{};  // vettore posizione
   float theta{};          // angolo traiettoria, tra 0 e 2pi, misurato dall'asse X in senso antiorario
 };
-
 struct exit_point { //punto di uscita, con angolo di traiettoria di uscita
   float y{};
   float theta{};
+
+  exit_point& operator+=(exit_point const& rhs);
+  exit_point& operator*=(exit_point const& rhs);
+
+  exit_point operator+(exit_point const& rhs);
+  exit_point operator*(exit_point const& rhs);
 };
+
+//funzione SQRT per exit point
+exit_point sqrt(exit_point const& value);
 
 struct intsect { //intersezione
   Eigen::Vector2f point{};

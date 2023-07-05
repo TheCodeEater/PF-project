@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <numeric>
 #include <vector>
+#include <cmath>
 
 namespace particleSimulator {
 namespace stats {
@@ -18,10 +19,10 @@ struct Statistics {
   T kurtosis{};
 
   //costruisci la struct a partire dai momenti iniziali
-  Statistics(T mean, T mean2, T mean3, T mean4, int N_):
+  Statistics(T mean, T mean2, T mean3, T mean4, int N):
     mean{mean},
-    sigma{sqrt(N_ / (N_ - 1) * (mean2 - mean * mean))},  // x quadro medio meno x medio quadro
-    mean_err{sigma / sqrt(N_)},
+    sigma{std::sqrt(N / (N - 1) * (mean2 - mean * mean))},  // x quadro medio meno x medio quadro
+    mean_err{sigma / std::sqrt(N)},
     skewness{(mean3 - 3 * mean * mean2 + 2 * mean * mean * mean) /(sigma * sigma * sigma)},  //
     kurtosis{(mean4 - 4 * mean3 * mean + 6 * mean2 * mean * mean -3 * mean * mean * mean * mean) / (sigma * sigma * sigma * sigma) -3}
     {}
