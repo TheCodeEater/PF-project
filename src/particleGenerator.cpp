@@ -1,5 +1,8 @@
 #include "../include/particleGenerator.hpp"
 
+#include "../include/dataStructures.hpp"
+#include "../include/math.hpp"
+
 namespace particleSimulator {
 
 randSimulator::randSimulator(randOptions options)

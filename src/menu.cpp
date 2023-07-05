@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "../include/math.hpp"
+
 namespace particleSimulator {
 
 void printInit() {

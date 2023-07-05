@@ -6,6 +6,7 @@
 
 #include "../include/statistics.hpp"
 #include "../include/typeAlias.hpp"
+#include "../include/dataStructures.hpp"
 
 namespace particleSimulator {
 
