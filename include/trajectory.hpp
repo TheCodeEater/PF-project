@@ -11,6 +11,7 @@
 
 #include "../Eigen/Dense"
 #include "../include/graphics.hpp"
+#include "../include/dataStructures.hpp"
 
 namespace particleSimulator {
 
@@ -18,45 +19,6 @@ namespace particleSimulator {
 using Line = Eigen::ParametrizedLine<float, 2>;
 using HLine = Eigen::Hyperplane<float, 2>;
 namespace bm = boost::math::constants;
-
-//enum per: posizione particelle, orientazione, bordo colpito
-
-enum class posTypes { Inside, Escaped, BackHit, Error };
-
-enum class vecOrientation { Left, Right, VerticalUp, VerticalDown };
-
-enum class hitBorder { Top, Bottom, Back, Front };
-struct particle {
-  Eigen::Vector2f pos{};  // vettore posizione
-  float theta{};          // angolo traiettoria, tra 0 e 2pi, misurato dall'asse X in senso antiorario
-};
-struct exit_point { //punto di uscita, con angolo di traiettoria di uscita
-  float y{};
-  float theta{};
-
-  exit_point& operator+=(exit_point const& rhs);
-  exit_point& operator*=(exit_point const& rhs);
-  exit_point& operator*=(int const& rhs);
-  exit_point& operator/=(int const& rhs);
-
-  exit_point operator+(exit_point const& rhs) const;
-  exit_point operator*(exit_point const& rhs) const;
-  exit_point operator/(int const& rhs) const;
-  exit_point operator*(int const& rhs) const;
-};
-
-//funzione SQRT per exit point
-exit_point getSQRT(exit_point const& value);
-
-struct intsect { //intersezione
-  Eigen::Vector2f point{};
-  hitBorder border{};
-};
-
-struct results{
-  std::vector<dottedLine> trajs{};
-  exit_point ep{};
-};
 
 class path { //oggetto di calcolo delle traiettorie
   // parametri biliardo
