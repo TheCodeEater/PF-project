@@ -52,9 +52,13 @@ struct exit_point { //punto di uscita, con angolo di traiettoria di uscita
 
   exit_point& operator+=(exit_point const& rhs);
   exit_point& operator*=(exit_point const& rhs);
+  exit_point& operator*=(int const& rhs);
+  exit_point& operator/=(int const& rhs);
 
-  exit_point operator+(exit_point const& rhs);
-  exit_point operator*(exit_point const& rhs);
+  exit_point operator+(exit_point const& rhs) const;
+  exit_point operator*(exit_point const& rhs) const;
+  exit_point operator/(int const& rhs) const;
+  exit_point operator*(int const& rhs) const;
 };
 
 //funzione SQRT per exit point

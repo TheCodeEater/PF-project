@@ -137,25 +137,25 @@ void config::exportStatistics(std::vector<exit_point> const& v,
 
   // calcoli statistici - COORDINATA DI USCITA
   {
-    stats::Sample1D s{};  // crea sample
+    stats::SampleP s{};  // crea sample
     std::for_each(v.cbegin(), v.cend(), [&s](exit_point const& p) {
-      s.add(p.y);
+      s.add(p);
     });  // aggiungi ogni elemento al sample
 
     stats::Statistics stats = s.statistics();  // calcoli statistici
     // stampa i dati
     output << "Distribuzione YF\n";
-    output << "Mean: " << stats.mean << "\n"
-           << "Sigma: " << stats.sigma << "\n"
-           << "Mean_err: " << stats.mean_err << "\n"
-           << "Skewness: " << stats.skewness << "\n"
-           << "Kurtosis: " << stats.kurtosis << "\n";
+    output << "Mean: " << stats.mean.y << "\n"
+           << "Sigma: " << stats.sigma.y << "\n"
+           << "Mean_err: " << stats.mean_err.y << "\n"
+           << "Skewness: " << stats.skewness.y << "\n"
+           << "Kurtosis: " << stats.kurtosis.y << "\n";
   }
 
   output << "\n-------------\n";
 
   // calcoli statistici - ANGOLO DI USCITA
-  {
+  /*{
     stats::Sample1D s{};  // crea sample
 
     std::for_each(v.cbegin(), v.cend(), [&s](exit_point const& p) {
@@ -170,7 +170,7 @@ void config::exportStatistics(std::vector<exit_point> const& v,
            << "Mean_err: " << stats.mean_err << "\n"
            << "Skewness: " << stats.skewness << "\n"
            << "Kurtosis: " << stats.kurtosis << "\n";
-  }
+  }*/
 }
 
 }  // namespace particleSimulator

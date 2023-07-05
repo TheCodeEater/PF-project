@@ -7,7 +7,7 @@
 namespace particleSimulator {
     namespace stats {
     // type alias
-        using SampleP = Sample<particle>;  // alias per sample di particelle
+        using SampleP = Sample<exit_point>;  // alias per sample di particelle
         using Sample1D = Sample<double>;
     }  // namespace stats
 }  // namespace particleSimulator
