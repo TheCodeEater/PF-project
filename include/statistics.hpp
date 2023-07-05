@@ -5,9 +5,22 @@
 #include <numeric>
 #include <vector>
 #include <cmath>
+#include <type_traits>
+
+#include "trajectory.hpp"
 
 namespace particleSimulator {
 namespace stats {
+
+template<typename T>
+T getSQRT(T const& value){
+  static_assert(std::is_arithmetic_v<T> || std::is_same_v<T,exit_point>);
+  if constexpr(std::is_arithmetic_v<T>){
+    return std::sqrt(value);
+  }else{
+    return particleSimulator::sqrt(value);
+  }
+}
 
 template <typename T>
 // struct dei momenti calcolati per la distribuzione del campione
@@ -21,7 +34,7 @@ struct Statistics {
   //costruisci la struct a partire dai momenti iniziali
   Statistics(T mean, T mean2, T mean3, T mean4, int N):
     mean{mean},
-    sigma{std::sqrt(N / (N - 1) * (mean2 - mean * mean))},  // x quadro medio meno x medio quadro
+    sigma{getSQRT(N / (N - 1.f) * (mean2 - mean * mean))},  // x quadro medio meno x medio quadro
     mean_err{sigma / std::sqrt(N)},
     skewness{(mean3 - 3 * mean * mean2 + 2 * mean * mean * mean) /(sigma * sigma * sigma)},  //
     kurtosis{(mean4 - 4 * mean3 * mean + 6 * mean2 * mean * mean -3 * mean * mean * mean * mean) / (sigma * sigma * sigma * sigma) -3}
