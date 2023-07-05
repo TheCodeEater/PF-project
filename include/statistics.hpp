@@ -2,82 +2,90 @@
 #define STATISTICS_HPP
 
 #include <algorithm>
-#include <numeric>
-#include <vector>
 #include <cmath>
+#include <numeric>
 #include <type_traits>
+#include <vector>
 
 #include "trajectory.hpp"
 
 namespace particleSimulator {
 namespace stats {
 
-template<typename T>
-T getSQRT(T const& value){
-  static_assert(std::is_arithmetic_v<T> || std::is_same_v<T,exit_point>);
+template <typename T>
+T getSQRT(T const& value) {
+  static_assert(std::is_arithmetic_v<T> || std::is_same_v<T, exit_point>);
   return std::sqrt(value);
 }
 
 template <typename T>
 // struct dei momenti calcolati per la distribuzione del campione
-struct Statistics {  
+struct Statistics {
   T mean{};
   T sigma{};
   T mean_err{};
   T skewness{};
   T kurtosis{};
 
-  //costruisci la struct a partire dai momenti iniziali
-  Statistics(T mean, T mean2, T mean3, T mean4, int N):
-    mean{mean},
-    sigma{getSQRT(N / (N - 1.f) * (mean2 - mean * mean))},  // x quadro medio meno x medio quadro
-    mean_err{sigma / std::sqrt(N)},
-    skewness{(mean3 - 3 * mean * mean2 + 2 * mean * mean * mean) /(sigma * sigma * sigma)},  //
-    kurtosis{(mean4 - 4 * mean3 * mean + 6 * mean2 * mean * mean -3 * mean * mean * mean * mean) / (sigma * sigma * sigma * sigma) -3}
-    {}
+  // costruisci la struct a partire dai momenti iniziali
+  Statistics(T mean, T mean2, T mean3, T mean4, int N)
+      : mean{mean},
+        sigma{getSQRT(
+            N / (N - 1.f) *
+            (mean2 - mean * mean))},  // x quadro medio meno x medio quadro
+        mean_err{sigma / std::sqrt(N)},
+        skewness{(mean3 - 3 * mean * mean2 + 2 * mean * mean * mean) /
+                 (sigma * sigma * sigma)},  //
+        kurtosis{(mean4 - 4 * mean3 * mean + 6 * mean2 * mean * mean -
+                  3 * mean * mean * mean * mean) /
+                     (sigma * sigma * sigma * sigma) -
+                 3} {}
 };
 template <typename T>
 class Sample {
   std::vector<T> entries_{};  // vettore di punti sperimentali
 
   struct Accumulator;
-  struct InitialMoments{
+  struct InitialMoments {
     T mean{};
     T mean2{};
     T mean3{};
     T mean4{};
 
-    //costruisci la struct, eseguendo il calcolo di momenti iniziali
-    InitialMoments(Accumulator const& acc, int N): mean{acc.sum/N}, mean2{acc.sum2/N}, mean3{acc.sum3/N}, mean4{acc.sum4/N} 
-    {
-      assert(N>0);
+    // costruisci la struct, eseguendo il calcolo di momenti iniziali
+    InitialMoments(Accumulator const& acc, int N)
+        : mean{acc.sum / N},
+          mean2{acc.sum2 / N},
+          mean3{acc.sum3 / N},
+          mean4{acc.sum4 / N} {
+      assert(N > 0);
     }
   };
-  struct Accumulator{
+  struct Accumulator {
     T sum{};
     T sum2{};
     T sum3{};
     T sum4{};
 
-    Accumulator& operator+=(T const& value){//operatore di accumulo
-      //esegui l'accumulo con gli operatori del tipo che usi
-      sum+=value;
-      sum2+=value*value;
-      sum3+=value*value*value;
-      sum4+=value*value*value*value;
+    Accumulator& operator+=(T const& value) {  // operatore di accumulo
+      // esegui l'accumulo con gli operatori del tipo che usi
+      sum += value;
+      sum2 += value * value;
+      sum3 += value * value * value;
+      sum4 += value * value * value * value;
 
       return *this;
     }
 
-    Accumulator operator+(T const& value){
+    Accumulator operator+(T const& value) {
       Accumulator acc_sum{*this};
-      acc_sum+=value;
+      acc_sum += value;
       return acc_sum;
     }
 
-    InitialMoments getMoments(int N){
-      assert(N>0);
-      return InitialMoments{*this,N};
+    InitialMoments getMoments(int N) {
+      assert(N > 0);
+      return InitialMoments{*this, N};
     }
   };
 
@@ -109,11 +117,13 @@ class Sample {
           "Cannot calculate parameters from empty sample!");
     }
     // accumulatori di somma.
-    const Accumulator sums{std::accumulate(entries_.begin(), entries_.end(), Accumulator{})}; //esegui le somme
+    const Accumulator sums{std::accumulate(entries_.begin(), entries_.end(),
+                                           Accumulator{})};  // esegui le somme
 
-    const InitialMoments imoments{sums,N_};
+    const InitialMoments imoments{sums, N_};
 
-    return Statistics{imoments.mean,imoments.mean2,imoments.mean3,imoments.mean4,N_};
+    return Statistics{imoments.mean, imoments.mean2, imoments.mean3,
+                      imoments.mean4, N_};
   }
 
   const auto& entries() const {

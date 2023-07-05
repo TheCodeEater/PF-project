@@ -13,16 +13,18 @@
 
 namespace particleSimulator {
 
-class VArray : public sf::VertexArray{ //creo una classe ereditata per poter aggiungere ciò che serve a usare back inserter
+class VArray : public sf::VertexArray {  // creo una classe ereditata per poter
+                                         // aggiungere ciò che serve a usare
+                                         // back inserter
 
-  public: 
-    VArray()=default;
-    VArray(sf::PrimitiveType type, std::size_t vertexCount=0);
+ public:
+  VArray() = default;
+  VArray(sf::PrimitiveType type, std::size_t vertexCount = 0);
 
-    // type alias per il tipo di elemento contenuto nei vertex array (vertex)
-    typedef sf::Vertex value_type;
-    // inserimento dei vertici
-    void push_back(value_type);
+  // type alias per il tipo di elemento contenuto nei vertex array (vertex)
+  typedef sf::Vertex value_type;
+  // inserimento dei vertici
+  void push_back(value_type);
 };
 
 class dottedLine {

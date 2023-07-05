@@ -4,9 +4,9 @@
 #include <fstream>
 #include <random>
 
+#include "../include/dataStructures.hpp"
 #include "../include/statistics.hpp"
 #include "../include/typeAlias.hpp"
-#include "../include/dataStructures.hpp"
 
 namespace particleSimulator {
 
@@ -136,32 +136,31 @@ void config::exportStatistics(std::vector<exit_point> const& v,
     throw std::runtime_error("Impossibile creare file di output! (statistics)");
   }
 
-  // calcoli statistici 
+  // calcoli statistici
 
-    stats::SampleP s{};  // crea sample
-    std::for_each(v.cbegin(), v.cend(), [&s](exit_point const& p) {
-      s.add(p);
-    });  // aggiungi ogni elemento al sample
+  stats::SampleP s{};  // crea sample
+  std::for_each(v.cbegin(), v.cend(), [&s](exit_point const& p) {
+    s.add(p);
+  });  // aggiungi ogni elemento al sample
 
-    stats::Statistics stats = s.statistics();  // calcoli statistici
-    // stampa i dati della y
-    output << "Distribuzione YF\n";
-    output << "Mean: " << stats.mean.y << "\n"
-           << "Sigma: " << stats.sigma.y << "\n"
-           << "Mean_err: " << stats.mean_err.y << "\n"
-           << "Skewness: " << stats.skewness.y << "\n"
-           << "Kurtosis: " << stats.kurtosis.y << "\n";
+  stats::Statistics stats = s.statistics();  // calcoli statistici
+  // stampa i dati della y
+  output << "Distribuzione YF\n";
+  output << "Mean: " << stats.mean.y << "\n"
+         << "Sigma: " << stats.sigma.y << "\n"
+         << "Mean_err: " << stats.mean_err.y << "\n"
+         << "Skewness: " << stats.skewness.y << "\n"
+         << "Kurtosis: " << stats.kurtosis.y << "\n";
 
   output << "\n-------------\n";
 
-
-    // stampa i dati dell'angolo
-    output << "Distribuzione ThetaF\n";
-    output << "Mean: " << stats.mean.theta << "\n"
-           << "Sigma: " << stats.sigma.theta << "\n"
-           << "Mean_err: " << stats.mean_err.theta << "\n"
-           << "Skewness: " << stats.skewness.theta << "\n"
-           << "Kurtosis: " << stats.kurtosis.theta << "\n";
+  // stampa i dati dell'angolo
+  output << "Distribuzione ThetaF\n";
+  output << "Mean: " << stats.mean.theta << "\n"
+         << "Sigma: " << stats.sigma.theta << "\n"
+         << "Mean_err: " << stats.mean_err.theta << "\n"
+         << "Skewness: " << stats.skewness.theta << "\n"
+         << "Kurtosis: " << stats.kurtosis.theta << "\n";
 }
 
 }  // namespace particleSimulator

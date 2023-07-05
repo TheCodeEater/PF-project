@@ -4,11 +4,14 @@
 #include <cmath>
 namespace particleSimulator {
 
-//costruttore: delega la costruzione a quello di vertex array
-VArray::VArray(sf::PrimitiveType type, std::size_t vertexCount): sf::VertexArray(type, vertexCount){}
+// costruttore: delega la costruzione a quello di vertex array
+VArray::VArray(sf::PrimitiveType type, std::size_t vertexCount)
+    : sf::VertexArray(type, vertexCount) {}
 
-void VArray::push_back(value_type vertex) { append(vertex); } //richiama la funzione append. Necessaria poiché back_inserter richiede push_back, non append
-
+void VArray::push_back(value_type vertex) {
+  append(vertex);
+}  // richiama la funzione append. Necessaria poiché back_inserter richiede
+   // push_back, non append
 
 dottedLine::dottedLine(vType p0, vType p1, sf::Color c)
     : first_{p0},

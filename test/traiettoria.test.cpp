@@ -1,10 +1,9 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
-#include "doctest.h"
-
-#include "../include/trajectory.hpp"
-#include "../include/math.hpp"
 #include "../include/dataStructures.hpp"
+#include "../include/math.hpp"
+#include "../include/trajectory.hpp"
+#include "doctest.h"
 
 using pT = particleSimulator::posTypes;
 namespace ps = particleSimulator;
@@ -20,7 +19,7 @@ TEST_CASE("Test del calcolo delle traiettorie") {
 
   // particelle
   particleSimulator::particle p0{{0, 0}, std::atanf(1)};
-  particleSimulator::particle p1{{0, -8}, particleSimulator::arctan(4, 3)}; 
+  particleSimulator::particle p1{{0, -8}, particleSimulator::arctan(4, 3)};
   particleSimulator::particle p2{{0, 0}, std::atanf(0)};
   particleSimulator::particle p3{{22, 8.92}, particleSimulator::arctan(-1, -5)};
 
@@ -54,31 +53,32 @@ TEST_CASE("Test del calcolo delle traiettorie") {
     // particella 0
     CHECK(int0.x() == doctest::Approx(9.5238095));
     CHECK(int0.y() == doctest::Approx(9.5238095));
-    //particella 1
-    CHECK(int1.x()==doctest::Approx(13.0119));
-    CHECK(int1.y()==doctest::Approx(9.3493));
-    //particella 2
-    CHECK(int2.x()==doctest::Approx(100));
-    CHECK(int2.y()==doctest::Approx(0));
-   //particella 3
-   CHECK(int3.x()==doctest::Approx(0));
-   CHECK(int3.y()==doctest::Approx(4.520034));
+    // particella 1
+    CHECK(int1.x() == doctest::Approx(13.0119));
+    CHECK(int1.y() == doctest::Approx(9.3493));
+    // particella 2
+    CHECK(int2.x() == doctest::Approx(100));
+    CHECK(int2.y() == doctest::Approx(0));
+    // particella 3
+    CHECK(int3.x() == doctest::Approx(0));
+    CHECK(int3.y() == doctest::Approx(4.520034));
   }
 
   // calcolo angoli riflessi
   SUBCASE("Test riflessione") {
     biliardo.reflect(p0);
 
-    CHECK(p0.theta == doctest::Approx(5.39786)); //angolo della nuova traiettoria
+    CHECK(p0.theta ==
+          doctest::Approx(5.39786));  // angolo della nuova traiettoria
 
     CHECK(biliardo.getHitDirection(p0.theta) ==
-          particleSimulator::vecOrientation::Right); //nuova orientazione
+          particleSimulator::vecOrientation::Right);  // nuova orientazione
 
-    //test punto di urto 2
+    // test punto di urto 2
     biliardo.reflect(p0);
 
-    CHECK(p0.pos.x()==doctest::Approx(24.488321));
-    CHECK(p0.pos.y()==doctest::Approx(-8.7755799));
+    CHECK(p0.pos.x() == doctest::Approx(24.488321));
+    CHECK(p0.pos.y() == doctest::Approx(-8.7755799));
   }
 }
 
@@ -133,21 +133,23 @@ TEST_CASE("Test dei casi critici") {  // casi che hanno o che potenzialmente
   }
 
   SUBCASE("Test della riflessione di un caso particolare") {
-    ps::particle p{{0, -91.5416}, 5.82604};  // particella (rimuovere il 4 finale)
+    ps::particle p{{0, -91.5416},
+                   5.82604};  // particella (rimuovere il 4 finale)
 
     // direzione iniziale
-    CHECK(biliardo.getHitDirection(p.theta)==ps::vecOrientation::Right);
+    CHECK(biliardo.getHitDirection(p.theta) == ps::vecOrientation::Right);
 
     // sequenza delle posizioni occupate
     const std::vector<ps::particle> v = s.getSequence(p, 200);
 
-    //sequenza che dovrebbe essere
-    const std::array<Eigen::Vector2f,3> sequence{{{396.67302,-286.66512},{699.82471,200.05},{700,-191.11072}}};
+    // sequenza che dovrebbe essere
+    const std::array<Eigen::Vector2f, 3> sequence{
+        {{396.67302, -286.66512}, {699.82471, 200.05}, {700, -191.11072}}};
 
-    auto it=sequence.cbegin();
-    for (auto const& value : v) {  //controllo posizioni occupate
+    auto it = sequence.cbegin();
+    for (auto const& value : v) {  // controllo posizioni occupate
       CHECK(value.pos.x() == doctest::Approx(it->x()));
-      CHECK(value.pos.y() == doctest::Approx(it->y())); 
+      CHECK(value.pos.y() == doctest::Approx(it->y()));
       ++it;
     }
   }
@@ -157,9 +159,13 @@ TEST_CASE("Test dei casi critici") {  // casi che hanno o che potenzialmente
 
     const std::vector<ps::particle> v = s.getSequence(p, 200);
     // inserire test delle posizioni occupate nella sequenza
-    const std::array<Eigen::Vector2f,4> sequence{{{479.5721045,-262.97901},{663.275102,210.493},{579.317,-234.481},{0,396.056}}}; //aggiungere sequenza
-    
-    auto it{sequence.cbegin()}; //iteratore const per array
+    const std::array<Eigen::Vector2f, 4> sequence{
+        {{479.5721045, -262.97901},
+         {663.275102, 210.493},
+         {579.317, -234.481},
+         {0, 396.056}}};  // aggiungere sequenza
+
+    auto it{sequence.cbegin()};  // iteratore const per array
 
     for (auto const& value : v) {
       CHECK(value.pos.x() == doctest::Approx(it->x()));
@@ -169,7 +175,8 @@ TEST_CASE("Test dei casi critici") {  // casi che hanno o che potenzialmente
   }
 
   /*SUBCASE("Test di un caso particolare v3"){
-    ps::particle p{{0, 35.56728745}, 1.570799947};  // particella (rimuovere il 4 finale)
+    ps::particle p{{0, 35.56728745}, 1.570799947};  // particella (rimuovere il
+  4 finale)
 
     // direzione iniziale
     CHECK(biliardo.getHitDirection(p.theta)==ps::vecOrientation::VerticalUp);

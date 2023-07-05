@@ -1,9 +1,9 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
-#include "doctest.h" //doctest
-
 #include "../include/statistics.hpp"
+
 #include "../include/typeAlias.hpp"
+#include "doctest.h"  //doctest
 
 namespace st = particleSimulator::stats;  // alias namespace
 

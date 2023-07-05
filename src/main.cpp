@@ -53,7 +53,7 @@ int main() {
           ps::exit_point p_exit =
               sim.loop();  // esegui la simulazione, disegnando. Alla chiusura
                            // della finestra, restituisce il punto di uscita
-          printResult(p_exit); //stampa i risultati
+          printResult(p_exit);  // stampa i risultati
 
           break;
         }
