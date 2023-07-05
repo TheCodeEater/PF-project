@@ -62,7 +62,7 @@ struct exit_point { //punto di uscita, con angolo di traiettoria di uscita
 };
 
 //funzione SQRT per exit point
-exit_point sqrt(exit_point const& value);
+exit_point getSQRT(exit_point const& value);
 
 struct intsect { //intersezione
   Eigen::Vector2f point{};

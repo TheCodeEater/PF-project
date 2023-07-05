@@ -15,11 +15,7 @@ namespace stats {
 template<typename T>
 T getSQRT(T const& value){
   static_assert(std::is_arithmetic_v<T> || std::is_same_v<T,exit_point>);
-  if constexpr(std::is_arithmetic_v<T>){
-    return std::sqrt(value);
-  }else{
-    return particleSimulator::sqrt(value);
-  }
+  return std::sqrt(value);
 }
 
 template <typename T>

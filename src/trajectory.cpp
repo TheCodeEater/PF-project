@@ -42,7 +42,7 @@ exit_point exit_point::operator/(int const& rhs) const{
  }
 
 //la funzione tratta exit_point come una struct accumulatrice, eseguendo la radice di entrambi i valori
-exit_point sqrt(exit_point const& value){
+exit_point getSQRT(exit_point const& value){
   return {std::sqrt(value.y),std::sqrt(value.theta)}; //esegui la radice su ogni membro
 }
 
