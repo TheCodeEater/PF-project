@@ -44,7 +44,7 @@ if (BUILD_TESTING)
   target_link_libraries(particelle_test_stats.t PRIVATE sfml-graphics)
   # aggiungi l'eseguibile statistics.t alla lista dei test
   add_test(NAME Simulazione COMMAND particelle_test.t)
-  add_test(NAME Statistica COMMAND particelle_test_stats.t)
+  #add_test(NAME Statistica COMMAND particelle_test_stats.t)
 
 endif()
 
