@@ -36,7 +36,7 @@ target_link_libraries(particelle.bin PRIVATE sfml-graphics)
 if (BUILD_TESTING)
 
   # aggiungi l'eseguibile gane,t
-  add_executable(particelle_test_simulazione.t test/traiettoria.test.cpp src/application.cpp src/graphics.cpp src/io.cpp src/trajectory.cpp src/particlegenerator.cpp src/menu.cpp src/dataStructures.cpp src/math.cpp)
+  add_executable(particelle_test_simulazione.t test/traiettoria.test.cpp src/application.cpp src/graphics.cpp src/io.cpp src/trajectory.cpp src/particleGenerator.cpp src/menu.cpp src/dataStructures.cpp src/math.cpp)
   add_executable(particelle_test_gen.t test/generator.test.cpp src/application.cpp src/graphics.cpp src/io.cpp src/trajectory.cpp src/particleGenerator.cpp src/menu.cpp src/dataStructures.cpp src/math.cpp)
   add_executable(particelle_test_stats.t test/statistics.test.cpp src/application.cpp src/graphics.cpp src/io.cpp src/trajectory.cpp src/particleGenerator.cpp src/menu.cpp src/dataStructures.cpp src/math.cpp)
   target_link_libraries(particelle_test_simulazione.t PRIVATE sfml-graphics)
